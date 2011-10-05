@@ -36,6 +36,7 @@
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnOpen = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -77,7 +78,7 @@
             // cbConnectionType
             // 
             this.cbConnectionType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.cbConnectionType.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.cbConnectionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbConnectionType.FormattingEnabled = true;
             this.cbConnectionType.Location = new System.Drawing.Point(126, 61);
             this.cbConnectionType.Name = "cbConnectionType";
@@ -103,6 +104,7 @@
             this.cbDataSource.Name = "cbDataSource";
             this.cbDataSource.Size = new System.Drawing.Size(365, 21);
             this.cbDataSource.TabIndex = 2;
+            this.cbDataSource.SelectedIndexChanged += new System.EventHandler(this.cbDataSource_SelectedIndexChanged);
             // 
             // flowLayoutPanel1
             // 
@@ -135,6 +137,10 @@
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
             // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.CheckFileExists = false;
+            // 
             // ConnectDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -148,8 +154,6 @@
             this.flowLayoutPanel1.ResumeLayout(false);
             this.ResumeLayout(false);
 
-            //Events
-            
         }
 
         #endregion
@@ -162,5 +166,6 @@
         private System.Windows.Forms.FlowLayoutPanel flowLayoutPanel1;
         private System.Windows.Forms.Button btnCancel;
         private System.Windows.Forms.Button btnOpen;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }

@@ -40,6 +40,10 @@ namespace SQLiteBrowser.Dialogs
             {
                 _query.ConnectionType = this.cbConnectionType.Text;
                 _query.DataSource = this.cbDataSource.Text;
+                
+                //TODO: Should probably try the connection here...
+                _query.InitiatlizeData();
+
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
             }
@@ -67,9 +71,17 @@ namespace SQLiteBrowser.Dialogs
             Cancel();
         }
 
-        private void ConnectDialog_KeyPress(object sender, KeyPressEventArgs e)
+        private void cbDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
-            MessageBox.Show(Convert.ToInt32(e.KeyChar).ToString());
+            if (this.cbDataSource.Text == "Browse for more...")
+            {
+                if (this.openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                {
+                    string fileName = this.openFileDialog1.FileName;
+                    this.cbDataSource.Items.Insert(0, fileName);
+                    this.cbDataSource.SelectedItem = fileName;
+                }
+            }
         }
     }
 }

@@ -24,7 +24,33 @@ namespace SQLiteBrowser.Views
             DialogResult dr = cd.ShowDialog();
             if (dr == DialogResult.OK)
             {
-                MessageBox.Show(_queryViewModel.ConnectionType + "\r\n" + _queryViewModel.DataSource);
+            }
+        }
+
+        private void QueryView_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F5)
+            {
+                RunQuery();
+            }
+        }
+
+        private void RunQuery()
+        {
+            string query = this.tbQuery.Text.Trim();
+            if (!string.IsNullOrEmpty(query))
+            {
+                string message = string.Empty;
+                try
+                {
+                    message = _queryViewModel.Data.ExecuteNonQuery(query).ToString() + " rows affected";
+                }
+                catch(Exception e)
+                {
+                    message = e.Message;
+                }
+
+                MessageBox.Show(message);
             }
         }
     }

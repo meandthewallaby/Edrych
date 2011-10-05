@@ -33,6 +33,7 @@ namespace SQLiteBrowser.DataAccess
             }
 
             dab.ConnectionString = ConnectionString;
+            dab.Open();
 
             return dab;
         }

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace SQLiteBrowser.DataAccess
 {
-    public class DataAccessBase
+    public abstract class DataAccessBase
     {
         private IDbConnection _conn;
         private IDbCommand _comm;
@@ -16,10 +16,16 @@ namespace SQLiteBrowser.DataAccess
         {
         }
 
-        public string ConnectionString
+        public string ConnectionString { get; set; }
+        public string DataSource { get; set; }
+        public string InitialCatalog { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+        public string AuthType { get; set; }
+
+        public void Open()
         {
-            get;
-            set;
+            PrepareConnection();
         }
 
         public IDataReader ExecuteReader(string sqlQuery)

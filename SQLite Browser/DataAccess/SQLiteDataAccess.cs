@@ -13,12 +13,12 @@ namespace SQLiteBrowser.DataAccess
         {
         }
 
-        public SQLiteConnection GetDbConnection()
+        internal override IDbConnection GetDbConnection()
         {
             return new SQLiteConnection(this.ConnectionString);
         }
 
-        public SQLiteCommand GetDbCommand()
+        internal override IDbCommand GetDbCommand()
         {
             return new SQLiteCommand();
         }
