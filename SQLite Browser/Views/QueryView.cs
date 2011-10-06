@@ -14,44 +14,35 @@ namespace SQLiteBrowser.Views
     public partial class QueryView : UserControl
     {
         private QueryViewModel _queryViewModel;
+        private bool _hideResults = true;
 
         public QueryView()
         {
             InitializeComponent();
             _queryViewModel = new QueryViewModel();
-            this.splitContainer1.Panel2Collapsed = true;
             ConnectDialog cd = new ConnectDialog(_queryViewModel);
             DialogResult dr = cd.ShowDialog();
             if (dr == DialogResult.OK)
             {
             }
+            _queryViewModel.DataBinding = new BindingSource();
+            this.dgResults.DataSource = _queryViewModel.DataBinding;
         }
 
         private void QueryView_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5)
             {
+                //Need to figure out how to do this async
                 RunQuery();
             }
         }
 
         private void RunQuery()
         {
-            string query = this.tbQuery.Text.Trim();
-            if (!string.IsNullOrEmpty(query))
-            {
-                string message = string.Empty;
-                try
-                {
-                    message = _queryViewModel.Data.ExecuteNonQuery(query).ToString() + " rows affected";
-                }
-                catch(Exception e)
-                {
-                    message = e.Message;
-                }
+            string query = (string.IsNullOrEmpty(tbQuery.SelectedText.Trim()) ? tbQuery.Text : tbQuery.SelectedText).Trim();
 
-                MessageBox.Show(message);
-            }
+            _queryViewModel.RunQuery(query);
         }
     }
 }

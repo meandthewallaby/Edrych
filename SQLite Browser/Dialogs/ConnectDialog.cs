@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SQLiteBrowser.Properties;
 using SQLiteBrowser.ViewModels;
 
 namespace SQLiteBrowser.Dialogs
@@ -31,25 +33,46 @@ namespace SQLiteBrowser.Dialogs
         private void PopulateDataSource()
         {
             this.cbDataSource.Items.Clear();
+
+            if (Settings.Default.RecentConnections != null)
+            {
+                foreach (string source in Settings.Default.RecentConnections)
+                {
+                    this.cbDataSource.Items.Add(source);
+                }
+            }
+
             this.cbDataSource.Items.Add("Browse for more...");
         }
 
         private void Open()
         {
-            if (this.cbConnectionType.Items.Contains(this.cbConnectionType.Text))
-            {
-                _query.ConnectionType = this.cbConnectionType.Text;
-                _query.DataSource = this.cbDataSource.Text;
+            _query.ConnectionType = this.cbConnectionType.Text;
+            _query.DataSource = this.cbDataSource.Text;
                 
-                //TODO: Should probably try the connection here...
+            //TODO: Should probably try the connection here...
+            try
+            {
                 _query.InitiatlizeData();
+
+                if (Settings.Default.RecentConnections == null)
+                {
+                    Settings.Default.RecentConnections = new StringCollection();
+                }
+
+                if (Settings.Default.RecentConnections.Contains(_query.DataSource))
+                {
+                    Settings.Default.RecentConnections.Remove(_query.DataSource);
+                }
+                Settings.Default.RecentConnections.Insert(0, _query.DataSource);
+                Settings.Default.Save();
 
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
             }
-            else
+            catch (Exception e)
             {
-                MessageBox.Show("You need to select a valid connection type", "Invalid Connection Type", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Could not open the connection!\r\n" + e.Message, "Invalid Connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 

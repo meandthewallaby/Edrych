@@ -22,5 +22,16 @@ namespace SQLiteBrowser.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        public global::System.Collections.Specialized.StringCollection RecentConnections {
+            get {
+                return ((global::System.Collections.Specialized.StringCollection)(this["RecentConnections"]));
+            }
+            set {
+                this["RecentConnections"] = value;
+            }
+        }
     }
 }

@@ -28,6 +28,16 @@ namespace SQLiteBrowser.DataAccess
             PrepareConnection();
         }
 
+        public ResultSet GetDataSet(string sqlQuery)
+        {
+            IDataReader reader = this.ExecuteReader(sqlQuery);
+            ResultSet rs = new ResultSet();
+
+            rs.Data.Load(reader);
+
+            return rs;
+        }
+
         public IDataReader ExecuteReader(string sqlQuery)
         {
             PrepareConnection();
