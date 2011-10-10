@@ -16,6 +16,11 @@ namespace SQLiteBrowser
         public MainWindow()
         {
             InitializeComponent();
+            App.CopyEnabledChanged += this.CopyEnabled_Changed;
+            App.PasteEnabledChanged += this.PasteEnabled_Changed;
+
+            App.IsCopyEnabled = false;
+            App.IsPasteEnabled = false;
         }
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -27,6 +32,17 @@ namespace SQLiteBrowser
             tp.Text = "New query";
             tp.Controls.Add(qp);
             this.tabControl1.TabPages.Add(tp);
+        }
+
+        private void CopyEnabled_Changed(object sender, EventArgs e)
+        {
+            this.cutToolStripMenuItem.Enabled = App.IsCopyEnabled;
+            this.copyToolStripMenuItem.Enabled = App.IsCopyEnabled;
+        }
+
+        private void PasteEnabled_Changed(object sender, EventArgs e)
+        {
+            this.pasteToolStripMenuItem.Enabled = App.IsPasteEnabled;
         }
     }
 }

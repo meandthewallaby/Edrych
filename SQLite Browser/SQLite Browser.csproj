@@ -59,6 +59,8 @@
     <Compile Include="Dialogs\ConnectDialog.Designer.cs">
       <DependentUpon>ConnectDialog.cs</DependentUpon>
     </Compile>
+    <Compile Include="App.cs" />
+    <Compile Include="Helpers\RunQueryCompletedEventArgs.cs" />
     <Compile Include="MainWindow.cs">
       <SubType>Form</SubType>
     </Compile>

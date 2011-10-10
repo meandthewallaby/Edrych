@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using SQLiteBrowser.DataAccess;
+using SQLiteBrowser.Helpers;
 
 namespace SQLiteBrowser.ViewModels
 {
@@ -58,11 +60,59 @@ namespace SQLiteBrowser.ViewModels
 
         public void RunQuery(string Query)
         {
-            if (!string.IsNullOrEmpty(Query))
+            this.RunQueryAsync(Query);
+        }
+
+        #region Private/Protected Async
+
+        private delegate ResultSet RunQueryDelegate(string Query);
+        private event RunQueryCompletedEventHandler RunQueryCompleted;
+
+        protected virtual void OnRunQueryCompleted(RunQueryCompletedEventArgs e)
+        {
+            if (RunQueryCompleted != null)
             {
-                _results = _dab.GetDataSet(Query);
-                _dataBinding.DataSource = _results.Data;
+                RunQueryCompleted(this, e);
             }
         }
+
+        private void RunQueryAsync(string Query)
+        {
+            RunQueryCompleted += this.RunQuery_Completed;
+            RunQueryDelegate dl = new RunQueryDelegate(RunQueryWorker);
+            AsyncOperation async = AsyncOperationManager.CreateOperation(null);
+
+            IAsyncResult ar = dl.BeginInvoke(Query, new AsyncCallback(RunQueryCallback), async);
+        }
+
+        private ResultSet RunQueryWorker(string Query)
+        {
+            ResultSet res = null;
+            if (!string.IsNullOrEmpty(Query))
+            {
+                res = _dab.GetDataSet(Query);
+            }
+
+            return res;
+        }
+
+        private void RunQueryCallback(IAsyncResult ar)
+        {
+            RunQueryDelegate dl = (RunQueryDelegate)((System.Runtime.Remoting.Messaging.AsyncResult)ar).AsyncDelegate;
+            AsyncOperation async = (AsyncOperation)ar.AsyncState;
+            ResultSet results = dl.EndInvoke(ar);
+            RunQueryCompletedEventArgs completedArgs = new RunQueryCompletedEventArgs(null, false, null);
+            completedArgs.Results = results;
+            async.PostOperationCompleted(delegate(object e) { OnRunQueryCompleted((RunQueryCompletedEventArgs)e); }, completedArgs);
+        }
+
+        private void RunQuery_Completed(object sender, RunQueryCompletedEventArgs e)
+        {
+            _results = e.Results;
+            _dataBinding.DataSource = _results.Data;
+            RunQueryCompleted -= this.RunQuery_Completed;
+        }
+
+        #endregion
     }
 }
