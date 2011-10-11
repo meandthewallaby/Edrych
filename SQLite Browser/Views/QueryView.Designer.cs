@@ -88,6 +88,7 @@
             this.tbLines.Name = "tbLines";
             this.tbLines.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.tbLines.Size = new System.Drawing.Size(32, 190);
+            this.tbLines.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbLines.TabIndex = 1;
             this.tbLines.Text = "";
             // 

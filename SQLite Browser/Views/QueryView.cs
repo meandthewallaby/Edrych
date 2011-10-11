@@ -73,6 +73,9 @@ namespace SQLiteBrowser.Views
             }
 
             _numLines = newLines;
+
+            App.IsUndoEnabled = this.tbQuery.CanUndo;
+            App.IsRedoEnabled = this.tbQuery.CanRedo;
         }
 
         private void QueryView_Scrolling(object sender, EventArgs e)
@@ -87,11 +90,12 @@ namespace SQLiteBrowser.Views
 
         private void Query_Focus(object sender, EventArgs e)
         {
-            App.IsCopyEnabled = true;
-
             if (this.tbQuery.Focused)
             {
+                App.IsCopyEnabled = true;
                 App.IsPasteEnabled = true;
+                App.IsUndoEnabled = this.tbQuery.CanUndo;
+                App.IsRedoEnabled = this.tbQuery.CanRedo;
             }
         }
 
@@ -99,6 +103,8 @@ namespace SQLiteBrowser.Views
         {
             App.IsCopyEnabled = false;
             App.IsPasteEnabled = false;
+            App.IsUndoEnabled = false;
+            App.IsRedoEnabled = false;
         }
     }
 }
