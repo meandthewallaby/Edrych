@@ -10,8 +10,11 @@ namespace SQLiteBrowser.Helpers
 {
     public class TabControlExt : TabControl
     {
+        private const int CLOSE_ICON_PADDING = 4;
+        private const int CLOSE_ICON_SIZE = 16;
+
         public delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
-        public event OnHeaderCloseEventHandler OnClose;
+        public event OnHeaderCloseEventHandler Closing;
 
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
@@ -19,23 +22,11 @@ namespace SQLiteBrowser.Helpers
             for(int nIndex = 0 ; nIndex < this.TabCount ; nIndex++)
             {
                 tabTextArea = (RectangleF)this.GetTabRect(nIndex);
-                if( nIndex != this.SelectedIndex )
-                {
-                    /*if not active draw ,inactive close button*/
-                    using(Bitmap bmp = Icons.inactiveClose)
-                    {
-                        e.Graphics.DrawImage(bmp, tabTextArea.X+tabTextArea.Width -16, 5, 13, 13);
-                    }
-                }
-                else
-                {
-                    /*if active draw ,active close button*/
-                    using(Bitmap bmp = Icons.activeClose)
-                    {
-                        e.Graphics.DrawImage(bmp,
-                            tabTextArea.X+tabTextArea.Width -16, 5, 13, 13);
-                    }
-                }
+
+                Bitmap bmp = nIndex == this.SelectedIndex ? Icons.activeClose : Icons.inactiveClose;
+                e.Graphics.DrawImage(bmp, tabTextArea.X + tabTextArea.Width - (CLOSE_ICON_PADDING + CLOSE_ICON_SIZE), tabTextArea.Y + CLOSE_ICON_PADDING, CLOSE_ICON_SIZE, CLOSE_ICON_SIZE);
+                bmp.Dispose();
+
                 string str = this.TabPages[nIndex].Text;
                 StringFormat stringFormat = new StringFormat();
                 stringFormat.Alignment = StringAlignment.Center; 
@@ -55,11 +46,14 @@ namespace SQLiteBrowser.Helpers
             for (int i = 0; i < this.TabCount; i++)
             {
                 tabRect = (RectangleF)this.GetTabRect(i);
-                if (tabRect.Contains((PointF)clickedPoint))
+
+                RectangleF closeIcon = new RectangleF(tabRect.X + tabRect.Width - 20, tabRect.Y + 4, 16, 16);
+
+                if (closeIcon.Contains((PointF)clickedPoint))
                 {
-                    if (OnClose != null)
+                    if (Closing != null)
                     {
-                        OnClose(this, new CloseEventArgs(this.SelectedIndex));
+                        Closing(this, new CloseEventArgs(this.SelectedIndex));
                     }
                 }
             }

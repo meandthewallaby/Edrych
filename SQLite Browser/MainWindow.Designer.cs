@@ -158,7 +158,7 @@
             this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
             this.tabControl1.ItemSize = new System.Drawing.Size(300, 24);
             this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tabControl1.OnClose += this.TabClosing;
+            this.tabControl1.Closing += this.TabClosing;
             // 
             // menuStrip1
             // 
