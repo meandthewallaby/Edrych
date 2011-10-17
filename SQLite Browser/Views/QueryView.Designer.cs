@@ -75,7 +75,7 @@
             this.tbQuery.TextChanged += new System.EventHandler(this.QueryView_QueryChanged);
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
             this.tbQuery.KeyUp += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
-            this.tbQuery.Leave += new System.EventHandler(this.Query_UnFocus);
+            this.tbQuery.Leave += new System.EventHandler(this.QueryOrResults_Leave);
             // 
             // tbLines
             // 
@@ -88,7 +88,6 @@
             this.tbLines.Name = "tbLines";
             this.tbLines.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
             this.tbLines.Size = new System.Drawing.Size(32, 190);
-            this.tbLines.SelectionAlignment = System.Windows.Forms.HorizontalAlignment.Right;
             this.tbLines.TabIndex = 1;
             this.tbLines.Text = "";
             // 
@@ -104,16 +103,15 @@
             this.dgResults.Size = new System.Drawing.Size(578, 214);
             this.dgResults.TabIndex = 0;
             this.dgResults.Enter += new System.EventHandler(this.Query_Focus);
-            this.dgResults.Leave += new System.EventHandler(this.Query_UnFocus);
+            this.dgResults.Leave += new System.EventHandler(this.QueryOrResults_Leave);
             // 
             // QueryView
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainer1);
             this.Name = "QueryView";
             this.Size = new System.Drawing.Size(578, 410);
-            this.Load += new System.EventHandler(this.QueryView_Load);
+            this.Enter += new System.EventHandler(this.QueryView_Focus);
+            this.Leave += new System.EventHandler(this.QueryView_Leave);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();

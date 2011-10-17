@@ -17,28 +17,30 @@ namespace SQLiteBrowser
         public MainWindow()
         {
             InitializeComponent();
+            App.CutEnabledChanged += this.CutEnabled_Changed;
             App.CopyEnabledChanged += this.CopyEnabled_Changed;
             App.PasteEnabledChanged += this.PasteEnabled_Changed;
             App.UndoEnabledChanged += this.UndoEnabled_Changed;
             App.RedoEnabledChanged += this.RedoEnabled_Changed;
+            App.SelectAllEnabledChanged += this.SelectAllEnabled_Changed;
 
             App.IsCopyEnabled = false;
             App.IsPasteEnabled = false;
             App.IsUndoEnabled = false;
             App.IsRedoEnabled = false;
+            App.IsSelectAllEnabled = false;
         }
 
         #region Menu Item Handling - File Menu
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            QueryView qp = new QueryView();
-            qp.Dock = DockStyle.Fill;
-            TabPage tp = new TabPage();
-            tp.Name = "New query";
-            tp.Text = "New query";
-            tp.Controls.Add(qp);
-            this.tabControl1.TabPages.Add(tp);
+            this.CreateQueryTab(false);
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.CreateQueryTab(true);
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -48,50 +50,15 @@ namespace SQLiteBrowser
 
         #endregion
 
-        #region Menu Item Handling - Edit Menu
+        #region Event Handlers
 
-        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        private void CutEnabled_Changed(object sender, EventArgs e)
         {
-            RichTextBox tbActiveQuery = FindFocusedControl() as RichTextBox;
-            tbActiveQuery.Undo();
+            this.cutToolStripMenuItem.Enabled = App.IsCutEnabled;
         }
-
-        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RichTextBox tbActiveQuery = FindFocusedControl() as RichTextBox;
-            tbActiveQuery.Redo();
-        }
-
-        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RichTextBox tbActiveQuery = FindFocusedControl() as RichTextBox;
-            tbActiveQuery.Cut();
-        }
-
-        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RichTextBox tbActiveQuery = FindFocusedControl() as RichTextBox;
-            tbActiveQuery.Copy();
-        }
-
-        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RichTextBox tbActiveQuery = FindFocusedControl() as RichTextBox;
-            DataFormats.Format myFormat = DataFormats.GetFormat(DataFormats.Text);
-            tbActiveQuery.Paste(myFormat);
-        }
-
-        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            RichTextBox tbActiveQuery = FindFocusedControl() as RichTextBox;
-            tbActiveQuery.SelectAll();
-        }
-
-        #endregion
 
         private void CopyEnabled_Changed(object sender, EventArgs e)
         {
-            this.cutToolStripMenuItem.Enabled = App.IsCopyEnabled;
             this.copyToolStripMenuItem.Enabled = App.IsCopyEnabled;
         }
 
@@ -110,22 +77,60 @@ namespace SQLiteBrowser
             this.redoToolStripMenuItem.Enabled = App.IsRedoEnabled;
         }
 
-        private void TabClosing(object sender, CloseEventArgs e)
+        private void SelectAllEnabled_Changed(object sender, EventArgs e)
         {
-            //Need some saving and all that here
-            this.tabControl1.TabPages.RemoveAt(e.TabIndex);
+            this.selectAllToolStripMenuItem.Enabled = App.IsSelectAllEnabled;
         }
 
-        private Control FindFocusedControl()
+        private void Window_Closing(object sender, FormClosingEventArgs e)
         {
-            Control control = this;
-            var container = control as ContainerControl;
-            while (container != null)
+            List<QueryView> unsavedQueries = new List<QueryView>();
+            StringBuilder files = new StringBuilder();
+            DialogResult result = System.Windows.Forms.DialogResult.No;
+
+            foreach (QueryView query in this.tabControl1.TabPages)
             {
-                control = container.ActiveControl;
-                container = control as ContainerControl;
+                if (query.IsSaved == false)
+                {
+                    unsavedQueries.Add(query);
+                    files.AppendLine(query.TabName);
+                }
             }
-            return control;
+
+            if (unsavedQueries.Count > 0)
+            {
+                result = MessageBox.Show("You're closing tabs that have some work you haven't saved yet. Do you want to save the following files?\r\n" + files.ToString(), "Unsaved Queries", MessageBoxButtons.YesNoCancel);
+
+                if (result == System.Windows.Forms.DialogResult.Yes)
+                {
+                    foreach (QueryView query in unsavedQueries)
+                    {
+                        query.Select();
+                        query.Focus();
+                        App.OnSave(this, new EventArgs());
+                        this.tabControl1.TabPages.RemoveByKey(query.Name);
+                    }
+                }
+            }
+
+            if (result == System.Windows.Forms.DialogResult.Cancel)
+            {
+                e.Cancel = true;
+            }
         }
+
+        #endregion
+
+        #region Private Methods
+
+        private void CreateQueryTab(bool IsOpen)
+        {
+            QueryView qp = new QueryView();
+            this.tabControl1.TabPages.Insert(0, qp);
+            qp.CreateQueryView(IsOpen);
+            this.tabControl1.SelectedIndex = 0;
+        }
+
+        #endregion
     }
 }

@@ -22,6 +22,12 @@ namespace SQLiteBrowser.Helpers
             for(int nIndex = 0 ; nIndex < this.TabCount ; nIndex++)
             {
                 tabTextArea = (RectangleF)this.GetTabRect(nIndex);
+                
+                using(SolidBrush brush = new SolidBrush(this.TabPages[nIndex].BackColor))
+                {
+                    //Clear the tab
+                    e.Graphics.FillRectangle(brush, tabTextArea);
+                }
 
                 Bitmap bmp = nIndex == this.SelectedIndex ? Icons.activeClose : Icons.inactiveClose;
                 e.Graphics.DrawImage(bmp, tabTextArea.X + tabTextArea.Width - (CLOSE_ICON_PADDING + CLOSE_ICON_SIZE), tabTextArea.Y + CLOSE_ICON_PADDING, CLOSE_ICON_SIZE, CLOSE_ICON_SIZE);
@@ -29,10 +35,11 @@ namespace SQLiteBrowser.Helpers
 
                 string str = this.TabPages[nIndex].Text;
                 StringFormat stringFormat = new StringFormat();
-                stringFormat.Alignment = StringAlignment.Center; 
+                stringFormat.Alignment = StringAlignment.Center;
+                stringFormat.LineAlignment = StringAlignment.Center;
                 using(SolidBrush brush = new SolidBrush(this.TabPages[nIndex].ForeColor))
                 {
-                    /*Draw the tab header text*/
+                    //Draw the tab header text
                     e.Graphics.DrawString(str, this.Font, brush, tabTextArea,stringFormat);
                 }
             }
