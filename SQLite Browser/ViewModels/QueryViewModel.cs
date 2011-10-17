@@ -26,6 +26,8 @@ namespace SQLiteBrowser.ViewModels
         private string _safeFileName = "New Query";
         private bool _isSaved = false;
 
+        private const string FILE_TYPES = "SQL file (*.sql)|*.sql|Text file (*.txt)|*.txt|All files (*.*)|*.*";
+
         #endregion
 
         #region Constructor(s)
@@ -96,6 +98,7 @@ namespace SQLiteBrowser.ViewModels
             {
                 OpenFileDialog open = new OpenFileDialog();
                 open.Multiselect = false;
+                open.Filter = FILE_TYPES;
 
                 if (open.ShowDialog() == DialogResult.OK)
                 {
@@ -132,7 +135,7 @@ namespace SQLiteBrowser.ViewModels
                 saveDialog.OverwritePrompt = true;
                 saveDialog.DefaultExt = "sql";
                 saveDialog.AddExtension = true;
-                saveDialog.Filter = "SQL file (*.sql)|*.sql|Text file (*.txt)|*.txt|All files (*.*)|*.*";
+                saveDialog.Filter = FILE_TYPES;
 
                 if(saveDialog.ShowDialog() == DialogResult.OK)
                 {
