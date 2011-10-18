@@ -152,6 +152,25 @@ namespace SQLiteBrowser.ViewModels
 
         #endregion
 
+        #region Public Events
+
+        public event EventHandler BeginQuery;
+        public event EventHandler EndQuery;
+
+        private void OnBeginQuery()
+        {
+            if (BeginQuery != null)
+                BeginQuery(this, new EventArgs());
+        }
+
+        private void OnEndQuery()
+        {
+            if (EndQuery != null)
+                EndQuery(this, new EventArgs());
+        }
+
+        #endregion
+
         #region Private Methods
 
         private void CommitSave(string Query)
@@ -187,6 +206,7 @@ namespace SQLiteBrowser.ViewModels
             RunQueryDelegate dl = new RunQueryDelegate(RunQueryWorker);
             AsyncOperation async = AsyncOperationManager.CreateOperation(null);
 
+            OnBeginQuery();
             IAsyncResult ar = dl.BeginInvoke(Query, new AsyncCallback(RunQueryCallback), async);
         }
 
@@ -216,6 +236,7 @@ namespace SQLiteBrowser.ViewModels
             _results = e.Results;
             _dataBinding.DataSource = _results.Data;
             RunQueryCompleted -= this.RunQuery_Completed;
+            OnEndQuery();
         }
 
         #endregion

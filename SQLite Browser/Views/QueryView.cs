@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using SQLiteBrowser.Dialogs;
 using SQLiteBrowser.Helpers;
@@ -18,6 +20,7 @@ namespace SQLiteBrowser.Views
 
         private QueryViewModel _queryViewModel;
         private int _numLines = 0;
+        private BackgroundWorker _bgWorker = new BackgroundWorker();
 
         #endregion
 
@@ -29,6 +32,14 @@ namespace SQLiteBrowser.Views
             _queryViewModel = new QueryViewModel();
             this.dgResults.DataSource = _queryViewModel.DataBinding;
             this.Name = Guid.NewGuid().ToString();
+
+            _queryViewModel.BeginQuery += this.BeginQuery;
+            _queryViewModel.EndQuery += this.EndQuery;
+
+            _bgWorker.WorkerReportsProgress = true;
+            _bgWorker.WorkerSupportsCancellation = true;
+            _bgWorker.DoWork += this.TimeQuery;
+            _bgWorker.ProgressChanged += this.UpdateTimer;
         }
 
         #endregion
@@ -91,6 +102,36 @@ namespace SQLiteBrowser.Views
             }
         }
 
+        private void AddTabs()
+        {
+            int currLineChar = this.tbQuery.GetFirstCharIndexOfCurrentLine();
+            int currLine = this.tbQuery.GetLineFromCharIndex(currLineChar);
+            if (currLine > 0 && this.tbQuery.Lines[currLine].Length == 0)
+            {
+                string beforeLine = this.tbQuery.Lines[currLine-1];
+                int counter = 0;
+                foreach (char nextChar in beforeLine.ToCharArray())
+                {
+                    if (nextChar == '\t')
+                    {
+                        counter++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < counter; i++)
+                {
+                    //why is this not working?!
+                    this.tbQuery.Text = this.tbQuery.Text.Insert(currLineChar, "\t");
+                }
+
+                this.tbQuery.Select(currLineChar + counter, 0);
+            }
+        }
+
         #endregion
 
         #region Event Handlers
@@ -102,6 +143,7 @@ namespace SQLiteBrowser.Views
             if (_numLines != newLines)
             {
                 UpdateLineNumbers();
+                AddTabs();
             }
 
             _numLines = newLines;
@@ -269,8 +311,43 @@ namespace SQLiteBrowser.Views
                 if (result != DialogResult.Cancel)
                 {
                     tc.TabPages.RemoveAt(e.TabIndex);
+                    this.Dispose(true);
                 }
             }
+        }
+
+        private void BeginQuery(object sender, EventArgs e)
+        {
+            _bgWorker.RunWorkerAsync();
+        }
+
+        private void EndQuery(object sender, EventArgs e)
+        {
+            if (_bgWorker.IsBusy)
+            {
+                _bgWorker.CancelAsync();
+            }
+        }
+
+        #endregion
+
+        #region Private Methods - Async
+
+        private void TimeQuery(object sender, DoWorkEventArgs e)
+        {
+            Stopwatch sw = Stopwatch.StartNew();
+            while (!_bgWorker.CancellationPending)
+            {
+                TimeSpan ts = sw.Elapsed;
+                _bgWorker.ReportProgress(0, String.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds));
+                Thread.Sleep(500);
+            }
+            sw.Stop();
+        }
+
+        private void UpdateTimer(object sender, ProgressChangedEventArgs e)
+        {
+            this.queryTimer.Text = e.UserState.ToString();
         }
 
         #endregion
