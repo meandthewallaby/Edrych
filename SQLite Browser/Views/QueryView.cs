@@ -14,7 +14,7 @@ using SQLiteBrowser.ViewModels;
 
 namespace SQLiteBrowser.Views
 {
-    public partial class QueryView : TabPage
+    public partial class QueryView : UserControl
     {
         #region Private/Global Variables
 
@@ -31,6 +31,7 @@ namespace SQLiteBrowser.Views
             InitializeComponent();
             _queryViewModel = new QueryViewModel();
             this.dgResults.DataSource = _queryViewModel.DataBinding;
+            this.label1.DataBindings.Add("Text", _queryViewModel, "Messages");
             this.Name = Guid.NewGuid().ToString();
 
             _queryViewModel.BeginQuery += this.BeginQuery;
@@ -321,11 +322,20 @@ namespace SQLiteBrowser.Views
             _bgWorker.RunWorkerAsync();
         }
 
-        private void EndQuery(object sender, EventArgs e)
+        private void EndQuery(object sender, EndQueryEventArgs e)
         {
             if (_bgWorker.IsBusy)
             {
                 _bgWorker.CancelAsync();
+            }
+
+            if (e.HasError)
+            {
+                this.tcResults.SelectTab("tpMessages");
+            }
+            else
+            {
+                this.tcResults.SelectTab("tpResults");
             }
         }
 
@@ -340,7 +350,7 @@ namespace SQLiteBrowser.Views
             {
                 TimeSpan ts = sw.Elapsed;
                 _bgWorker.ReportProgress(0, String.Format("{0:00}:{1:00}", ts.Minutes, ts.Seconds));
-                Thread.Sleep(500);
+                Thread.Sleep(100);
             }
             sw.Stop();
         }

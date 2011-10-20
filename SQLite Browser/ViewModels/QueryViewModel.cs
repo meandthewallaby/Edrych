@@ -5,6 +5,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using SQLiteBrowser.DataAccess;
 using SQLiteBrowser.Dialogs;
@@ -21,6 +22,7 @@ namespace SQLiteBrowser.ViewModels
         private DataAccessBase _dab;
         private ResultSet _results = new ResultSet();
         private BindingSource _dataBinding = new BindingSource();
+        private string _messages = string.Empty;
 
         private string _fileName = string.Empty;
         private string _safeFileName = "New Query";
@@ -66,6 +68,11 @@ namespace SQLiteBrowser.ViewModels
         {
             get { return _dataBinding; }
             set { _dataBinding = value; }
+        }
+
+        public string Messages
+        {
+            get { return _messages; }
         }
 
         public string SafeFileName
@@ -155,7 +162,7 @@ namespace SQLiteBrowser.ViewModels
         #region Public Events
 
         public event EventHandler BeginQuery;
-        public event EventHandler EndQuery;
+        public event EndQueryEventHandler EndQuery;
 
         private void OnBeginQuery()
         {
@@ -163,10 +170,10 @@ namespace SQLiteBrowser.ViewModels
                 BeginQuery(this, new EventArgs());
         }
 
-        private void OnEndQuery()
+        private void OnEndQuery(bool IsError)
         {
             if (EndQuery != null)
-                EndQuery(this, new EventArgs());
+                EndQuery(this, new EndQueryEventArgs(IsError));
         }
 
         #endregion
@@ -192,7 +199,7 @@ namespace SQLiteBrowser.ViewModels
         private delegate ResultSet RunQueryDelegate(string Query);
         private event RunQueryCompletedEventHandler RunQueryCompleted;
 
-        protected virtual void OnRunQueryCompleted(RunQueryCompletedEventArgs e)
+        protected virtual void OnRunQueryCompleted(CustomEventArgs e)
         {
             if (RunQueryCompleted != null)
             {
@@ -225,18 +232,42 @@ namespace SQLiteBrowser.ViewModels
         {
             RunQueryDelegate dl = (RunQueryDelegate)((System.Runtime.Remoting.Messaging.AsyncResult)ar).AsyncDelegate;
             AsyncOperation async = (AsyncOperation)ar.AsyncState;
-            ResultSet results = dl.EndInvoke(ar);
-            RunQueryCompletedEventArgs completedArgs = new RunQueryCompletedEventArgs(null, false, null);
-            completedArgs.Results = results;
-            async.PostOperationCompleted(delegate(object e) { OnRunQueryCompleted((RunQueryCompletedEventArgs)e); }, completedArgs);
+            ResultSet results;
+            CustomEventArgs completedArgs = new CustomEventArgs(null, false, null);
+
+            try
+            {
+                results = dl.EndInvoke(ar);
+                completedArgs.Results = results;
+            }
+            catch(Exception ex)
+            {
+                completedArgs = new CustomEventArgs(ex, false, null);
+            }
+            finally
+            {
+                async.PostOperationCompleted(delegate(object e) { OnRunQueryCompleted((CustomEventArgs)e); }, completedArgs);
+            }
         }
 
-        private void RunQuery_Completed(object sender, RunQueryCompletedEventArgs e)
+        private void RunQuery_Completed(object sender, CustomEventArgs e)
         {
-            _results = e.Results;
+            bool isError = true;
+            if (e.Error == null)
+            {
+                _results = e.Results;
+                isError = false;
+            }
+            else
+            {
+                _results = new ResultSet();
+                _results.Messages = e.Error.Message;
+            }
+
             _dataBinding.DataSource = _results.Data;
+            _messages = _results.Messages;
             RunQueryCompleted -= this.RunQuery_Completed;
-            OnEndQuery();
+            OnEndQuery(isError);
         }
 
         #endregion

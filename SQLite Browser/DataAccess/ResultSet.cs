@@ -12,7 +12,7 @@ namespace SQLiteBrowser.DataAccess
         public event PropertyChangedEventHandler PropertyChanged;
 
         private DataTable _dt;
-        private string _messages;
+        private string _messages = string.Empty;
 
         public ResultSet()
         {

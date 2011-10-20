@@ -31,15 +31,22 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tbQuery = new System.Windows.Forms.RichTextBox();
             this.tbLines = new System.Windows.Forms.RichTextBox();
+            this.tcResults = new System.Windows.Forms.TabControl();
+            this.tpResults = new System.Windows.Forms.TabPage();
+            this.dgResults = new System.Windows.Forms.DataGridView();
+            this.tpMessages = new System.Windows.Forms.TabPage();
             this.panel1 = new System.Windows.Forms.Panel();
             this.queryTimer = new System.Windows.Forms.Label();
-            this.dgResults = new System.Windows.Forms.DataGridView();
+            this.tbMessages = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.tcResults.SuspendLayout();
+            this.tpResults.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgResults)).BeginInit();
+            this.tpMessages.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -56,10 +63,10 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.tcResults);
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Panel2.Controls.Add(this.dgResults);
-            this.splitContainer1.Size = new System.Drawing.Size(578, 410);
-            this.splitContainer1.SplitterDistance = 192;
+            this.splitContainer1.Size = new System.Drawing.Size(862, 576);
+            this.splitContainer1.SplitterDistance = 269;
             this.splitContainer1.TabIndex = 0;
             // 
             // tbQuery
@@ -72,7 +79,7 @@
             this.tbQuery.Location = new System.Drawing.Point(31, 0);
             this.tbQuery.Name = "tbQuery";
             this.tbQuery.ShortcutsEnabled = false;
-            this.tbQuery.Size = new System.Drawing.Size(547, 190);
+            this.tbQuery.Size = new System.Drawing.Size(831, 267);
             this.tbQuery.TabIndex = 0;
             this.tbQuery.Text = "";
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
@@ -87,64 +94,117 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tbLines.BackColor = System.Drawing.SystemColors.Control;
             this.tbLines.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbLines.Enabled = false;
             this.tbLines.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbLines.Location = new System.Drawing.Point(0, 0);
             this.tbLines.Name = "tbLines";
             this.tbLines.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.None;
-            this.tbLines.Size = new System.Drawing.Size(32, 190);
+            this.tbLines.Size = new System.Drawing.Size(32, 267);
             this.tbLines.TabIndex = 1;
             this.tbLines.Text = "";
+            // 
+            // tcResults
+            // 
+            this.tcResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tcResults.Controls.Add(this.tpResults);
+            this.tcResults.Controls.Add(this.tpMessages);
+            this.tcResults.Location = new System.Drawing.Point(0, 3);
+            this.tcResults.Name = "tcResults";
+            this.tcResults.SelectedIndex = 0;
+            this.tcResults.Size = new System.Drawing.Size(862, 282);
+            this.tcResults.TabIndex = 2;
+            // 
+            // tpResults
+            // 
+            this.tpResults.Controls.Add(this.dgResults);
+            this.tpResults.Location = new System.Drawing.Point(4, 22);
+            this.tpResults.Name = "tpResults";
+            this.tpResults.Padding = new System.Windows.Forms.Padding(3);
+            this.tpResults.Size = new System.Drawing.Size(854, 256);
+            this.tpResults.TabIndex = 0;
+            this.tpResults.Text = "Results";
+            this.tpResults.UseVisualStyleBackColor = true;
+            // 
+            // dgResults
+            // 
+            this.dgResults.AllowUserToAddRows = false;
+            this.dgResults.AllowUserToDeleteRows = false;
+            this.dgResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgResults.Location = new System.Drawing.Point(3, 3);
+            this.dgResults.Name = "dgResults";
+            this.dgResults.ReadOnly = true;
+            this.dgResults.Size = new System.Drawing.Size(848, 250);
+            this.dgResults.TabIndex = 0;
+            this.dgResults.Enter += new System.EventHandler(this.Query_Focus);
+            this.dgResults.Leave += new System.EventHandler(this.QueryOrResults_Leave);
+            // 
+            // tpMessages
+            // 
+            this.tpMessages.Controls.Add(this.tbMessages);
+            this.tpMessages.Location = new System.Drawing.Point(4, 22);
+            this.tpMessages.Name = "tpMessages";
+            this.tpMessages.Padding = new System.Windows.Forms.Padding(3);
+            this.tpMessages.Size = new System.Drawing.Size(854, 256);
+            this.tpMessages.TabIndex = 1;
+            this.tpMessages.Text = "Messages";
+            this.tpMessages.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.queryTimer);
-            this.panel1.Location = new System.Drawing.Point(0, 195);
+            this.panel1.Location = new System.Drawing.Point(0, 284);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(578, 19);
+            this.panel1.Size = new System.Drawing.Size(862, 19);
             this.panel1.TabIndex = 1;
             // 
             // queryTimer
             // 
             this.queryTimer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.queryTimer.AutoSize = true;
-            this.queryTimer.Location = new System.Drawing.Point(547, 4);
+            this.queryTimer.Location = new System.Drawing.Point(831, 4);
             this.queryTimer.Name = "queryTimer";
             this.queryTimer.Size = new System.Drawing.Size(28, 13);
             this.queryTimer.TabIndex = 0;
             this.queryTimer.Text = "0:00";
             // 
-            // dgResults
+            // tbMessages
             // 
-            this.dgResults.AllowUserToAddRows = false;
-            this.dgResults.AllowUserToDeleteRows = false;
-            this.dgResults.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.dgResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgResults.Location = new System.Drawing.Point(0, 0);
-            this.dgResults.Name = "dgResults";
-            this.dgResults.ReadOnly = true;
-            this.dgResults.Size = new System.Drawing.Size(578, 196);
-            this.dgResults.TabIndex = 0;
-            this.dgResults.Enter += new System.EventHandler(this.Query_Focus);
-            this.dgResults.Leave += new System.EventHandler(this.QueryOrResults_Leave);
+            this.tbMessages.BackColor = System.Drawing.SystemColors.Window;
+            this.tbMessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbMessages.Enabled = false;
+            this.tbMessages.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbMessages.Location = new System.Drawing.Point(3, 3);
+            this.tbMessages.Multiline = true;
+            this.tbMessages.Name = "tbMessages";
+            this.tbMessages.ReadOnly = true;
+            this.tbMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbMessages.ShortcutsEnabled = false;
+            this.tbMessages.Size = new System.Drawing.Size(848, 250);
+            this.tbMessages.TabIndex = 0;
             // 
             // QueryView
             // 
             this.Controls.Add(this.splitContainer1);
             this.Name = "QueryView";
-            this.Size = new System.Drawing.Size(578, 410);
+            this.Size = new System.Drawing.Size(862, 576);
             this.Enter += new System.EventHandler(this.QueryView_Focus);
             this.Leave += new System.EventHandler(this.QueryView_Leave);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.tcResults.ResumeLayout(false);
+            this.tpResults.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dgResults)).EndInit();
+            this.tpMessages.ResumeLayout(false);
+            this.tpMessages.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.dgResults)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -157,6 +217,10 @@
         private System.Windows.Forms.RichTextBox tbLines;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label queryTimer;
+        private System.Windows.Forms.TabControl tcResults;
+        private System.Windows.Forms.TabPage tpResults;
+        private System.Windows.Forms.TabPage tpMessages;
+        private System.Windows.Forms.TextBox tbMessages;
 
     }
 }

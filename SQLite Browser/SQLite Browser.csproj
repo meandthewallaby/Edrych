@@ -60,7 +60,7 @@
       <DependentUpon>ConnectDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="App.cs" />
-    <Compile Include="Helpers\RunQueryCompletedEventArgs.cs" />
+    <Compile Include="Helpers\CustomEventArgs.cs" />
     <Compile Include="Helpers\TabControlExt.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -84,7 +84,7 @@
       <DependentUpon>Icons.resx</DependentUpon>
     </Compile>
     <Compile Include="Views\QueryView.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\QueryView.Designer.cs">
       <DependentUpon>QueryView.cs</DependentUpon>
