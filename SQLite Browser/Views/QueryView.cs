@@ -14,7 +14,7 @@ using SQLiteBrowser.ViewModels;
 
 namespace SQLiteBrowser.Views
 {
-    public partial class QueryView : UserControl
+    public partial class QueryView : TabPage
     {
         #region Private/Global Variables
 
@@ -26,12 +26,12 @@ namespace SQLiteBrowser.Views
 
         #region Constructor(s)
 
-        public QueryView()
+        public QueryView(DataAccess.DataAccessBase Dab)
         {
             InitializeComponent();
-            _queryViewModel = new QueryViewModel();
+            _queryViewModel = new QueryViewModel(Dab);
             this.dgResults.DataSource = _queryViewModel.DataBinding;
-            this.label1.DataBindings.Add("Text", _queryViewModel, "Messages");
+            this.tbMessages.DataBindings.Add("Text", _queryViewModel, "Messages");
             this.Name = Guid.NewGuid().ToString();
 
             _queryViewModel.BeginQuery += this.BeginQuery;

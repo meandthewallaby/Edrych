@@ -7,6 +7,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using SQLiteBrowser.DataAccess;
 using SQLiteBrowser.Properties;
 using SQLiteBrowser.ViewModels;
 
@@ -14,20 +15,43 @@ namespace SQLiteBrowser.Dialogs
 {
     public partial class ConnectDialog : Form
     {
-        private QueryViewModel _query;
+        #region Private/Global Variables
 
-        public ConnectDialog(QueryViewModel Query)
+        private DataAccessBase _dataAccess;
+        private ConnectionType _connType;
+        private string _dataSource;
+        
+        #endregion
+
+        #region Constructor(s)
+        
+        public ConnectDialog()
         {
             InitializeComponent();
-            _query = Query;
             PopulateConnectionType();
             PopulateDataSource();
         }
 
+        #endregion
+
+        #region Public Properties
+
+        public DataAccessBase DataAccess
+        {
+            get { return _dataAccess; }
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private void PopulateConnectionType()
         {
             this.cbConnectionType.Items.Clear();
-            this.cbConnectionType.Items.Add("SQLite");
+            foreach (var connType in Enum.GetValues(typeof(ConnectionType)))
+            {
+                this.cbConnectionType.Items.Add(connType.ToString());
+            }
         }
 
         private void PopulateDataSource()
@@ -47,24 +71,23 @@ namespace SQLiteBrowser.Dialogs
 
         private void Open()
         {
-            _query.ConnectionType = this.cbConnectionType.Text;
-            _query.DataSource = this.cbDataSource.Text;
+            _connType = (DataAccess.ConnectionType)Enum.Parse(typeof(DataAccess.ConnectionType), this.cbConnectionType.Text);
+            _dataSource = this.cbDataSource.Text;
                 
-            //TODO: Should probably try the connection here...
             try
             {
-                _query.InitiatlizeData();
+                InitiatlizeData();
 
                 if (Settings.Default.RecentConnections == null)
                 {
                     Settings.Default.RecentConnections = new StringCollection();
                 }
 
-                if (Settings.Default.RecentConnections.Contains(_query.DataSource))
+                if (Settings.Default.RecentConnections.Contains(_dataSource))
                 {
-                    Settings.Default.RecentConnections.Remove(_query.DataSource);
+                    Settings.Default.RecentConnections.Remove(_dataSource);
                 }
-                Settings.Default.RecentConnections.Insert(0, _query.DataSource);
+                Settings.Default.RecentConnections.Insert(0, _dataSource);
                 Settings.Default.Save();
 
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
@@ -78,11 +101,19 @@ namespace SQLiteBrowser.Dialogs
 
         private void Cancel()
         {
-            _query.ConnectionType = null;
-            _query.DataSource = null;
+            _dataAccess = null;
             this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.Close();
         }
+
+        public void InitiatlizeData()
+        {
+            this._dataAccess = DataAccessFactory.GetDataAccess(_connType, "Data Source=" + _dataSource);
+        }
+
+        #endregion
+
+        #region Private Methods - Event Handlers
 
         private void btnOpen_Click(object sender, EventArgs e)
         {
@@ -106,5 +137,7 @@ namespace SQLiteBrowser.Dialogs
                 }
             }
         }
+
+        #endregion
     }
 }

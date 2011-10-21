@@ -14,21 +14,13 @@ namespace SQLiteBrowser
 {
     public partial class MainWindow : Form
     {
+        private TreeViewModel _treeViewModel = new TreeViewModel();
+
         public MainWindow()
         {
             InitializeComponent();
-            App.CutEnabledChanged += this.CutEnabled_Changed;
-            App.CopyEnabledChanged += this.CopyEnabled_Changed;
-            App.PasteEnabledChanged += this.PasteEnabled_Changed;
-            App.UndoEnabledChanged += this.UndoEnabled_Changed;
-            App.RedoEnabledChanged += this.RedoEnabled_Changed;
-            App.SelectAllEnabledChanged += this.SelectAllEnabled_Changed;
-
-            App.IsCopyEnabled = false;
-            App.IsPasteEnabled = false;
-            App.IsUndoEnabled = false;
-            App.IsRedoEnabled = false;
-            App.IsSelectAllEnabled = false;
+            InitializeMenus();
+            InitializeTreeView();
         }
 
         #region Menu Item Handling - File Menu
@@ -125,10 +117,30 @@ namespace SQLiteBrowser
 
         private void CreateQueryTab(bool IsOpen)
         {
-            QueryView qp = new QueryView();
+            QueryView qp = new QueryView(_treeViewModel.DataAccess);
             this.tabControl1.TabPages.Insert(0, qp);
             qp.CreateQueryView(IsOpen);
             this.tabControl1.SelectedIndex = 0;
+        }
+
+        private void InitializeMenus()
+        {
+            App.CutEnabledChanged += this.CutEnabled_Changed;
+            App.CopyEnabledChanged += this.CopyEnabled_Changed;
+            App.PasteEnabledChanged += this.PasteEnabled_Changed;
+            App.UndoEnabledChanged += this.UndoEnabled_Changed;
+            App.RedoEnabledChanged += this.RedoEnabled_Changed;
+            App.SelectAllEnabledChanged += this.SelectAllEnabled_Changed;
+
+            App.IsCopyEnabled = false;
+            App.IsPasteEnabled = false;
+            App.IsUndoEnabled = false;
+            App.IsRedoEnabled = false;
+            App.IsSelectAllEnabled = false;
+        }
+
+        private void InitializeTreeView()
+        {
         }
 
         #endregion

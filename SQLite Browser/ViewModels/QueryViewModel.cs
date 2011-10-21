@@ -17,8 +17,6 @@ namespace SQLiteBrowser.ViewModels
     {
         #region Private/Global Variables
 
-        private string _connType;
-        private string _dataSource;
         private DataAccessBase _dab;
         private ResultSet _results = new ResultSet();
         private BindingSource _dataBinding = new BindingSource();
@@ -34,26 +32,15 @@ namespace SQLiteBrowser.ViewModels
 
         #region Constructor(s)
 
-        public QueryViewModel()
+        public QueryViewModel(DataAccessBase Dab)
         {
+            _dab = Dab;
         }
 
         #endregion
 
         #region Public Properties
-
-        public string ConnectionType
-        {
-            get { return _connType; }
-            set { _connType = value; }
-        }
-
-        public string DataSource
-        {
-            get { return _dataSource; }
-            set { _dataSource = value; }
-        }
-
+        
         public DataAccessBase Data
         {
             get { return _dab; }
@@ -90,13 +77,6 @@ namespace SQLiteBrowser.ViewModels
 
         #region Public Methods
 
-        public void InitiatlizeData()
-        {
-            DataAccess.ConnectionType ct = (DataAccess.ConnectionType)Enum.Parse(typeof(DataAccess.ConnectionType), this.ConnectionType);
-            //May need to build the connection string a little differently...
-            this._dab = DataAccessFactory.GetDataAccess(ct, "Data Source=" + this.DataSource);
-        }
-
         public string InitQuery(bool OpenQuery)
         {
             string queryText = string.Empty;
@@ -123,8 +103,12 @@ namespace SQLiteBrowser.ViewModels
                 }
             }
 
-            ConnectDialog cd = new ConnectDialog(this);
-            cd.ShowDialog();
+            if (this._dab == null)
+            {
+                ConnectDialog cd = new ConnectDialog();
+                cd.ShowDialog();
+                this._dab = cd.DataAccess;
+            }
 
             return queryText;
         }

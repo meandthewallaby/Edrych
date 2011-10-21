@@ -16,6 +16,7 @@ namespace SQLiteBrowser.DataAccess
         {
         }
 
+        public ConnectionType ConnectionType { get; set; }
         public string ConnectionString { get; set; }
         public string DataSource { get; set; }
         public string InitialCatalog { get; set; }
