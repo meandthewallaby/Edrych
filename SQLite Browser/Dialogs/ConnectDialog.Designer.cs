@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConnectDialog));
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.cbConnectionType = new System.Windows.Forms.ComboBox();
@@ -150,6 +151,7 @@
             this.CancelButton = this.btnCancel;
             this.ClientSize = new System.Drawing.Size(494, 292);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ConnectDialog";
             this.Text = "ConnectDialog";
             this.tableLayoutPanel1.ResumeLayout(false);

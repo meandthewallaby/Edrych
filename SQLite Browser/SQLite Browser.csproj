@@ -11,7 +11,8 @@
     <RootNamespace>SQLiteBrowser</RootNamespace>
     <AssemblyName>SQLite Browser</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -34,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aga.Controls">
+      <HintPath>..\..\..\..\..\Downloads\treeviewadv\Aga.Controls\obj\Release\Aga.Controls.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -53,6 +57,7 @@
     <Compile Include="DataAccess\DataAccessBase.cs" />
     <Compile Include="DataAccess\DataAccessFactory.cs" />
     <Compile Include="DataAccess\SQLiteDataAccess.cs" />
+    <Compile Include="DataAccess\DataAccessItems.cs" />
     <Compile Include="Dialogs\ConnectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -71,7 +76,8 @@
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="DataAccess\ResultSet.cs" />
-    <Compile Include="Models\InfoBase.cs" />
+    <Compile Include="Models\TreeItems.cs" />
+    <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\DataAccessResources.Designer.cs">
@@ -130,12 +136,26 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\column.png" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="Resources\activeClose.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\inactiveClose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\database.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\table.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\view.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

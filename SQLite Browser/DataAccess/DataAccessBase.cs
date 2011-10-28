@@ -23,6 +23,7 @@ namespace SQLiteBrowser.DataAccess
         public string Username { get; set; }
         public string Password { get; set; }
         public string AuthType { get; set; }
+        public string Name { get { return _conn.Database; } }
 
         public void Open()
         {
@@ -72,6 +73,16 @@ namespace SQLiteBrowser.DataAccess
             }
         }
 
+        public void AddParameter(string Name, object Value)
+        {
+            _comm.Parameters.Add(GetDbParameter(Name, Value));
+        }
+
+        public void ClearParameters()
+        {
+            _comm.Parameters.Clear();
+        }
+
         private void PrepareConnection()
         {
             if (_conn == null)
@@ -93,5 +104,9 @@ namespace SQLiteBrowser.DataAccess
 
         internal abstract IDbConnection GetDbConnection();
         internal abstract IDbCommand GetDbCommand();
+        internal abstract IDbDataParameter GetDbParameter(string Name, object Value);
+        internal abstract List<TableView> GetTables();
+        internal abstract List<TableView> GetViews();
+        internal abstract List<Column> GetColumns(string TableName);
     }
 }

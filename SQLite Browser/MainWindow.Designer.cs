@@ -30,13 +30,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.treeView1 = new System.Windows.Forms.TreeView();
-            this.tabControl1 = new TabControlExt();
+            this.treeViewAdv1 = new Aga.Controls.Tree.TreeViewAdv();
+            this.expandingIcon1 = new Aga.Controls.Tree.NodeControls.ExpandingIcon();
+            this._icon = new Aga.Controls.Tree.NodeControls.NodeIcon();
+            this._name = new Aga.Controls.Tree.NodeControls.NodeTextBox();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -67,6 +70,9 @@
             this.searchToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.tabControl1 = new SQLiteBrowser.Helpers.TabControlExt();
             this.toolStripContainer1.SuspendLayout();
             this.toolStripContainer2.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -77,6 +83,7 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            this.treeContextMenu.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -130,7 +137,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeView1);
+            this.splitContainer1.Panel1.Controls.Add(this.treeViewAdv1);
             // 
             // splitContainer1.Panel2
             // 
@@ -139,25 +146,45 @@
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
             // 
-            // treeView1
+            // treeViewAdv1
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(232, 478);
-            this.treeView1.TabIndex = 0;
+            this.treeViewAdv1.AsyncExpanding = true;
+            this.treeViewAdv1.BackColor = System.Drawing.SystemColors.Window;
+            this.treeViewAdv1.ContextMenuStrip = this.treeContextMenu;
+            this.treeViewAdv1.DefaultToolTipProvider = null;
+            this.treeViewAdv1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeViewAdv1.DragDropMarkColor = System.Drawing.Color.Black;
+            this.treeViewAdv1.LineColor = System.Drawing.SystemColors.ControlDark;
+            this.treeViewAdv1.LoadOnDemand = true;
+            this.treeViewAdv1.Location = new System.Drawing.Point(0, 0);
+            this.treeViewAdv1.Model = null;
+            this.treeViewAdv1.Name = "treeViewAdv1";
+            this.treeViewAdv1.NodeControls.Add(this.expandingIcon1);
+            this.treeViewAdv1.NodeControls.Add(this._icon);
+            this.treeViewAdv1.NodeControls.Add(this._name);
+            this.treeViewAdv1.SelectedNode = null;
+            this.treeViewAdv1.Size = new System.Drawing.Size(232, 478);
+            this.treeViewAdv1.TabIndex = 0;
+            this.treeViewAdv1.Text = "treeViewAdv1";
             // 
-            // tabControl1
+            // expandingIcon1
             // 
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(667, 478);
-            this.tabControl1.TabIndex = 0;
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.ItemSize = new System.Drawing.Size(300, 24);
-            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.expandingIcon1.LeftMargin = 0;
+            this.expandingIcon1.ParentColumn = null;
+            // 
+            // _icon
+            // 
+            this._icon.DataPropertyName = "Icon";
+            this._icon.LeftMargin = 1;
+            this._icon.ParentColumn = null;
+            this._icon.ScaleMode = Aga.Controls.Tree.ImageScaleMode.Clip;
+            // 
+            // _name
+            // 
+            this._name.DataPropertyName = "Name";
+            this._name.IncrementalSearchEnabled = true;
+            this._name.LeftMargin = 3;
+            this._name.ParentColumn = null;
             // 
             // menuStrip1
             // 
@@ -208,7 +235,6 @@
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
             this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openToolStripMenuItem.Text = "&Open";
-            this.openToolStripMenuItem.Click += this.openToolStripMenuItem_Click;
             // 
             // toolStripSeparator
             // 
@@ -223,14 +249,12 @@
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
             this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveToolStripMenuItem.Text = "&Save";
-            this.saveToolStripMenuItem.Click += App.OnSave;
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
             this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
-            this.saveAsToolStripMenuItem.Click += App.OnSaveAs;
             // 
             // toolStripSeparator1
             // 
@@ -286,7 +310,6 @@
             this.undoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
             this.undoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.undoToolStripMenuItem.Text = "&Undo";
-            this.undoToolStripMenuItem.Click += App.OnUndo;
             // 
             // redoToolStripMenuItem
             // 
@@ -294,7 +317,6 @@
             this.redoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
             this.redoToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.redoToolStripMenuItem.Text = "&Redo";
-            this.redoToolStripMenuItem.Click += App.OnRedo;
             // 
             // toolStripSeparator3
             // 
@@ -309,7 +331,6 @@
             this.cutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
             this.cutToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.cutToolStripMenuItem.Text = "Cu&t";
-            this.cutToolStripMenuItem.Click += App.OnCut;
             // 
             // copyToolStripMenuItem
             // 
@@ -319,7 +340,6 @@
             this.copyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
             this.copyToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.copyToolStripMenuItem.Text = "&Copy";
-            this.copyToolStripMenuItem.Click += App.OnCopy;
             // 
             // pasteToolStripMenuItem
             // 
@@ -329,7 +349,6 @@
             this.pasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
             this.pasteToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.pasteToolStripMenuItem.Text = "&Paste";
-            this.pasteToolStripMenuItem.Click += App.OnPaste;
             // 
             // toolStripSeparator4
             // 
@@ -342,7 +361,6 @@
             this.selectAllToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
             this.selectAllToolStripMenuItem.Size = new System.Drawing.Size(164, 22);
             this.selectAllToolStripMenuItem.Text = "Select &All";
-            this.selectAllToolStripMenuItem.Click += App.OnSelectAll;
             // 
             // toolsToolStripMenuItem
             // 
@@ -406,6 +424,32 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.aboutToolStripMenuItem.Text = "&About...";
             // 
+            // treeContextMenu
+            // 
+            this.treeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.contextRefresh});
+            this.treeContextMenu.Name = "treeContextMenu";
+            this.treeContextMenu.Size = new System.Drawing.Size(153, 48);
+            // 
+            // contextRefresh
+            // 
+            this.contextRefresh.Name = "contextRefresh";
+            this.contextRefresh.Size = new System.Drawing.Size(152, 22);
+            this.contextRefresh.Text = "Refresh";
+            this.contextRefresh.Click += new System.EventHandler(this.contextRefresh_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControl1.ItemSize = new System.Drawing.Size(300, 24);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(667, 478);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControl1.TabIndex = 0;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -413,9 +457,9 @@
             this.ClientSize = new System.Drawing.Size(903, 524);
             this.Controls.Add(this.toolStripContainer2);
             this.Controls.Add(this.toolStripContainer1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainWindow";
             this.Text = "SQLite Browser";
-            this.FormClosing += this.Window_Closing;
             this.toolStripContainer1.ResumeLayout(false);
             this.toolStripContainer1.PerformLayout();
             this.toolStripContainer2.BottomToolStripPanel.ResumeLayout(false);
@@ -431,7 +475,9 @@
             this.splitContainer1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            this.treeContextMenu.ResumeLayout(false);
             this.ResumeLayout(false);
+
         }
 
         #endregion
@@ -470,8 +516,13 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.TreeView treeView1;
         private TabControlExt tabControl1;
+        private Aga.Controls.Tree.TreeViewAdv treeViewAdv1;
+        private Aga.Controls.Tree.NodeControls.NodeTextBox _name;
+        private Aga.Controls.Tree.NodeControls.NodeIcon _icon;
+        private Aga.Controls.Tree.NodeControls.ExpandingIcon expandingIcon1;
+        private System.Windows.Forms.ContextMenuStrip treeContextMenu;
+        private System.Windows.Forms.ToolStripMenuItem contextRefresh;
     }
 }
 

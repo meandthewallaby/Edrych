@@ -15,7 +15,7 @@ namespace SQLiteBrowser.ViewModels
         #region Private/Global Variables
 
         private DataAccessBase _dataAccess;
-        private List<InfoBase> _treeItems = new List<InfoBase>();
+        private TreeModel _tree;
 
         #endregion
 
@@ -24,7 +24,9 @@ namespace SQLiteBrowser.ViewModels
         public TreeViewModel()
         {
             InitializeData();
-            AddDatabase();
+            _tree = new TreeModel();
+            if(this._dataAccess != null)
+                _tree.AddDatabase(this._dataAccess);
         }
 
         #endregion
@@ -36,6 +38,20 @@ namespace SQLiteBrowser.ViewModels
             get { return _dataAccess; }
         }
 
+        public TreeModel Tree
+        {
+            get { return _tree; }
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public void RefreshNode(Aga.Controls.Tree.TreeNodeAdv Node)
+        {
+            _tree.RefreshNode(Node);
+        }
+
         #endregion
 
         #region Private Methods
@@ -45,17 +61,6 @@ namespace SQLiteBrowser.ViewModels
             ConnectDialog cd = new ConnectDialog();
             cd.ShowDialog();
             this._dataAccess = cd.DataAccess;
-        }
-
-        private void AddDatabase()
-        {
-            InfoBase database = new InfoBase();
-            database.Name = this._dataAccess.DataSource;
-            List<InfoBase> folders = new List<InfoBase>();
-            folders.Add(new InfoBase() { Name = "Tables" });
-            folders.Add(new InfoBase() { Name = "Views" });
-            database.Children = folders;
-            _treeItems.Add(database);
         }
 
         #endregion

@@ -120,4 +120,17 @@
   <data name="DefaultConnectionString" xml:space="preserve">
     <value>Data Source=%TEMP%\Test.db3</value>
   </data>
+  <data name="SQLite_FindColumns" xml:space="preserve">
+    <value>PRAGMA table_info(@TableName)</value>
+  </data>
+  <data name="SQLite_FindTables" xml:space="preserve">
+    <value>SELECT name FROM sqlite_master
+WHERE type='table'
+ORDER BY name;</value>
+  </data>
+  <data name="SQLite_FindViews" xml:space="preserve">
+    <value>SELECT name FROM sqlite_master
+WHERE type='view'
+ORDER BY name;</value>
+  </data>
 </root>

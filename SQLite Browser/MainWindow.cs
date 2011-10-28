@@ -14,7 +14,7 @@ namespace SQLiteBrowser
 {
     public partial class MainWindow : Form
     {
-        private TreeViewModel _treeViewModel = new TreeViewModel();
+        private TreeViewModel _treeViewModel;
 
         public MainWindow()
         {
@@ -111,6 +111,12 @@ namespace SQLiteBrowser
             }
         }
 
+        private void contextRefresh_Click(object sender, EventArgs e)
+        {
+            this.treeViewAdv1.SelectedNode.Collapse();
+            _treeViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
+        }
+
         #endregion
 
         #region Private Methods
@@ -141,6 +147,8 @@ namespace SQLiteBrowser
 
         private void InitializeTreeView()
         {
+            _treeViewModel = new TreeViewModel();
+            this.treeViewAdv1.Model = _treeViewModel.Tree;
         }
 
         #endregion
