@@ -13,9 +13,16 @@ namespace SQLiteBrowser
         [STAThread]
         static void Main()
         {
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            try
+            {
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new MainWindow());
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Well, THAT was unexpected. Here's everything I know, but I'm gonna close after you hit OK...\r\n\r\n" + e.ToString(), "Unexpected Error!", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

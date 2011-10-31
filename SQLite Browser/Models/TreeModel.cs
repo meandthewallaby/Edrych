@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -20,11 +21,11 @@ namespace SQLiteBrowser.Models
 
         #region Public Methods
 
-        public void AddDatabase(DataAccessBase database)
+        public void AddServer(DataAccessBase dataAccess)
         {
-            DatabaseItem item = new DatabaseItem(database.Name, null);
-            item.Database = database;
-            if(_cache.ContainsKey("ROOT"))
+            ServerItem item = new ServerItem(dataAccess.DataSource);
+            item.DataAccess = dataAccess;
+            if (_cache.ContainsKey("ROOT"))
             {
                 _cache["ROOT"].Add(item);
             }
@@ -37,9 +38,9 @@ namespace SQLiteBrowser.Models
             OnNodesInserted(TreePath.Empty, _cache["ROOT"].ToArray());
         }
 
-        public System.Collections.IEnumerable GetChildren(TreePath treePath)
+        public IEnumerable GetChildren(TreePath treePath)
         {
-            List<BaseItem> items = null;
+            List<BaseItem> items = new List<BaseItem>();
             if (treePath.IsEmpty())
             {
                 if (_cache.ContainsKey("ROOT"))
@@ -54,26 +55,40 @@ namespace SQLiteBrowser.Models
             }
             else
             {
-                DatabaseItem database = treePath.FirstNode as DatabaseItem;
+                ServerItem server = treePath.FirstNode as ServerItem;
+                DatabaseItem database = treePath.FullPath.FirstOrDefault(i => (i as BaseItem).Type == ItemType.Database) as DatabaseItem;
                 BaseItem parent = treePath.LastNode as BaseItem;
-                if (parent != null && database != null)
+                if (parent != null && server != null)
                 {
-                    //Populate the items based on the parent
-                    switch (parent.Type)
+                    if (_cache.ContainsKey(parent.ItemPath))
                     {
-                        case ItemType.Database:
-                            items = GetDatabaseChildren(parent);
-                            break;
-                        case ItemType.Folder:
-                            items = GetFolderChildren(parent, database);
-                            break;
-                        case ItemType.Table:
-                        case ItemType.View:
-                            items = GetColumns(parent, database);
-                            break;
-                        default:
-                            items = new List<BaseItem>();
-                            break;
+                        items = _cache[parent.ItemPath];
+                    }
+                    else
+                    {
+                        //Populate the items based on the parent
+                        switch (parent.Type)
+                        {
+                            case ItemType.Server:
+                                items = GetDatabases(server);
+                                break;
+                            case ItemType.Database:
+                                items = GetDatabaseChildren(parent);
+                                break;
+                            case ItemType.Folder:
+                                if(database != null)
+                                    items = GetFolderChildren(parent, database);
+                                break;
+                            case ItemType.Table:
+                            case ItemType.View:
+                                if (database != null)
+                                    items = GetColumns(parent, database);
+                                break;
+                            default:
+                                break;
+                        }
+
+                        _cache.Add(parent.ItemPath, items);
                     }
 
                     parent.IsLoaded = true;
@@ -90,9 +105,27 @@ namespace SQLiteBrowser.Models
 
         public void RefreshNode(TreeNodeAdv SelectedNode)
         {
-            TreePath path = new TreePath(SelectedNode.Parent.Tag);
-            List<BaseItem> children = (List<BaseItem>)GetChildren(path);
-            OnStructureChanged(path, children.ToArray());
+            if (SelectedNode != null)
+            {
+                BaseItem item = SelectedNode.Tag as BaseItem;
+                List<BaseItem> items = new List<BaseItem>();
+                items.Add(item);
+                BaseItem parent = item.Parent;
+                while (parent != null)
+                {
+                    items.Insert(0, parent);
+                    parent = parent.Parent;
+                }
+
+                TreePath path = new TreePath(items.ToArray());
+                List<string> oldCache = _cache.Keys.Where(k => k.StartsWith(item.ItemPath)).ToList();
+                foreach (string key in oldCache)
+                {
+                    _cache.Remove(key);
+                }
+                List<BaseItem> children = (List<BaseItem>)GetChildren(path);
+                OnStructureChanged(path, children.ToArray());
+            }
         }
 
         #endregion
@@ -110,6 +143,21 @@ namespace SQLiteBrowser.Models
         #endregion
 
         #region Private Methods
+
+        private List<BaseItem> GetDatabases(ServerItem server)
+        {
+            List<BaseItem> items = new List<BaseItem>();
+            List<Database> databases = server.DataAccess.GetDatabases();
+
+            foreach (Database db in databases)
+            {
+                DatabaseItem dataItem = new DatabaseItem(db.Name, server);
+                dataItem.Database = server.DataAccess;
+                items.Add(dataItem);
+            }
+
+            return items;
+        }
 
         private List<BaseItem> GetDatabaseChildren(BaseItem parent)
         {

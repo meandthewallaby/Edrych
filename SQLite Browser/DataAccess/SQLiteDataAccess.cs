@@ -16,7 +16,10 @@ namespace SQLiteBrowser.DataAccess
 
         internal override IDbConnection GetDbConnection()
         {
-            return new SQLiteConnection(this.ConnectionString);
+            this.ConnectionString = "Data Source=" + this.DataSource + (this.Password != null ? ";Password=" + this.Password : "");
+            SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
+            this.InitialCatalog = conn.Database;
+            return conn;
         }
 
         internal override IDbCommand GetDbCommand()
@@ -27,6 +30,15 @@ namespace SQLiteBrowser.DataAccess
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new SQLiteParameter(Name, Value);
+        }
+
+        internal override List<Database> GetDatabases()
+        {
+            List<Database> databases = new List<Database>();
+            Database db = new Database();
+            db.Name = this.InitialCatalog;
+            databases.Add(db);
+            return databases;
         }
 
         internal override List<TableView> GetTables()

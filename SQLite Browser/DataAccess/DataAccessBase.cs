@@ -35,7 +35,10 @@ namespace SQLiteBrowser.DataAccess
             IDataReader reader = this.ExecuteReader(sqlQuery);
             ResultSet rs = new ResultSet();
 
+            rs.Messages = reader.RecordsAffected + " rows affected";
             rs.Data.Load(reader);
+
+            reader.Close();
 
             return rs;
         }
@@ -105,6 +108,7 @@ namespace SQLiteBrowser.DataAccess
         internal abstract IDbConnection GetDbConnection();
         internal abstract IDbCommand GetDbCommand();
         internal abstract IDbDataParameter GetDbParameter(string Name, object Value);
+        internal abstract List<Database> GetDatabases();
         internal abstract List<TableView> GetTables();
         internal abstract List<TableView> GetViews();
         internal abstract List<Column> GetColumns(string TableName);

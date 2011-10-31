@@ -15,4 +15,9 @@ namespace SQLiteBrowser.DataAccess
         public string Name { get; set; }
         public string DataType { get; set; }
     }
+
+    public class Database
+    {
+        public string Name { get; set; }
+    }
 }

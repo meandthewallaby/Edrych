@@ -329,7 +329,7 @@ namespace SQLiteBrowser.Views
                 _bgWorker.CancelAsync();
             }
 
-            if (e.HasError)
+            if (e.HasError || this.dgResults.RowCount == 0)
             {
                 this.tcResults.SelectTab("tpMessages");
             }

@@ -108,7 +108,7 @@ namespace SQLiteBrowser.Dialogs
 
         public void InitiatlizeData()
         {
-            this._dataAccess = DataAccessFactory.GetDataAccess(_connType, "Data Source=" + _dataSource);
+            this._dataAccess = DataAccessFactory.GetDataAccess(_connType, _dataSource);
         }
 
         #endregion

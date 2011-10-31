@@ -18,7 +18,12 @@ namespace SQLiteBrowser.DataAccess
             return GetDataAccess(ConnectionType.SQLite, DataAccessResources.DefaultConnectionString);
         }
 
-        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string ConnectionString)
+        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource)
+        {
+            return GetDataAccess(ConnectionType, DataSource, null, null);
+        }
+
+        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string Username, string Password)
         {
             DataAccessBase dab;
 
@@ -32,7 +37,9 @@ namespace SQLiteBrowser.DataAccess
                     break;
             }
 
-            dab.ConnectionString = ConnectionString;
+            dab.DataSource = DataSource;
+            dab.Username = Username;
+            dab.Password = Password;
             dab.Open();
 
             return dab;

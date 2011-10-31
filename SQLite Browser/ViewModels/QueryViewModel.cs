@@ -13,7 +13,7 @@ using SQLiteBrowser.Helpers;
 
 namespace SQLiteBrowser.ViewModels
 {
-    public class QueryViewModel
+    public class QueryViewModel : INotifyPropertyChanged
     {
         #region Private/Global Variables
 
@@ -147,6 +147,7 @@ namespace SQLiteBrowser.ViewModels
 
         public event EventHandler BeginQuery;
         public event EndQueryEventHandler EndQuery;
+        public event PropertyChangedEventHandler PropertyChanged;
 
         private void OnBeginQuery()
         {
@@ -158,6 +159,14 @@ namespace SQLiteBrowser.ViewModels
         {
             if (EndQuery != null)
                 EndQuery(this, new EndQueryEventArgs(IsError));
+        }
+
+        private void NotifyPropertyChanged(string Property)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(Property));
+            }
         }
 
         #endregion
@@ -250,6 +259,7 @@ namespace SQLiteBrowser.ViewModels
 
             _dataBinding.DataSource = _results.Data;
             _messages = _results.Messages;
+            NotifyPropertyChanged("Messages");
             RunQueryCompleted -= this.RunQuery_Completed;
             OnEndQuery(isError);
         }

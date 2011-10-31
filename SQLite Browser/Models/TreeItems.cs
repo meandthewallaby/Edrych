@@ -10,6 +10,7 @@ namespace SQLiteBrowser.Models
 {
     enum ItemType
     {
+        Server,
         Database,
         Folder,
         Table,
@@ -69,6 +70,9 @@ namespace SQLiteBrowser.Models
         {
             switch(this._type)
             {
+                case ItemType.Server:
+                    _icon = Icons.server;
+                    break;
                 case ItemType.Database:
                     _icon = Icons.database;
                     break;
@@ -104,6 +108,22 @@ namespace SQLiteBrowser.Models
         {
             get { return _database; }
             set { _database = value; }
+        }
+    }
+
+    class ServerItem : BaseItem
+    {
+        private DataAccessBase _dataAccess;
+
+        public ServerItem(string Name)
+            : base(ItemType.Server, Name, null)
+        {
+        }
+
+        public DataAccessBase DataAccess
+        {
+            get { return _dataAccess; }
+            set { _dataAccess = value; }
         }
     }
 }

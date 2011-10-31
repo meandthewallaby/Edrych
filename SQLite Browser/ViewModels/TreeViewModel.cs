@@ -26,7 +26,7 @@ namespace SQLiteBrowser.ViewModels
             InitializeData();
             _tree = new TreeModel();
             if(this._dataAccess != null)
-                _tree.AddDatabase(this._dataAccess);
+                _tree.AddServer(this._dataAccess);
         }
 
         #endregion
