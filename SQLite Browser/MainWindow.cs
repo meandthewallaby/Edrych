@@ -35,6 +35,16 @@ namespace SQLiteBrowser
             this.CreateQueryTab(true);
         }
 
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnSave(sender, e);
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnSaveAs(sender, e);
+        }
+
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -42,36 +52,66 @@ namespace SQLiteBrowser
 
         #endregion
 
+        #region Menu Item Handling - Edit Menu
+
+        private void cutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnCut(sender, e);
+        }
+
+        private void copyToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnCopy(sender, e);
+        }
+
+        private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnPaste(sender, e);
+        }
+
+        private void undoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnUndo(sender, e);
+        }
+
+        private void redoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnRedo(sender, e);
+        }
+
+        private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnSelectAll(sender, e);
+        }
+
+        #endregion
+
+        #region Menu Item Handling - Query Menu
+
+        private void queryConnectMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnQueryConnect(sender, e);
+        }
+
+        private void queryDisconnectMenuItem_Click(object sender, EventArgs e)
+        {
+            App.OnQueryDisconnect(sender, e);
+        }
+
+        #endregion
+
         #region Event Handlers
 
-        private void CutEnabled_Changed(object sender, EventArgs e)
+        private void Property_Changed(object sender, PropertyChangedEventArgs e)
         {
             this.cutToolStripMenuItem.Enabled = App.IsCutEnabled;
-        }
-
-        private void CopyEnabled_Changed(object sender, EventArgs e)
-        {
             this.copyToolStripMenuItem.Enabled = App.IsCopyEnabled;
-        }
-
-        private void PasteEnabled_Changed(object sender, EventArgs e)
-        {
             this.pasteToolStripMenuItem.Enabled = App.IsPasteEnabled;
-        }
-
-        private void UndoEnabled_Changed(object sender, EventArgs e)
-        {
             this.undoToolStripMenuItem.Enabled = App.IsUndoEnabled;
-        }
-
-        private void RedoEnabled_Changed(object sender, EventArgs e)
-        {
             this.redoToolStripMenuItem.Enabled = App.IsRedoEnabled;
-        }
-
-        private void SelectAllEnabled_Changed(object sender, EventArgs e)
-        {
             this.selectAllToolStripMenuItem.Enabled = App.IsSelectAllEnabled;
+            this.queryConnectMenuItem.Enabled = App.IsQueryConnectEnabled;
+            this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
         }
 
         private void Window_Closing(object sender, FormClosingEventArgs e)
@@ -131,24 +171,26 @@ namespace SQLiteBrowser
 
         private void InitializeMenus()
         {
-            App.CutEnabledChanged += this.CutEnabled_Changed;
-            App.CopyEnabledChanged += this.CopyEnabled_Changed;
-            App.PasteEnabledChanged += this.PasteEnabled_Changed;
-            App.UndoEnabledChanged += this.UndoEnabled_Changed;
-            App.RedoEnabledChanged += this.RedoEnabled_Changed;
-            App.SelectAllEnabledChanged += this.SelectAllEnabled_Changed;
+            App.PropertyChanged += this.Property_Changed;
 
             App.IsCopyEnabled = false;
             App.IsPasteEnabled = false;
             App.IsUndoEnabled = false;
             App.IsRedoEnabled = false;
             App.IsSelectAllEnabled = false;
+            App.IsQueryConnectEnabled = false;
+            App.IsQueryDisconnectEnabled = false;
         }
 
         private void InitializeTreeView()
         {
             _treeViewModel = new TreeViewModel();
             this.treeViewAdv1.Model = _treeViewModel.Tree;
+        }
+
+        private void connectMenuItem_Click(object sender, EventArgs e)
+        {
+            _treeViewModel.CreateConnection();
         }
 
         #endregion

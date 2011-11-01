@@ -4,7 +4,7 @@ using System.Data;
 using System.Data.SQLite;
 using System.Linq;
 using System.Text;
-using SQLiteBrowser.Resources;
+using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.DataAccess
 {

@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SQLiteBrowser.Resources {
+namespace SQLiteBrowser.Properties {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace SQLiteBrowser.Resources {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Icons {
+    internal class DataAccessResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Icons() {
+        internal DataAccessResources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace SQLiteBrowser.Resources {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SQLiteBrowser.Resources.Icons", typeof(Icons).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("SQLiteBrowser.Properties.DataAccessResources", typeof(DataAccessResources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -60,59 +60,43 @@ namespace SQLiteBrowser.Resources {
             }
         }
         
-        internal static System.Drawing.Bitmap activeClose {
+        /// <summary>
+        ///   Looks up a localized string similar to Data Source=%TEMP%\Test.db3.
+        /// </summary>
+        internal static string DefaultConnectionString {
             get {
-                object obj = ResourceManager.GetObject("activeClose", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("DefaultConnectionString", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap column {
+        /// <summary>
+        ///   Looks up a localized string similar to PRAGMA table_info(@TableName).
+        /// </summary>
+        internal static string SQLite_FindColumns {
             get {
-                object obj = ResourceManager.GetObject("column", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("SQLite_FindColumns", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap database {
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT name FROM sqlite_master
+        ///WHERE type=&apos;table&apos;
+        ///ORDER BY name;.
+        /// </summary>
+        internal static string SQLite_FindTables {
             get {
-                object obj = ResourceManager.GetObject("database", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("SQLite_FindTables", resourceCulture);
             }
         }
         
-        internal static System.Drawing.Bitmap folder {
+        /// <summary>
+        ///   Looks up a localized string similar to SELECT name FROM sqlite_master
+        ///WHERE type=&apos;view&apos;
+        ///ORDER BY name;.
+        /// </summary>
+        internal static string SQLite_FindViews {
             get {
-                object obj = ResourceManager.GetObject("folder", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap inactiveClose {
-            get {
-                object obj = ResourceManager.GetObject("inactiveClose", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap server {
-            get {
-                object obj = ResourceManager.GetObject("server", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap table {
-            get {
-                object obj = ResourceManager.GetObject("table", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        internal static System.Drawing.Bitmap view {
-            get {
-                object obj = ResourceManager.GetObject("view", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("SQLite_FindViews", resourceCulture);
             }
         }
     }

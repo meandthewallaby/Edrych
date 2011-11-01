@@ -7,7 +7,7 @@ using System.Text;
 using Aga.Controls;
 using Aga.Controls.Tree;
 using SQLiteBrowser.DataAccess;
-using SQLiteBrowser.Resources;
+using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.Models
 {
@@ -35,7 +35,7 @@ namespace SQLiteBrowser.Models
                 items.Add(item);
                 _cache.Add("ROOT", items);
             }
-            OnNodesInserted(TreePath.Empty, _cache["ROOT"].ToArray());
+            OnStructureChanged(TreePath.Empty, _cache["ROOT"].ToArray());
         }
 
         public IEnumerable GetChildren(TreePath treePath)

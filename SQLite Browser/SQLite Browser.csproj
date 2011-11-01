@@ -80,12 +80,12 @@
     <Compile Include="Models\TreeModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Resources\DataAccessResources.Designer.cs">
+    <Compile Include="Properties\DataAccessResources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>DataAccessResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Resources\Icons.Designer.cs">
+    <Compile Include="Properties\Icons.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Icons.resx</DependentUpon>
@@ -114,13 +114,14 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Resources\DataAccessResources.resx">
+    <EmbeddedResource Include="Properties\DataAccessResources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DataAccessResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Icons.resx">
+    <EmbeddedResource Include="Properties\Icons.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Icons.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Views\QueryView.resx">
       <DependentUpon>QueryView.cs</DependentUpon>
@@ -159,6 +160,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\server.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\connect.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disconnect.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

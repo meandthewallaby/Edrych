@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 
@@ -13,138 +14,93 @@ namespace SQLiteBrowser
         private static bool _isUndoEnabled;
         private static bool _isRedoEnabled;
         private static bool _isSelectAllEnabled;
+        private static bool _isQueryConnectEnabled;
+        private static bool _isQueryDisconnectEnabled;
 
-        public static bool IsCutEnabled { get { return _isCutEnabled; } set { _isCutEnabled = value; OnCutEnabledChanged(); } }
-        public static bool IsCopyEnabled { get { return _isCopyEnabled; } set { _isCopyEnabled = value; OnCopyEnabledChanged(); } }
-        public static bool IsPasteEnabled { get { return _isPasteEnabled; } set { _isPasteEnabled = value; OnPasteEnabledChanged(); } }
-        public static bool IsUndoEnabled { get { return _isUndoEnabled; } set { _isUndoEnabled = value; OnUndoEnabledChanged(); } }
-        public static bool IsRedoEnabled { get { return _isRedoEnabled; } set { _isRedoEnabled = value; OnRedoEnabledChanged(); } }
-        public static bool IsSelectAllEnabled { get { return _isSelectAllEnabled; } set { _isSelectAllEnabled = value; OnSelectAllEnabledChanged(); } }
+        public static bool IsCutEnabled { get { return _isCutEnabled; } set { if (value != _isCutEnabled) { _isCutEnabled = value; NotifyPropertyChanged("IsCutEnabled"); } } }
+        public static bool IsCopyEnabled { get { return _isCopyEnabled; } set { if (value != _isCopyEnabled) { _isCopyEnabled = value; NotifyPropertyChanged("IsCopyEnabled"); } } }
+        public static bool IsPasteEnabled { get { return _isPasteEnabled; } set { if (value != _isPasteEnabled) { _isPasteEnabled = value; NotifyPropertyChanged("IsPasteEnabled"); } } }
+        public static bool IsUndoEnabled { get { return _isUndoEnabled; } set { if (value != _isUndoEnabled) { _isUndoEnabled = value; NotifyPropertyChanged("IsUndoEnabled"); } } }
+        public static bool IsRedoEnabled { get { return _isRedoEnabled; } set { if (value != _isRedoEnabled) { _isRedoEnabled = value; NotifyPropertyChanged("IsRedoEnabled"); } } }
+        public static bool IsSelectAllEnabled { get { return _isSelectAllEnabled; } set { if (value != _isSelectAllEnabled) { _isSelectAllEnabled = value; NotifyPropertyChanged("IsSelectAllEnabled"); } } }
+        public static bool IsQueryConnectEnabled { get { return _isQueryConnectEnabled; } set { if (value != _isQueryConnectEnabled) { _isQueryConnectEnabled = value; NotifyPropertyChanged("IsQueryConnectEnabled"); } } }
+        public static bool IsQueryDisconnectEnabled { get { return _isQueryDisconnectEnabled; } set { if (value != _isQueryDisconnectEnabled) { _isQueryDisconnectEnabled = value; NotifyPropertyChanged("IsQueryDisconnectEnabled"); } } }
 
-        public static event EventHandler CutEnabledChanged;
-        private static void OnCutEnabledChanged()
+        public static event PropertyChangedEventHandler PropertyChanged;
+        private static void NotifyPropertyChanged(string Property)
         {
-            if (CutEnabledChanged != null)
-            {
-                CutEnabledChanged(null, new EventArgs());
-            }
-        }
-
-        public static event EventHandler CopyEnabledChanged;
-        private static void OnCopyEnabledChanged()
-        {
-            if (CopyEnabledChanged != null)
-            {
-                CopyEnabledChanged(null, new EventArgs());
-            }
-        }
-
-        public static event EventHandler PasteEnabledChanged;
-        private static void OnPasteEnabledChanged()
-        {
-            if (PasteEnabledChanged != null)
-            {
-                PasteEnabledChanged(null, new EventArgs());
-            }
-        }
-
-        public static event EventHandler UndoEnabledChanged;
-        private static void OnUndoEnabledChanged()
-        {
-            if (UndoEnabledChanged != null)
-            {
-                UndoEnabledChanged(null, new EventArgs());
-            }
-        }
-
-        public static event EventHandler RedoEnabledChanged;
-        private static void OnRedoEnabledChanged()
-        {
-            if (RedoEnabledChanged != null)
-            {
-                RedoEnabledChanged(null, new EventArgs());
-            }
-        }
-
-        public static event EventHandler SelectAllEnabledChanged;
-        private static void OnSelectAllEnabledChanged()
-        {
-            if (SelectAllEnabledChanged != null)
-            {
-                SelectAllEnabledChanged(null, new EventArgs());
-            }
+            if (PropertyChanged != null)
+                PropertyChanged(new App(), new PropertyChangedEventArgs(Property));
         }
 
         public static event EventHandler Save;
         public static void OnSave(object sender, EventArgs e)
         {
             if (Save != null)
-            {
-                Save(null, new EventArgs());
-            }
+                Save(sender, e);
         }
 
         public static event EventHandler SaveAs;
         public static void OnSaveAs(object sender, EventArgs e)
         {
             if (SaveAs != null)
-            {
-                SaveAs(null, new EventArgs());
-            }
+                SaveAs(sender, e);
         }
 
         public static event EventHandler Cut;
         public static void OnCut(object sender, EventArgs e)
         {
             if (Cut != null)
-            {
-                Cut(null, new EventArgs());
-            }
+                Cut(sender, e);
         }
 
         public static event EventHandler Copy;
         public static void OnCopy(object sender, EventArgs e)
         {
             if (Copy != null)
-            {
-                Copy(null, new EventArgs());
-            }
+                Copy(sender, e);
         }
 
         public static event EventHandler Paste;
         public static void OnPaste(object sender, EventArgs e)
         {
             if (Paste != null)
-            {
-                Paste(null, new EventArgs());
-            }
+                Paste(sender, e);
         }
 
         public static event EventHandler Undo;
         public static void OnUndo(object sender, EventArgs e)
         {
             if (Undo != null)
-            {
-                Undo(null, new EventArgs());
-            }
+                Undo(sender, e);
         }
 
         public static event EventHandler Redo;
         public static void OnRedo(object sender, EventArgs e)
         {
             if (Redo != null)
-            {
-                Redo(null, new EventArgs());
-            }
+                Redo(sender, e);
         }
 
         public static event EventHandler SelectAll;
         public static void OnSelectAll(object sender, EventArgs e)
         {
             if (SelectAll != null)
-            {
-                SelectAll(null, new EventArgs());
-            }
+                SelectAll(sender, e);
+        }
+
+        public static event EventHandler QueryConnect;
+        public static void OnQueryConnect(object sender, EventArgs e)
+        {
+            if (QueryConnect != null)
+                QueryConnect(sender, e);
+        }
+
+        public static event EventHandler QueryDisonnect;
+        public static void OnQueryDisconnect(object sender, EventArgs e)
+        {
+            if (QueryDisonnect != null)
+                QueryDisonnect(sender, e);
         }
     }
 }

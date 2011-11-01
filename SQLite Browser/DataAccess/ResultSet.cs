@@ -9,8 +9,6 @@ namespace SQLiteBrowser.DataAccess
 {
     public class ResultSet
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-
         private DataTable _dt;
         private string _messages = string.Empty;
 

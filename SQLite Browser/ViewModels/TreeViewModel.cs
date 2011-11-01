@@ -23,10 +23,8 @@ namespace SQLiteBrowser.ViewModels
 
         public TreeViewModel()
         {
-            InitializeData();
             _tree = new TreeModel();
-            if(this._dataAccess != null)
-                _tree.AddServer(this._dataAccess);
+            CreateConnection();
         }
 
         #endregion
@@ -47,6 +45,15 @@ namespace SQLiteBrowser.ViewModels
 
         #region Public Methods
 
+        public void CreateConnection()
+        {
+            ConnectDialog cd = new ConnectDialog();
+            cd.ShowDialog();
+            this._dataAccess = cd.DataAccess;
+            if (this._dataAccess != null)
+                _tree.AddServer(this._dataAccess);
+        }
+
         public void RefreshNode(Aga.Controls.Tree.TreeNodeAdv Node)
         {
             _tree.RefreshNode(Node);
@@ -56,13 +63,7 @@ namespace SQLiteBrowser.ViewModels
 
         #region Private Methods
 
-        private void InitializeData()
-        {
-            ConnectDialog cd = new ConnectDialog();
-            cd.ShowDialog();
-            this._dataAccess = cd.DataAccess;
-        }
-
+       
         #endregion
     }
 }
