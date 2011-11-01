@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using SQLiteBrowser.Dialogs;
 using SQLiteBrowser.Helpers;
 using SQLiteBrowser.ViewModels;
+using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.Views
 {
@@ -41,6 +42,9 @@ namespace SQLiteBrowser.Views
             _bgWorker.WorkerSupportsCancellation = true;
             _bgWorker.DoWork += this.TimeQuery;
             _bgWorker.ProgressChanged += this.UpdateTimer;
+
+            //Change status bar
+            UpdateConnectionInfo();
         }
 
         #endregion
@@ -133,6 +137,20 @@ namespace SQLiteBrowser.Views
             }
         }
 
+        private void UpdateConnectionInfo()
+        {
+            if (_queryViewModel.Data != null)
+            {
+                this.connectionLabel.Image = Icons.connect;
+                this.connectionLabel.Text = "        Connected to " + _queryViewModel.Data.DataSource;
+            }
+            else
+            {
+                this.connectionLabel.Image = Icons.disconnect;
+                this.connectionLabel.Text = "        Disconnected";
+            }
+        }
+
         #endregion
 
         #region Event Handlers
@@ -186,12 +204,22 @@ namespace SQLiteBrowser.Views
         {
             App.Save += this.QueryView_Save;
             App.SaveAs += this.QueryView_SaveAs;
+            App.QueryConnect += this.QueryView_Connect;
+            App.QueryDisonnect += this.QueryView_Disconnect;
+
+            App.IsQueryConnectEnabled = true;
+            App.IsQueryDisconnectEnabled = true;
         }
 
         private void QueryView_Leave(object sender, EventArgs e)
         {
             App.Save -= this.QueryView_Save;
             App.SaveAs -= this.QueryView_SaveAs;
+            App.QueryConnect -= this.QueryView_Connect;
+            App.QueryDisonnect -= this.QueryView_Disconnect;
+
+            App.IsQueryConnectEnabled = false;
+            App.IsQueryDisconnectEnabled = false;
         }
 
         private void Query_Focus(object sender, EventArgs e)
@@ -237,6 +265,18 @@ namespace SQLiteBrowser.Views
 
             App.Copy -= this.Results_Copy;
             App.SelectAll -= this.Results_SelectAll;
+        }
+
+        private void QueryView_Connect(object sender, EventArgs e)
+        {
+            _queryViewModel.Connect();
+            UpdateConnectionInfo();
+        }
+
+        private void QueryView_Disconnect(object sender, EventArgs e)
+        {
+            _queryViewModel.Disconnect();
+            UpdateConnectionInfo();
         }
 
         private void QueryView_Save(object sender, EventArgs e)
@@ -329,7 +369,7 @@ namespace SQLiteBrowser.Views
                 _bgWorker.CancelAsync();
             }
 
-            if (e.HasError || this.dgResults.RowCount == 0)
+            if (e.HasError || (this.dgResults.RowCount == 0 && this.dgResults.ColumnCount == 0))
             {
                 this.tcResults.SelectTab("tpMessages");
             }
@@ -337,6 +377,8 @@ namespace SQLiteBrowser.Views
             {
                 this.tcResults.SelectTab("tpResults");
             }
+
+            this.tbQuery.Focus();
         }
 
         #endregion

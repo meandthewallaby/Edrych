@@ -30,6 +30,14 @@ namespace SQLiteBrowser.DataAccess
             PrepareConnection();
         }
 
+        public void Close()
+        {
+            if (this._tran != null)
+                _tran.Rollback();
+            if (this._conn != null && this._conn.State == ConnectionState.Open)
+                _conn.Close();
+        }
+
         public ResultSet GetDataSet(string sqlQuery)
         {
             IDataReader reader = this.ExecuteReader(sqlQuery);
@@ -45,17 +53,31 @@ namespace SQLiteBrowser.DataAccess
 
         public IDataReader ExecuteReader(string sqlQuery)
         {
-            PrepareConnection();
-            _comm.CommandText = sqlQuery;
-            IDataReader reader = _comm.ExecuteReader();
-            return reader;
+            try
+            {
+                PrepareConnection();
+                _comm.CommandText = sqlQuery;
+                IDataReader reader = _comm.ExecuteReader();
+                return reader;
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public int ExecuteNonQuery(string sqlQuery)
         {
-            PrepareConnection();
-            _comm.CommandText = sqlQuery;
-            return _comm.ExecuteNonQuery();
+            try
+            {
+                PrepareConnection();
+                _comm.CommandText = sqlQuery;
+                return _comm.ExecuteNonQuery();
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void BeginTransaction()

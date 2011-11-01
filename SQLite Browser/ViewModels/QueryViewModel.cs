@@ -141,6 +141,21 @@ namespace SQLiteBrowser.ViewModels
             }
         }
 
+        public void Connect()
+        {
+            ConnectDialog cd = new ConnectDialog();
+            cd.ShowDialog();
+            if (cd.DataAccess != null)
+                this._dab = cd.DataAccess;
+        }
+
+        public void Disconnect()
+        {
+            if (this._dab != null)
+                this._dab.Close();
+            this._dab = null;
+        }
+
         #endregion
 
         #region Public Events
@@ -213,7 +228,13 @@ namespace SQLiteBrowser.ViewModels
         private ResultSet RunQueryWorker(string Query)
         {
             ResultSet res = null;
-            if (!string.IsNullOrEmpty(Query))
+            if (_dab == null)
+            {
+                res = new ResultSet();
+                res.Messages = "No active connection";
+            }
+
+            if (!string.IsNullOrEmpty(Query) && res == null)
             {
                 res = _dab.GetDataSet(Query);
             }

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QueryView));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tbQuery = new System.Windows.Forms.RichTextBox();
             this.tbLines = new System.Windows.Forms.RichTextBox();
@@ -35,9 +36,10 @@
             this.tpResults = new System.Windows.Forms.TabPage();
             this.dgResults = new System.Windows.Forms.DataGridView();
             this.tpMessages = new System.Windows.Forms.TabPage();
+            this.tbMessages = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.queryTimer = new System.Windows.Forms.Label();
-            this.tbMessages = new System.Windows.Forms.TextBox();
+            this.connectionLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -152,10 +154,26 @@
             this.tpMessages.Text = "Messages";
             this.tpMessages.UseVisualStyleBackColor = true;
             // 
+            // tbMessages
+            // 
+            this.tbMessages.BackColor = System.Drawing.SystemColors.Window;
+            this.tbMessages.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tbMessages.Enabled = false;
+            this.tbMessages.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbMessages.Location = new System.Drawing.Point(3, 3);
+            this.tbMessages.Multiline = true;
+            this.tbMessages.Name = "tbMessages";
+            this.tbMessages.ReadOnly = true;
+            this.tbMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.tbMessages.ShortcutsEnabled = false;
+            this.tbMessages.Size = new System.Drawing.Size(848, 250);
+            this.tbMessages.TabIndex = 0;
+            // 
             // panel1
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.connectionLabel);
             this.panel1.Controls.Add(this.queryTimer);
             this.panel1.Location = new System.Drawing.Point(0, 284);
             this.panel1.Name = "panel1";
@@ -172,20 +190,16 @@
             this.queryTimer.TabIndex = 0;
             this.queryTimer.Text = "0:00";
             // 
-            // tbMessages
+            // connectionLabel
             // 
-            this.tbMessages.BackColor = System.Drawing.SystemColors.Window;
-            this.tbMessages.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tbMessages.Enabled = false;
-            this.tbMessages.Font = new System.Drawing.Font("Consolas", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.tbMessages.Location = new System.Drawing.Point(3, 3);
-            this.tbMessages.Multiline = true;
-            this.tbMessages.Name = "tbMessages";
-            this.tbMessages.ReadOnly = true;
-            this.tbMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.tbMessages.ShortcutsEnabled = false;
-            this.tbMessages.Size = new System.Drawing.Size(848, 250);
-            this.tbMessages.TabIndex = 0;
+            this.connectionLabel.AutoSize = true;
+            this.connectionLabel.Image = ((System.Drawing.Image)(resources.GetObject("connectionLabel.Image")));
+            this.connectionLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.connectionLabel.Location = new System.Drawing.Point(3, 4);
+            this.connectionLabel.Name = "connectionLabel";
+            this.connectionLabel.Size = new System.Drawing.Size(91, 13);
+            this.connectionLabel.TabIndex = 1;
+            this.connectionLabel.Text = "      Disconnected";
             // 
             // QueryView
             // 
@@ -221,6 +235,7 @@
         private System.Windows.Forms.TabPage tpResults;
         private System.Windows.Forms.TabPage tpMessages;
         private System.Windows.Forms.TextBox tbMessages;
+        private System.Windows.Forms.Label connectionLabel;
 
     }
 }
