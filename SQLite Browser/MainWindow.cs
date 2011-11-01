@@ -113,6 +113,8 @@ namespace SQLiteBrowser
             this.queryToolStripMenuItem.Visible = App.IsQueryMenuVisible;
             this.queryConnectMenuItem.Enabled = App.IsQueryConnectEnabled;
             this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
+            this.connectToolStrip.Enabled = App.IsQueryConnectEnabled;
+            this.disconnectToolStrip.Enabled = App.IsQueryDisconnectEnabled;
         }
 
         private void Window_Closing(object sender, FormClosingEventArgs e)
