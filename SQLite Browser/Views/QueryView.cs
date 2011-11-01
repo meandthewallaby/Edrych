@@ -45,6 +45,7 @@ namespace SQLiteBrowser.Views
 
             //Change status bar
             UpdateConnectionInfo();
+            App.IsQueryMenuVisible = true;
         }
 
         #endregion
@@ -353,6 +354,10 @@ namespace SQLiteBrowser.Views
                 {
                     tc.TabPages.RemoveAt(e.TabIndex);
                     tc.ResizeTabs();
+                    if (tc.TabCount == 0)
+                    {
+                        App.IsQueryMenuVisible = false;
+                    }
                     this.Dispose(true);
                 }
             }

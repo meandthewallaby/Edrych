@@ -38,8 +38,8 @@
             this.tpMessages = new System.Windows.Forms.TabPage();
             this.tbMessages = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.queryTimer = new System.Windows.Forms.Label();
             this.connectionLabel = new System.Windows.Forms.Label();
+            this.queryTimer = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -115,7 +115,7 @@
             this.tcResults.Location = new System.Drawing.Point(0, 3);
             this.tcResults.Name = "tcResults";
             this.tcResults.SelectedIndex = 0;
-            this.tcResults.Size = new System.Drawing.Size(862, 282);
+            this.tcResults.Size = new System.Drawing.Size(862, 275);
             this.tcResults.TabIndex = 2;
             // 
             // tpResults
@@ -124,7 +124,7 @@
             this.tpResults.Location = new System.Drawing.Point(4, 22);
             this.tpResults.Name = "tpResults";
             this.tpResults.Padding = new System.Windows.Forms.Padding(3);
-            this.tpResults.Size = new System.Drawing.Size(854, 256);
+            this.tpResults.Size = new System.Drawing.Size(854, 249);
             this.tpResults.TabIndex = 0;
             this.tpResults.Text = "Results";
             this.tpResults.UseVisualStyleBackColor = true;
@@ -138,7 +138,7 @@
             this.dgResults.Location = new System.Drawing.Point(3, 3);
             this.dgResults.Name = "dgResults";
             this.dgResults.ReadOnly = true;
-            this.dgResults.Size = new System.Drawing.Size(848, 250);
+            this.dgResults.Size = new System.Drawing.Size(848, 243);
             this.dgResults.TabIndex = 0;
             this.dgResults.Enter += new System.EventHandler(this.Query_Focus);
             this.dgResults.Leave += new System.EventHandler(this.QueryOrResults_Leave);
@@ -175,31 +175,33 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.panel1.Controls.Add(this.connectionLabel);
             this.panel1.Controls.Add(this.queryTimer);
-            this.panel1.Location = new System.Drawing.Point(0, 284);
+            this.panel1.Location = new System.Drawing.Point(0, 277);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(862, 19);
+            this.panel1.Size = new System.Drawing.Size(862, 26);
             this.panel1.TabIndex = 1;
-            // 
-            // queryTimer
-            // 
-            this.queryTimer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.queryTimer.AutoSize = true;
-            this.queryTimer.Location = new System.Drawing.Point(831, 4);
-            this.queryTimer.Name = "queryTimer";
-            this.queryTimer.Size = new System.Drawing.Size(28, 13);
-            this.queryTimer.TabIndex = 0;
-            this.queryTimer.Text = "0:00";
             // 
             // connectionLabel
             // 
-            this.connectionLabel.AutoSize = true;
+            this.connectionLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.connectionLabel.Image = ((System.Drawing.Image)(resources.GetObject("connectionLabel.Image")));
             this.connectionLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.connectionLabel.Location = new System.Drawing.Point(3, 4);
             this.connectionLabel.Name = "connectionLabel";
-            this.connectionLabel.Size = new System.Drawing.Size(91, 13);
+            this.connectionLabel.Size = new System.Drawing.Size(792, 20);
             this.connectionLabel.TabIndex = 1;
             this.connectionLabel.Text = "      Disconnected";
+            this.connectionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // queryTimer
+            // 
+            this.queryTimer.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.queryTimer.Location = new System.Drawing.Point(801, 4);
+            this.queryTimer.Name = "queryTimer";
+            this.queryTimer.Size = new System.Drawing.Size(58, 16);
+            this.queryTimer.TabIndex = 0;
+            this.queryTimer.Text = "0:00";
+            this.queryTimer.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // QueryView
             // 
@@ -218,7 +220,6 @@
             this.tpMessages.ResumeLayout(false);
             this.tpMessages.PerformLayout();
             this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }

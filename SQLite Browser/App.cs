@@ -14,6 +14,7 @@ namespace SQLiteBrowser
         private static bool _isUndoEnabled;
         private static bool _isRedoEnabled;
         private static bool _isSelectAllEnabled;
+        private static bool _isQueryMenuVisible;
         private static bool _isQueryConnectEnabled;
         private static bool _isQueryDisconnectEnabled;
 
@@ -23,6 +24,7 @@ namespace SQLiteBrowser
         public static bool IsUndoEnabled { get { return _isUndoEnabled; } set { if (value != _isUndoEnabled) { _isUndoEnabled = value; NotifyPropertyChanged("IsUndoEnabled"); } } }
         public static bool IsRedoEnabled { get { return _isRedoEnabled; } set { if (value != _isRedoEnabled) { _isRedoEnabled = value; NotifyPropertyChanged("IsRedoEnabled"); } } }
         public static bool IsSelectAllEnabled { get { return _isSelectAllEnabled; } set { if (value != _isSelectAllEnabled) { _isSelectAllEnabled = value; NotifyPropertyChanged("IsSelectAllEnabled"); } } }
+        public static bool IsQueryMenuVisible { get { return _isQueryMenuVisible; } set { if (value != _isQueryMenuVisible) { _isQueryMenuVisible = value; NotifyPropertyChanged("IsQueryMenuVisible"); } } }
         public static bool IsQueryConnectEnabled { get { return _isQueryConnectEnabled; } set { if (value != _isQueryConnectEnabled) { _isQueryConnectEnabled = value; NotifyPropertyChanged("IsQueryConnectEnabled"); } } }
         public static bool IsQueryDisconnectEnabled { get { return _isQueryDisconnectEnabled; } set { if (value != _isQueryDisconnectEnabled) { _isQueryDisconnectEnabled = value; NotifyPropertyChanged("IsQueryDisconnectEnabled"); } } }
 

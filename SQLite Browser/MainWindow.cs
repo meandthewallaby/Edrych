@@ -110,6 +110,7 @@ namespace SQLiteBrowser
             this.undoToolStripMenuItem.Enabled = App.IsUndoEnabled;
             this.redoToolStripMenuItem.Enabled = App.IsRedoEnabled;
             this.selectAllToolStripMenuItem.Enabled = App.IsSelectAllEnabled;
+            this.queryToolStripMenuItem.Visible = App.IsQueryMenuVisible;
             this.queryConnectMenuItem.Enabled = App.IsQueryConnectEnabled;
             this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
         }
@@ -179,6 +180,7 @@ namespace SQLiteBrowser
             App.IsUndoEnabled = false;
             App.IsRedoEnabled = false;
             App.IsSelectAllEnabled = false;
+            App.IsQueryMenuVisible = false;
             App.IsQueryConnectEnabled = false;
             App.IsQueryDisconnectEnabled = false;
         }

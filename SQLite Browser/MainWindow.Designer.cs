@@ -66,6 +66,9 @@
             this.pasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.queryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.queryConnectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.queryDisconnectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.customizeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -76,9 +79,6 @@
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.queryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.queryConnectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.queryDisconnectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabControl1 = new SQLiteBrowser.Helpers.TabControlExt();
             this.toolStripContainer1.SuspendLayout();
             this.toolStripContainer2.BottomToolStripPanel.SuspendLayout();
@@ -139,6 +139,7 @@
             // splitContainer1
             // 
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             // 
@@ -179,12 +180,13 @@
             this.treeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextRefresh});
             this.treeContextMenu.Name = "treeContextMenu";
-            this.treeContextMenu.Size = new System.Drawing.Size(114, 26);
+            this.treeContextMenu.Size = new System.Drawing.Size(153, 48);
             // 
             // contextRefresh
             // 
+            this.contextRefresh.Image = ((System.Drawing.Image)(resources.GetObject("contextRefresh.Image")));
             this.contextRefresh.Name = "contextRefresh";
-            this.contextRefresh.Size = new System.Drawing.Size(113, 22);
+            this.contextRefresh.Size = new System.Drawing.Size(152, 22);
             this.contextRefresh.Text = "Refresh";
             this.contextRefresh.Click += new System.EventHandler(this.contextRefresh_Click);
             // 
@@ -417,6 +419,32 @@
             this.selectAllToolStripMenuItem.Text = "Select &All";
             this.selectAllToolStripMenuItem.Click += new System.EventHandler(this.selectAllToolStripMenuItem_Click);
             // 
+            // queryToolStripMenuItem
+            // 
+            this.queryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.queryConnectMenuItem,
+            this.queryDisconnectMenuItem});
+            this.queryToolStripMenuItem.Name = "queryToolStripMenuItem";
+            this.queryToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
+            this.queryToolStripMenuItem.Text = "&Query";
+            this.queryToolStripMenuItem.Visible = false;
+            // 
+            // queryConnectMenuItem
+            // 
+            this.queryConnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("queryConnectMenuItem.Image")));
+            this.queryConnectMenuItem.Name = "queryConnectMenuItem";
+            this.queryConnectMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.queryConnectMenuItem.Text = "Connect";
+            this.queryConnectMenuItem.Click += new System.EventHandler(this.queryConnectMenuItem_Click);
+            // 
+            // queryDisconnectMenuItem
+            // 
+            this.queryDisconnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("queryDisconnectMenuItem.Image")));
+            this.queryDisconnectMenuItem.Name = "queryDisconnectMenuItem";
+            this.queryDisconnectMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.queryDisconnectMenuItem.Text = "Disconnect";
+            this.queryDisconnectMenuItem.Click += new System.EventHandler(this.queryDisconnectMenuItem_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -483,31 +511,6 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(12, 20);
-            // 
-            // queryToolStripMenuItem
-            // 
-            this.queryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.queryConnectMenuItem,
-            this.queryDisconnectMenuItem});
-            this.queryToolStripMenuItem.Name = "queryToolStripMenuItem";
-            this.queryToolStripMenuItem.Size = new System.Drawing.Size(51, 20);
-            this.queryToolStripMenuItem.Text = "&Query";
-            // 
-            // queryConnectMenuItem
-            // 
-            this.queryConnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("queryConnectMenuItem.Image")));
-            this.queryConnectMenuItem.Name = "queryConnectMenuItem";
-            this.queryConnectMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.queryConnectMenuItem.Text = "Connect";
-            this.queryConnectMenuItem.Click += new System.EventHandler(this.queryConnectMenuItem_Click);
-            // 
-            // queryDisconnectMenuItem
-            // 
-            this.queryDisconnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("queryDisconnectMenuItem.Image")));
-            this.queryDisconnectMenuItem.Name = "queryDisconnectMenuItem";
-            this.queryDisconnectMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.queryDisconnectMenuItem.Text = "Disconnect";
-            this.queryDisconnectMenuItem.Click += new System.EventHandler(this.queryDisconnectMenuItem_Click);
             // 
             // tabControl1
             // 
