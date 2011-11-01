@@ -12,6 +12,9 @@ namespace SQLiteBrowser.Helpers
     {
         private const int CLOSE_ICON_PADDING = 4;
         private const int CLOSE_ICON_SIZE = 16;
+        private const int MIN_TAB_WIDTH = 100;
+        private const int MAX_TAB_WIDTH = 300;
+        private const int TAB_HEIGHT = 24;
 
         public delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
         public event OnHeaderCloseEventHandler Closing;
@@ -63,6 +66,15 @@ namespace SQLiteBrowser.Helpers
                         Closing(this, new CloseEventArgs(this.SelectedIndex));
                     }
                 }
+            }
+        }
+
+        public void ResizeTabs()
+        {
+            if (this.TabCount > 0)
+            {
+                int itemWidth = Math.Min(Math.Max((this.Size.Width - 50) / this.TabCount, MIN_TAB_WIDTH), MAX_TAB_WIDTH);
+                this.ItemSize = new Size(itemWidth, TAB_HEIGHT);
             }
         }
     }

@@ -352,6 +352,7 @@ namespace SQLiteBrowser.Views
                 if (result != DialogResult.Cancel)
                 {
                     tc.TabPages.RemoveAt(e.TabIndex);
+                    tc.ResizeTabs();
                     this.Dispose(true);
                 }
             }

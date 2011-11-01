@@ -167,6 +167,7 @@ namespace SQLiteBrowser
             this.tabControl1.TabPages.Insert(0, qp);
             qp.CreateQueryView(IsOpen);
             this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.ResizeTabs();
         }
 
         private void InitializeMenus()
