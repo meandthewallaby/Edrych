@@ -21,6 +21,7 @@ namespace SQLiteBrowser.ViewModels
         private ResultSet _results = new ResultSet();
         private BindingSource _dataBinding = new BindingSource();
         private string _messages = string.Empty;
+        private List<Database> _databases;
 
         private string _fileName = string.Empty;
         private string _safeFileName = "New Query";
@@ -73,6 +74,11 @@ namespace SQLiteBrowser.ViewModels
             set { _isSaved = value; }
         }
 
+        public List<Database> Databases
+        {
+            get { return _databases; }
+        }
+
         #endregion
 
         #region Public Methods
@@ -109,6 +115,8 @@ namespace SQLiteBrowser.ViewModels
                 cd.ShowDialog();
                 this._dab = cd.DataAccess;
             }
+
+            this._databases = this._dab.GetDatabases();
 
             return queryText;
         }
@@ -154,6 +162,11 @@ namespace SQLiteBrowser.ViewModels
             if (this._dab != null)
                 this._dab.Close();
             this._dab = null;
+        }
+
+        public void SetDatabase(string DatabaseName)
+        {
+
         }
 
         #endregion

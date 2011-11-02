@@ -77,7 +77,7 @@
     </Compile>
     <Compile Include="DataAccess\ResultSet.cs" />
     <Compile Include="Models\TreeItems.cs" />
-    <Compile Include="Models\TreeModel.cs" />
+    <Compile Include="Models\ServerBrowserModel.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\DataAccessResources.Designer.cs">
@@ -85,12 +85,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DataAccessResources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Properties\Icons.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Icons.resx</DependentUpon>
-    </Compile>
-    <Compile Include="ViewModels\TreeViewModel.cs" />
+    <Compile Include="ViewModels\ServerBrowserViewModel.cs" />
     <Compile Include="Views\QueryView.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -118,11 +113,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>DataAccessResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Icons.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Icons.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </EmbeddedResource>
     <EmbeddedResource Include="Views\QueryView.resx">
       <DependentUpon>QueryView.cs</DependentUpon>
     </EmbeddedResource>
@@ -141,16 +131,28 @@
     <None Include="Resources\column.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\activeClose.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\inactiveClose.png" />
+    <None Include="Resources\connect.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\database.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\disconnect.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\folder.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\open.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\server.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\table.png" />
@@ -159,13 +161,10 @@
     <None Include="Resources\view.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\server.png" />
+    <None Include="Resources\activeClose.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\connect.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\disconnect.png" />
+    <None Include="Resources\inactiveClose.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

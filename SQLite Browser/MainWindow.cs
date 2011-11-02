@@ -14,7 +14,14 @@ namespace SQLiteBrowser
 {
     public partial class MainWindow : Form
     {
-        private TreeViewModel _treeViewModel;
+        #region Private/Global Variables
+
+        private ServerBrowserViewModel _browserViewModel;
+        private QueryView _activeQuery;
+
+        #endregion
+
+        #region Constructor(s)
 
         public MainWindow()
         {
@@ -22,6 +29,8 @@ namespace SQLiteBrowser
             InitializeMenus();
             InitializeTreeView();
         }
+
+        #endregion
 
         #region Menu Item Handling - File Menu
 
@@ -33,6 +42,19 @@ namespace SQLiteBrowser
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.CreateQueryTab(true);
+        }
+
+        private void connectMenuItem_Click(object sender, EventArgs e)
+        {
+            _browserViewModel.CreateConnection();
+        }
+
+        private void disconnectMenuItem_Click(object sender, EventArgs e)
+        {
+            if (this.treeViewAdv1.SelectedNode != null)
+            {
+                _browserViewModel.RemoveConnection(this.treeViewAdv1.SelectedNode);
+            }
         }
 
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
@@ -100,6 +122,18 @@ namespace SQLiteBrowser
 
         #endregion
 
+        #region Menu Item Handling - Tool Strip
+
+        private void DatabaseDropDown_SelectionChanged(object sender, EventArgs e)
+        {
+            if (App.LoadingDatabases)
+                return;
+            if(_activeQuery != null)
+                _activeQuery.SetDatabase(this.databaseDropDown.SelectedItem as string);
+        }
+
+        #endregion
+
         #region Event Handlers
 
         private void Property_Changed(object sender, PropertyChangedEventArgs e)
@@ -110,11 +144,12 @@ namespace SQLiteBrowser
             this.undoToolStripMenuItem.Enabled = App.IsUndoEnabled;
             this.redoToolStripMenuItem.Enabled = App.IsRedoEnabled;
             this.selectAllToolStripMenuItem.Enabled = App.IsSelectAllEnabled;
+            this.databaseDropDown.Enabled = App.IsQueryMenuVisible;
+            this.queryConnectToolStrip.Enabled = App.IsQueryConnectEnabled;
+            this.queryDisconnectToolStrip.Enabled = App.IsQueryDisconnectEnabled;
             this.queryToolStripMenuItem.Visible = App.IsQueryMenuVisible;
             this.queryConnectMenuItem.Enabled = App.IsQueryConnectEnabled;
             this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
-            this.connectToolStrip.Enabled = App.IsQueryConnectEnabled;
-            this.disconnectToolStrip.Enabled = App.IsQueryDisconnectEnabled;
         }
 
         private void Window_Closing(object sender, FormClosingEventArgs e)
@@ -157,7 +192,35 @@ namespace SQLiteBrowser
         private void contextRefresh_Click(object sender, EventArgs e)
         {
             this.treeViewAdv1.SelectedNode.Collapse();
-            _treeViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
+            _browserViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
+        }
+
+        private void TreeSelection_Changed(object sender, EventArgs e)
+        {
+            bool isDisconnectEnabled = this.treeViewAdv1.SelectedNode != null;
+            this.disconnectMenuItem.Enabled = isDisconnectEnabled;
+            this.disconnectToolStrip.Enabled = isDisconnectEnabled;
+            if (this.treeViewAdv1.SelectedNode != null)
+            {
+                _browserViewModel.UpdateActiveConnection(this.treeViewAdv1.SelectedNode);
+            }
+        }
+
+        private void QueryConnection_Changed(object sender, ConnectionChangedEventArgs e)
+        {
+            App.LoadingDatabases = true;
+            this.databaseDropDown.Items.Clear();
+            foreach (DataAccess.Database db in e.Databases.OrderBy(d => d.Name))
+            {
+                this.databaseDropDown.Items.Add(db.Name);
+            }
+            this.databaseDropDown.SelectedItem = e.SelectedDatabase;
+            App.LoadingDatabases = false;
+        }
+
+        private void ActiveQuery_Changed(object sender, EventArgs e)
+        {
+            this._activeQuery = sender as QueryView;
         }
 
         #endregion
@@ -166,7 +229,7 @@ namespace SQLiteBrowser
 
         private void CreateQueryTab(bool IsOpen)
         {
-            QueryView qp = new QueryView(_treeViewModel.DataAccess);
+            QueryView qp = new QueryView(_browserViewModel.ActiveConnection);
             this.tabControl1.TabPages.Insert(0, qp);
             qp.CreateQueryView(IsOpen);
             this.tabControl1.SelectedIndex = 0;
@@ -176,6 +239,9 @@ namespace SQLiteBrowser
         private void InitializeMenus()
         {
             App.PropertyChanged += this.Property_Changed;
+            this.treeViewAdv1.SelectionChanged += this.TreeSelection_Changed;
+            App.ConnectionChanged += this.QueryConnection_Changed;
+            App.ActiveQueryChanged += this.ActiveQuery_Changed;
 
             App.IsCopyEnabled = false;
             App.IsPasteEnabled = false;
@@ -189,13 +255,8 @@ namespace SQLiteBrowser
 
         private void InitializeTreeView()
         {
-            _treeViewModel = new TreeViewModel();
-            this.treeViewAdv1.Model = _treeViewModel.Tree;
-        }
-
-        private void connectMenuItem_Click(object sender, EventArgs e)
-        {
-            _treeViewModel.CreateConnection();
+            _browserViewModel = new ServerBrowserViewModel();
+            this.treeViewAdv1.Model = _browserViewModel.Tree;
         }
 
         #endregion

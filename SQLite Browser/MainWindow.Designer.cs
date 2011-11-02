@@ -1,6 +1,7 @@
 ﻿namespace SQLiteBrowser
 {
     using SQLiteBrowser.Helpers;
+    using SQLiteBrowser.Properties;
 
     partial class MainWindow
     {
@@ -36,12 +37,17 @@
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.toolStripContainer2 = new System.Windows.Forms.ToolStripContainer();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.toolStripContainer3 = new System.Windows.Forms.ToolStripContainer();
             this.treeViewAdv1 = new Aga.Controls.Tree.TreeViewAdv();
             this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.expandingIcon1 = new Aga.Controls.Tree.NodeControls.ExpandingIcon();
             this._icon = new Aga.Controls.Tree.NodeControls.NodeIcon();
             this._name = new Aga.Controls.Tree.NodeControls.NodeTextBox();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.connectToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.disconnectToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.tabControl1 = new SQLiteBrowser.Helpers.TabControlExt();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -80,9 +86,13 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.connectToolStrip = new System.Windows.Forms.ToolStripButton();
-            this.disconnectToolStrip = new System.Windows.Forms.ToolStripButton();
-            this.tabControl1 = new SQLiteBrowser.Helpers.TabControlExt();
+            this.newToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.openToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.queryConnectToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.queryDisconnectToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.databaseDropDown = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripContainer1.SuspendLayout();
             this.toolStripContainer2.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -92,7 +102,11 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.toolStripContainer3.ContentPanel.SuspendLayout();
+            this.toolStripContainer3.TopToolStripPanel.SuspendLayout();
+            this.toolStripContainer3.SuspendLayout();
             this.treeContextMenu.SuspendLayout();
+            this.toolStrip2.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -150,7 +164,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.treeViewAdv1);
+            this.splitContainer1.Panel1.Controls.Add(this.toolStripContainer3);
             // 
             // splitContainer1.Panel2
             // 
@@ -158,6 +172,24 @@
             this.splitContainer1.Size = new System.Drawing.Size(903, 453);
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 0;
+            // 
+            // toolStripContainer3
+            // 
+            // 
+            // toolStripContainer3.ContentPanel
+            // 
+            this.toolStripContainer3.ContentPanel.Controls.Add(this.treeViewAdv1);
+            this.toolStripContainer3.ContentPanel.Size = new System.Drawing.Size(232, 428);
+            this.toolStripContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer3.Location = new System.Drawing.Point(0, 0);
+            this.toolStripContainer3.Name = "toolStripContainer3";
+            this.toolStripContainer3.Size = new System.Drawing.Size(232, 453);
+            this.toolStripContainer3.TabIndex = 1;
+            this.toolStripContainer3.Text = "toolStripContainer3";
+            // 
+            // toolStripContainer3.TopToolStripPanel
+            // 
+            this.toolStripContainer3.TopToolStripPanel.Controls.Add(this.toolStrip2);
             // 
             // treeViewAdv1
             // 
@@ -176,7 +208,7 @@
             this.treeViewAdv1.NodeControls.Add(this._icon);
             this.treeViewAdv1.NodeControls.Add(this._name);
             this.treeViewAdv1.SelectedNode = null;
-            this.treeViewAdv1.Size = new System.Drawing.Size(232, 453);
+            this.treeViewAdv1.Size = new System.Drawing.Size(232, 428);
             this.treeViewAdv1.TabIndex = 0;
             this.treeViewAdv1.Text = "treeViewAdv1";
             // 
@@ -189,7 +221,7 @@
             // 
             // contextRefresh
             // 
-            this.contextRefresh.Image = ((System.Drawing.Image)(resources.GetObject("contextRefresh.Image")));
+            this.contextRefresh.Image = global::SQLiteBrowser.Properties.Resources.refresh;
             this.contextRefresh.Name = "contextRefresh";
             this.contextRefresh.Size = new System.Drawing.Size(113, 22);
             this.contextRefresh.Text = "Refresh";
@@ -213,6 +245,49 @@
             this._name.IncrementalSearchEnabled = true;
             this._name.LeftMargin = 3;
             this._name.ParentColumn = null;
+            // 
+            // toolStrip2
+            // 
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.connectToolStrip,
+            this.disconnectToolStrip});
+            this.toolStrip2.Location = new System.Drawing.Point(3, 0);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.Size = new System.Drawing.Size(58, 25);
+            this.toolStrip2.TabIndex = 0;
+            // 
+            // connectToolStrip
+            // 
+            this.connectToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.connectToolStrip.Image = global::SQLiteBrowser.Properties.Resources.connect;
+            this.connectToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.connectToolStrip.Name = "connectToolStrip";
+            this.connectToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.connectToolStrip.Text = "toolStripButton1";
+            this.connectToolStrip.Click += new System.EventHandler(this.connectMenuItem_Click);
+            // 
+            // disconnectToolStrip
+            // 
+            this.disconnectToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.disconnectToolStrip.Enabled = false;
+            this.disconnectToolStrip.Image = global::SQLiteBrowser.Properties.Resources.disconnect;
+            this.disconnectToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.disconnectToolStrip.Name = "disconnectToolStrip";
+            this.disconnectToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.disconnectToolStrip.Text = "toolStripButton2";
+            this.disconnectToolStrip.Click += new System.EventHandler(this.disconnectMenuItem_Click);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(667, 453);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControl1.TabIndex = 0;
             // 
             // menuStrip1
             // 
@@ -252,48 +327,50 @@
             // 
             // newToolStripMenuItem
             // 
-            this.newToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("newToolStripMenuItem.Image")));
+            this.newToolStripMenuItem.Image = global::SQLiteBrowser.Properties.Resources.newIcon;
             this.newToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.newToolStripMenuItem.Text = "&New";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStripMenuItem
             // 
-            this.openToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("openToolStripMenuItem.Image")));
+            this.openToolStripMenuItem.Image = global::SQLiteBrowser.Properties.Resources.open;
             this.openToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
             this.openToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.openToolStripMenuItem.Text = "&Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator6.Size = new System.Drawing.Size(143, 6);
             // 
             // connectMenuItem
             // 
-            this.connectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("connectMenuItem.Image")));
+            this.connectMenuItem.Image = global::SQLiteBrowser.Properties.Resources.connect;
             this.connectMenuItem.Name = "connectMenuItem";
-            this.connectMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.connectMenuItem.Size = new System.Drawing.Size(146, 22);
             this.connectMenuItem.Text = "Connect";
             this.connectMenuItem.Click += new System.EventHandler(this.connectMenuItem_Click);
             // 
             // disconnectMenuItem
             // 
-            this.disconnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("disconnectMenuItem.Image")));
+            this.disconnectMenuItem.Enabled = false;
+            this.disconnectMenuItem.Image = global::SQLiteBrowser.Properties.Resources.disconnect;
             this.disconnectMenuItem.Name = "disconnectMenuItem";
-            this.disconnectMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.disconnectMenuItem.Size = new System.Drawing.Size(146, 22);
             this.disconnectMenuItem.Text = "Disconnect";
+            this.disconnectMenuItem.Click += new System.EventHandler(this.disconnectMenuItem_Click);
             // 
             // toolStripSeparator
             // 
             this.toolStripSeparator.Name = "toolStripSeparator";
-            this.toolStripSeparator.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator.Size = new System.Drawing.Size(143, 6);
             // 
             // saveToolStripMenuItem
             // 
@@ -308,14 +385,14 @@
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveAsToolStripMenuItem.Text = "Save &As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // printToolStripMenuItem
             // 
@@ -323,7 +400,7 @@
             this.printToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.printToolStripMenuItem.Name = "printToolStripMenuItem";
             this.printToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.printToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.printToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printToolStripMenuItem.Text = "&Print";
             // 
             // printPreviewToolStripMenuItem
@@ -331,18 +408,18 @@
             this.printPreviewToolStripMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("printPreviewToolStripMenuItem.Image")));
             this.printPreviewToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.printPreviewToolStripMenuItem.Name = "printPreviewToolStripMenuItem";
-            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.printPreviewToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.printPreviewToolStripMenuItem.Text = "Print Pre&view";
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(143, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             // 
             // editToolStripMenuItem
@@ -436,7 +513,7 @@
             // 
             // queryConnectMenuItem
             // 
-            this.queryConnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("queryConnectMenuItem.Image")));
+            this.queryConnectMenuItem.Image = global::SQLiteBrowser.Properties.Resources.connect;
             this.queryConnectMenuItem.Name = "queryConnectMenuItem";
             this.queryConnectMenuItem.Size = new System.Drawing.Size(133, 22);
             this.queryConnectMenuItem.Text = "Connect";
@@ -444,7 +521,7 @@
             // 
             // queryDisconnectMenuItem
             // 
-            this.queryDisconnectMenuItem.Image = ((System.Drawing.Image)(resources.GetObject("queryDisconnectMenuItem.Image")));
+            this.queryDisconnectMenuItem.Image = global::SQLiteBrowser.Properties.Resources.disconnect;
             this.queryDisconnectMenuItem.Name = "queryDisconnectMenuItem";
             this.queryDisconnectMenuItem.Size = new System.Drawing.Size(133, 22);
             this.queryDisconnectMenuItem.Text = "Disconnect";
@@ -521,45 +598,77 @@
             // 
             this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.connectToolStrip,
-            this.disconnectToolStrip});
+            this.newToolStrip,
+            this.openToolStrip,
+            this.toolStripSeparator7,
+            this.queryConnectToolStrip,
+            this.queryDisconnectToolStrip,
+            this.toolStripSeparator8,
+            this.databaseDropDown});
             this.toolStrip1.Location = new System.Drawing.Point(3, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(89, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(239, 25);
             this.toolStrip1.TabIndex = 1;
             // 
-            // connectToolStrip
+            // newToolStrip
             // 
-            this.connectToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.connectToolStrip.Enabled = false;
-            this.connectToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("connectToolStrip.Image")));
-            this.connectToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.connectToolStrip.Name = "connectToolStrip";
-            this.connectToolStrip.Size = new System.Drawing.Size(23, 22);
-            this.connectToolStrip.Text = "toolStripButton1";
-            this.connectToolStrip.Click += new System.EventHandler(this.queryConnectMenuItem_Click);
+            this.newToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.newToolStrip.Image = global::SQLiteBrowser.Properties.Resources.newIcon;
+            this.newToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.newToolStrip.Name = "newToolStrip";
+            this.newToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.newToolStrip.Text = "toolStripButton1";
+            this.newToolStrip.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
-            // disconnectToolStrip
+            // openToolStrip
             // 
-            this.disconnectToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.disconnectToolStrip.Enabled = false;
-            this.disconnectToolStrip.Image = ((System.Drawing.Image)(resources.GetObject("disconnectToolStrip.Image")));
-            this.disconnectToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.disconnectToolStrip.Name = "disconnectToolStrip";
-            this.disconnectToolStrip.Size = new System.Drawing.Size(23, 22);
-            this.disconnectToolStrip.Text = "toolStripButton2";
-            this.disconnectToolStrip.Click += new System.EventHandler(this.queryDisconnectMenuItem_Click);
+            this.openToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openToolStrip.Image = global::SQLiteBrowser.Properties.Resources.open;
+            this.openToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openToolStrip.Name = "openToolStrip";
+            this.openToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.openToolStrip.Text = "toolStripButton2";
+            this.openToolStrip.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
-            // tabControl1
+            // toolStripSeparator7
             // 
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(667, 453);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 0;
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            // 
+            // queryConnectToolStrip
+            // 
+            this.queryConnectToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.queryConnectToolStrip.Enabled = false;
+            this.queryConnectToolStrip.Image = global::SQLiteBrowser.Properties.Resources.connect;
+            this.queryConnectToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.queryConnectToolStrip.Name = "queryConnectToolStrip";
+            this.queryConnectToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.queryConnectToolStrip.Text = "toolStripButton1";
+            this.queryConnectToolStrip.Click += new System.EventHandler(this.queryConnectMenuItem_Click);
+            // 
+            // queryDisconnectToolStrip
+            // 
+            this.queryDisconnectToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.queryDisconnectToolStrip.Enabled = false;
+            this.queryDisconnectToolStrip.Image = global::SQLiteBrowser.Properties.Resources.disconnect;
+            this.queryDisconnectToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.queryDisconnectToolStrip.Name = "queryDisconnectToolStrip";
+            this.queryDisconnectToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.queryDisconnectToolStrip.Text = "toolStripButton2";
+            this.queryDisconnectToolStrip.Click += new System.EventHandler(this.queryDisconnectMenuItem_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            // 
+            // databaseDropDown
+            // 
+            this.databaseDropDown.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.databaseDropDown.Enabled = false;
+            this.databaseDropDown.Name = "databaseDropDown";
+            this.databaseDropDown.Size = new System.Drawing.Size(121, 25);
+            this.databaseDropDown.Sorted = true;
             // 
             // MainWindow
             // 
@@ -584,7 +693,14 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.toolStripContainer3.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer3.TopToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer3.TopToolStripPanel.PerformLayout();
+            this.toolStripContainer3.ResumeLayout(false);
+            this.toolStripContainer3.PerformLayout();
             this.treeContextMenu.ResumeLayout(false);
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -644,6 +760,15 @@
         private System.Windows.Forms.ToolStripMenuItem queryConnectMenuItem;
         private System.Windows.Forms.ToolStripMenuItem queryDisconnectMenuItem;
         private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton queryConnectToolStrip;
+        private System.Windows.Forms.ToolStripButton queryDisconnectToolStrip;
+        private System.Windows.Forms.ToolStripButton newToolStrip;
+        private System.Windows.Forms.ToolStripButton openToolStrip;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripComboBox databaseDropDown;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer3;
+        private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton connectToolStrip;
         private System.Windows.Forms.ToolStripButton disconnectToolStrip;
     }

@@ -71,25 +71,25 @@ namespace SQLiteBrowser.Models
             switch(this._type)
             {
                 case ItemType.Server:
-                    _icon = Icons.server;
+                    _icon = Resources.server;
                     break;
                 case ItemType.Database:
-                    _icon = Icons.database;
+                    _icon = Resources.database;
                     break;
                 case ItemType.Folder:
-                    _icon = Icons.folder;
+                    _icon = Resources.folder;
                     break;
                 case ItemType.Table:
-                    _icon = Icons.table;
+                    _icon = Resources.table;
                     break;
                 case ItemType.View:
-                    _icon = Icons.view;
+                    _icon = Resources.view;
                     break;
                 case ItemType.Column:
-                    _icon = Icons.column;
+                    _icon = Resources.column;
                     break;
                 default:
-                    _icon = Icons.folder;
+                    _icon = Resources.folder;
                     break;
             }
         }

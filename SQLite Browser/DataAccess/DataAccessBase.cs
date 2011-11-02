@@ -134,5 +134,6 @@ namespace SQLiteBrowser.DataAccess
         internal abstract List<TableView> GetTables();
         internal abstract List<TableView> GetViews();
         internal abstract List<Column> GetColumns(string TableName);
+        internal abstract void SetDatabase(string DatabaseName);
     }
 }

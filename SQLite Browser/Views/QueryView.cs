@@ -78,6 +78,11 @@ namespace SQLiteBrowser.Views
             this.tbQuery.Focus();
         }
 
+        public void SetDatabase(string DatabaseName)
+        {
+
+        }
+
         #endregion
 
         #region Private Methods
@@ -142,12 +147,12 @@ namespace SQLiteBrowser.Views
         {
             if (_queryViewModel.Data != null)
             {
-                this.connectionLabel.Image = Icons.connect;
+                this.connectionLabel.Image = Resources.connect;
                 this.connectionLabel.Text = "        Connected to " + _queryViewModel.Data.DataSource;
             }
             else
             {
-                this.connectionLabel.Image = Icons.disconnect;
+                this.connectionLabel.Image = Resources.disconnect;
                 this.connectionLabel.Text = "        Disconnected";
             }
         }
@@ -210,6 +215,12 @@ namespace SQLiteBrowser.Views
 
             App.IsQueryConnectEnabled = true;
             App.IsQueryDisconnectEnabled = true;
+
+            App.OnActiveQueryChanged(this, new EventArgs());
+            if (this._queryViewModel != null)
+            {
+                App.OnConnectionChanged(this, new ConnectionChangedEventArgs(this._queryViewModel.Databases, this._queryViewModel.Data.InitialCatalog));
+            }
         }
 
         private void QueryView_Leave(object sender, EventArgs e)

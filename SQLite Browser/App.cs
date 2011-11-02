@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using SQLiteBrowser.Helpers;
 
 namespace SQLiteBrowser
 {
@@ -17,6 +18,7 @@ namespace SQLiteBrowser
         private static bool _isQueryMenuVisible;
         private static bool _isQueryConnectEnabled;
         private static bool _isQueryDisconnectEnabled;
+        private static bool _loadingDatabases;
 
         public static bool IsCutEnabled { get { return _isCutEnabled; } set { if (value != _isCutEnabled) { _isCutEnabled = value; NotifyPropertyChanged("IsCutEnabled"); } } }
         public static bool IsCopyEnabled { get { return _isCopyEnabled; } set { if (value != _isCopyEnabled) { _isCopyEnabled = value; NotifyPropertyChanged("IsCopyEnabled"); } } }
@@ -27,6 +29,7 @@ namespace SQLiteBrowser
         public static bool IsQueryMenuVisible { get { return _isQueryMenuVisible; } set { if (value != _isQueryMenuVisible) { _isQueryMenuVisible = value; NotifyPropertyChanged("IsQueryMenuVisible"); } } }
         public static bool IsQueryConnectEnabled { get { return _isQueryConnectEnabled; } set { if (value != _isQueryConnectEnabled) { _isQueryConnectEnabled = value; NotifyPropertyChanged("IsQueryConnectEnabled"); } } }
         public static bool IsQueryDisconnectEnabled { get { return _isQueryDisconnectEnabled; } set { if (value != _isQueryDisconnectEnabled) { _isQueryDisconnectEnabled = value; NotifyPropertyChanged("IsQueryDisconnectEnabled"); } } }
+        public static bool LoadingDatabases { get { return _loadingDatabases; } set { if (value != _loadingDatabases) { _loadingDatabases = value; } } }
 
         public static event PropertyChangedEventHandler PropertyChanged;
         private static void NotifyPropertyChanged(string Property)
@@ -103,6 +106,20 @@ namespace SQLiteBrowser
         {
             if (QueryDisonnect != null)
                 QueryDisonnect(sender, e);
+        }
+
+        public static event ConnectionChangedEventHandler ConnectionChanged;
+        public static void OnConnectionChanged(object sender, ConnectionChangedEventArgs e)
+        {
+            if (ConnectionChanged != null)
+                ConnectionChanged(sender, e);
+        }
+
+        public static event EventHandler ActiveQueryChanged;
+        public static void OnActiveQueryChanged(object sender, EventArgs e)
+        {
+            if (ActiveQueryChanged != null)
+                ActiveQueryChanged(sender, e);
         }
     }
 }

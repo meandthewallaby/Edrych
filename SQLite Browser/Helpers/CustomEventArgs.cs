@@ -29,4 +29,21 @@ namespace SQLiteBrowser.Helpers
 
         public bool HasError { get; set; }
     }
+
+    public delegate void ConnectionChangedEventHandler(object sender, ConnectionChangedEventArgs e);
+
+    public class ConnectionChangedEventArgs : EventArgs
+    {
+        private List<Database> _databases;
+        private string _selectedDatabase;
+
+        public ConnectionChangedEventArgs(List<Database> DatabaseList, string SelectedDB)
+        {
+            _databases = DatabaseList;
+            _selectedDatabase = SelectedDB;
+        }
+
+        public List<Database> Databases { get { return _databases; } }
+        public string SelectedDatabase { get { return _selectedDatabase; } }
+    }
 }

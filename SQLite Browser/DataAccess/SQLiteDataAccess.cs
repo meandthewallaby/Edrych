@@ -97,5 +97,10 @@ namespace SQLiteBrowser.DataAccess
 
             return cols;
         }
+
+        internal override void SetDatabase(string DatabaseName)
+        {
+            
+        }
     }
 }

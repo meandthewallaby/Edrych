@@ -32,7 +32,7 @@ namespace SQLiteBrowser.Helpers
                     e.Graphics.FillRectangle(brush, tabTextArea);
                 }
 
-                Bitmap bmp = nIndex == this.SelectedIndex ? Icons.activeClose : Icons.inactiveClose;
+                Bitmap bmp = nIndex == this.SelectedIndex ? Resources.activeClose : Resources.inactiveClose;
                 e.Graphics.DrawImage(bmp, tabTextArea.X + tabTextArea.Width - (CLOSE_ICON_PADDING + CLOSE_ICON_SIZE), tabTextArea.Y + CLOSE_ICON_PADDING, CLOSE_ICON_SIZE, CLOSE_ICON_SIZE);
                 bmp.Dispose();
 

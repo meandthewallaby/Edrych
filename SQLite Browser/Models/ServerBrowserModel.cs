@@ -11,7 +11,7 @@ using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.Models
 {
-    public class TreeModel : ITreeModel
+    public class ServerBrowserModel : ITreeModel
     {
         #region Private/Global Variables
 
@@ -35,7 +35,7 @@ namespace SQLiteBrowser.Models
                 items.Add(item);
                 _cache.Add("ROOT", items);
             }
-            OnStructureChanged(TreePath.Empty, _cache["ROOT"].ToArray());
+            OnStructureChanged(TreePath.Empty);
         }
 
         public IEnumerable GetChildren(TreePath treePath)
@@ -123,8 +123,44 @@ namespace SQLiteBrowser.Models
                 {
                     _cache.Remove(key);
                 }
-                List<BaseItem> children = (List<BaseItem>)GetChildren(path);
-                OnStructureChanged(path, children.ToArray());
+                OnStructureChanged(path);
+            }
+        }
+
+        public void RemoveServer(TreeNodeAdv SelectedNode)
+        {
+            //Find the server
+            ServerItem server = null;
+            while (server == null)
+            {
+                if (SelectedNode == null)
+                {
+                    break;
+                }
+                BaseItem item = SelectedNode.Tag as BaseItem;
+
+                if (item.Type == ItemType.Server)
+                {
+                    server = SelectedNode.Tag as ServerItem;
+                    break;
+                }
+
+                SelectedNode = SelectedNode.Parent;
+            }
+
+            if (server != null)
+            {
+                //Next, clear the cache
+                _cache["ROOT"].Remove(server as BaseItem);
+                List<BaseItem> serverChildren = _cache.ContainsKey(server.ItemPath) ? serverChildren = _cache[server.ItemPath] : new List<BaseItem>();
+                List<string> cachedItems = _cache.Keys.Where(k => k.StartsWith(server.ItemPath)).ToList();
+                foreach (string key in cachedItems)
+                {
+                    _cache.Remove(key);
+                }
+
+                //Finally, fire the event off
+                OnStructureChanged(TreePath.Empty);
             }
         }
 
@@ -229,11 +265,19 @@ namespace SQLiteBrowser.Models
             }
         }
 
-        private void OnStructureChanged(TreePath Tree, object[] Children)
+        private void OnNodesRemoved(TreePath Tree, object[] Children)
+        {
+            if (NodesRemoved != null)
+            {
+                NodesRemoved(this, new TreeModelEventArgs(Tree, Children));
+            }
+        }
+
+        private void OnStructureChanged(TreePath Tree)
         {
             if (StructureChanged != null)
             {
-                StructureChanged(this, new TreeModelEventArgs(Tree, Children));
+                StructureChanged(this, new TreePathEventArgs(Tree));
             }
         }
 
