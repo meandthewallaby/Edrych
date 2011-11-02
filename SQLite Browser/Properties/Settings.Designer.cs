@@ -25,12 +25,12 @@ namespace SQLiteBrowser.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        public global::System.Collections.Specialized.StringCollection RecentConnections {
+        public global::System.Collections.ArrayList Connections {
             get {
-                return ((global::System.Collections.Specialized.StringCollection)(this["RecentConnections"]));
+                return ((global::System.Collections.ArrayList)(this["Connections"]));
             }
             set {
-                this["RecentConnections"] = value;
+                this["Connections"] = value;
             }
         }
     }

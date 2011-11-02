@@ -8,7 +8,20 @@ namespace SQLiteBrowser.DataAccess
 {
     public enum ConnectionType
     {
+        None,
         SQLite
+    }
+
+    public class DataAccessConnection
+    {
+        public DataAccessConnection(ConnectionType Type, string ConnectionString)
+        {
+            this.Connection = Type;
+            this.DataSource = ConnectionString;
+        }
+
+        public ConnectionType Connection { get; set; }
+        public string DataSource { get; set; }
     }
 
     public class DataAccessFactory

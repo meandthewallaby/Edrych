@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -8,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using SQLiteBrowser.DataAccess;
-using SQLiteBrowser.Properties;
+using SQLiteBrowser.Helpers;
 using SQLiteBrowser.ViewModels;
 
 namespace SQLiteBrowser.Dialogs
@@ -20,6 +21,7 @@ namespace SQLiteBrowser.Dialogs
         private DataAccessBase _dataAccess;
         private ConnectionType _connType;
         private string _dataSource;
+        private Settings _settings;
         
         #endregion
 
@@ -28,6 +30,7 @@ namespace SQLiteBrowser.Dialogs
         public ConnectDialog()
         {
             InitializeComponent();
+            _settings = new Settings();
             PopulateConnectionType();
             PopulateDataSource();
         }
@@ -43,14 +46,31 @@ namespace SQLiteBrowser.Dialogs
 
         #endregion
 
+        #region Public Methods
+
+        public void InitiatlizeData()
+        {
+            this._dataAccess = DataAccessFactory.GetDataAccess(_connType, _dataSource);
+        }
+
+        #endregion
+
         #region Private Methods
 
         private void PopulateConnectionType()
         {
             this.cbConnectionType.Items.Clear();
-            foreach (var connType in Enum.GetValues(typeof(ConnectionType)))
+            foreach (ConnectionType connType in Enum.GetValues(typeof(ConnectionType)))
             {
-                this.cbConnectionType.Items.Add(connType.ToString());
+                //Need to test for installed base
+                if (connType != ConnectionType.None)
+                {
+                    this.cbConnectionType.Items.Add(connType.ToString());
+                }
+            }
+            if (this.cbConnectionType.Items.Count > 0)
+            {
+                this.cbConnectionType.SelectedIndex = 0;
             }
         }
 
@@ -58,11 +78,11 @@ namespace SQLiteBrowser.Dialogs
         {
             this.cbDataSource.Items.Clear();
 
-            if (Settings.Default.RecentConnections != null)
+            if (_settings.RecentConnections != null)
             {
-                foreach (string source in Settings.Default.RecentConnections)
+                foreach (DataAccessConnection source in _settings.RecentConnections.Where(r => r.Connection == this.SelectedConnectionType))
                 {
-                    this.cbDataSource.Items.Add(source);
+                    this.cbDataSource.Items.Add(source.DataSource);
                 }
             }
 
@@ -71,24 +91,23 @@ namespace SQLiteBrowser.Dialogs
 
         private void Open()
         {
-            _connType = (DataAccess.ConnectionType)Enum.Parse(typeof(DataAccess.ConnectionType), this.cbConnectionType.Text);
+            _connType = this.SelectedConnectionType;
             _dataSource = this.cbDataSource.Text;
                 
             try
             {
                 InitiatlizeData();
 
-                if (Settings.Default.RecentConnections == null)
+                DataAccessConnection current = new DataAccessConnection(_connType, _dataSource);
+
+                int currIndex = _settings.RecentConnections.IndexOf(_settings.RecentConnections.FirstOrDefault(c => c.Connection == current.Connection && c.DataSource == current.DataSource));
+                if (currIndex >= 0)
                 {
-                    Settings.Default.RecentConnections = new StringCollection();
+                    _settings.RecentConnections.RemoveAt(currIndex);
                 }
 
-                if (Settings.Default.RecentConnections.Contains(_dataSource))
-                {
-                    Settings.Default.RecentConnections.Remove(_dataSource);
-                }
-                Settings.Default.RecentConnections.Insert(0, _dataSource);
-                Settings.Default.Save();
+                _settings.RecentConnections.Insert(0, current);
+                _settings.Save();
 
                 this.DialogResult = System.Windows.Forms.DialogResult.OK;
                 this.Close();
@@ -106,9 +125,21 @@ namespace SQLiteBrowser.Dialogs
             this.Close();
         }
 
-        public void InitiatlizeData()
+        #endregion
+
+        #region Private Properties
+
+        private ConnectionType SelectedConnectionType
         {
-            this._dataAccess = DataAccessFactory.GetDataAccess(_connType, _dataSource);
+            get
+            {
+                ConnectionType type = ConnectionType.None;
+                if (!string.IsNullOrEmpty(this.cbConnectionType.Text))
+                {
+                    type = (DataAccess.ConnectionType)Enum.Parse(typeof(DataAccess.ConnectionType), this.cbConnectionType.Text);
+                }
+                return type;
+            }
         }
 
         #endregion

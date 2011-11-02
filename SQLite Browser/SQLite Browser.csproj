@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="App.cs" />
     <Compile Include="Helpers\CustomEventArgs.cs" />
+    <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\TabControlExt.cs">
       <SubType>Component</SubType>
     </Compile>

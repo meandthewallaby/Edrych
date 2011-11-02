@@ -19,24 +19,7 @@ namespace SQLiteBrowser.Models
 
         #endregion
 
-        #region Public Methods
-
-        public void AddServer(DataAccessBase dataAccess)
-        {
-            ServerItem item = new ServerItem(dataAccess.DataSource);
-            item.DataAccess = dataAccess;
-            if (_cache.ContainsKey("ROOT"))
-            {
-                _cache["ROOT"].Add(item);
-            }
-            else
-            {
-                List<BaseItem> items = new List<BaseItem>();
-                items.Add(item);
-                _cache.Add("ROOT", items);
-            }
-            OnStructureChanged(TreePath.Empty);
-        }
+        #region Public Methods - ITreeModel Interface
 
         public IEnumerable GetChildren(TreePath treePath)
         {
@@ -101,6 +84,27 @@ namespace SQLiteBrowser.Models
         public bool IsLeaf(TreePath treePath)
         {
             return treePath.LastNode != null && ((BaseItem)treePath.LastNode).Type == ItemType.Column;
+        }
+
+        #endregion
+
+        #region Public Methods - Manipulating Nodes
+
+        public void AddServer(DataAccessBase dataAccess)
+        {
+            ServerItem item = new ServerItem(dataAccess.DataSource);
+            item.DataAccess = dataAccess;
+            if (_cache.ContainsKey("ROOT"))
+            {
+                _cache["ROOT"].Add(item);
+            }
+            else
+            {
+                List<BaseItem> items = new List<BaseItem>();
+                items.Add(item);
+                _cache.Add("ROOT", items);
+            }
+            OnStructureChanged(TreePath.Empty);
         }
 
         public void RefreshNode(TreeNodeAdv SelectedNode)

@@ -2,7 +2,7 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="SQLiteBrowser.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="RecentConnections" Type="System.Collections.Specialized.StringCollection" Scope="User">
+    <Setting Name="Connections" Type="System.Collections.ArrayList" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
   </Settings>
