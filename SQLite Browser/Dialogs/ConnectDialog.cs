@@ -1,16 +1,8 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
 using System.Windows.Forms;
 using SQLiteBrowser.DataAccess;
 using SQLiteBrowser.Helpers;
-using SQLiteBrowser.ViewModels;
 
 namespace SQLiteBrowser.Dialogs
 {
@@ -32,7 +24,6 @@ namespace SQLiteBrowser.Dialogs
             InitializeComponent();
             _settings = new Settings();
             PopulateConnectionType();
-            PopulateDataSource();
         }
 
         #endregion
@@ -154,6 +145,11 @@ namespace SQLiteBrowser.Dialogs
         private void btnCancel_Click(object sender, EventArgs e)
         {
             Cancel();
+        }
+
+        private void cbConnectionType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PopulateDataSource();
         }
 
         private void cbDataSource_SelectedIndexChanged(object sender, EventArgs e)

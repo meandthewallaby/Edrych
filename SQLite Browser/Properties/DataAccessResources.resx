@@ -117,6 +117,22 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ANSI_FindTables" xml:space="preserve">
+    <value>select
+	TABLE_NAME
+from
+	INFORMATION_SCHEMA.TABLES
+order by
+	1</value>
+  </data>
+  <data name="ANSI_FindViews" xml:space="preserve">
+    <value>select
+	TABLE_NAME
+from
+	INFORMATION_SCHEMA.VIEWS
+order by
+	1</value>
+  </data>
   <data name="DefaultConnectionString" xml:space="preserve">
     <value>Data Source=%TEMP%\Test.db3</value>
   </data>
@@ -132,5 +148,39 @@ ORDER BY name;</value>
     <value>SELECT name FROM sqlite_master
 WHERE type='view'
 ORDER BY name;</value>
+  </data>
+  <data name="SQLServer_FindColumns" xml:space="preserve">
+    <value>select
+	COLUMN_NAME as name,
+	DATA_TYPE 
+		+ ISNULL('(' + cast(character_maximum_length as varchar) + ')', '')
+		+ case 
+			when DATA_TYPE in ('decimal', 'numeric') then
+				ISNULL('(' + cast(NUMERIC_PRECISION as varchar) + ', ' + CAST(NUMERIC_SCALE as varchar) + ')', '')
+			else ''
+		  end
+	as type
+from
+	INFORMATION_SCHEMA.COLUMNS
+where
+	TABLE_NAME = @TableName
+order by
+	ORDINAL_POSITION</value>
+  </data>
+  <data name="SQLServer_FindDatabases" xml:space="preserve">
+    <value>select
+	name
+from
+	sys.databases
+order by
+	1</value>
+  </data>
+  <data name="SQLServer_SetDatabase" xml:space="preserve">
+    <value>if exists (select 1 from sys.databases d where d.name = @DatabaseName)
+begin
+
+use @DatabaseReplaceName
+
+end</value>
   </data>
 </root>

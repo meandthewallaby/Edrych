@@ -3,12 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using SQLiteBrowser.Dialogs;
 using SQLiteBrowser.Helpers;
 using SQLiteBrowser.ViewModels;
 using SQLiteBrowser.Properties;
@@ -45,7 +42,6 @@ namespace SQLiteBrowser.Views
 
             //Change status bar
             UpdateConnectionInfo();
-            App.IsQueryMenuVisible = true;
         }
 
         #endregion
@@ -80,7 +76,7 @@ namespace SQLiteBrowser.Views
 
         public void SetDatabase(string DatabaseName)
         {
-
+            _queryViewModel.SetDatabase(DatabaseName);
         }
 
         #endregion
@@ -194,16 +190,15 @@ namespace SQLiteBrowser.Views
             {
                 this.splitContainer1.Panel2Collapsed = !this.splitContainer1.Panel2Collapsed;
             }
+            else if ((e.Modifiers & ModifierKeys) == Keys.Control && e.KeyCode == Keys.U)
+            {
+                App.OnSwitchDatabases(this, new EventArgs());
+            }
         }
 
         private void QueryView_Scrolling(object sender, EventArgs e)
         {
             UpdateLineNumbers();
-        }
-
-        private void QueryView_Load(object sender, EventArgs e)
-        {
-            this.tbQuery.Focus();
         }
 
         private void QueryView_Focus(object sender, EventArgs e)
@@ -213,14 +208,16 @@ namespace SQLiteBrowser.Views
             App.QueryConnect += this.QueryView_Connect;
             App.QueryDisonnect += this.QueryView_Disconnect;
 
+            App.IsQueryMenuVisible = true;
             App.IsQueryConnectEnabled = true;
-            App.IsQueryDisconnectEnabled = true;
+            App.IsQueryDisconnectEnabled = (_queryViewModel.Data != null);
 
             App.OnActiveQueryChanged(this, new EventArgs());
             if (this._queryViewModel != null)
             {
-                App.OnConnectionChanged(this, new ConnectionChangedEventArgs(this._queryViewModel.Databases, this._queryViewModel.Data.InitialCatalog));
+                App.OnConnectionChanged(this, new ConnectionChangedEventArgs(this._queryViewModel.Databases, this._queryViewModel.Data.SelectedDatabase));
             }
+            this.tbQuery.Focus();
         }
 
         private void QueryView_Leave(object sender, EventArgs e)
@@ -230,6 +227,7 @@ namespace SQLiteBrowser.Views
             App.QueryConnect -= this.QueryView_Connect;
             App.QueryDisonnect -= this.QueryView_Disconnect;
 
+            App.IsQueryMenuVisible = false;
             App.IsQueryConnectEnabled = false;
             App.IsQueryDisconnectEnabled = false;
         }
@@ -283,12 +281,14 @@ namespace SQLiteBrowser.Views
         {
             _queryViewModel.Connect();
             UpdateConnectionInfo();
+            App.IsQueryDisconnectEnabled = true;
         }
 
         private void QueryView_Disconnect(object sender, EventArgs e)
         {
             _queryViewModel.Disconnect();
             UpdateConnectionInfo();
+            App.IsQueryDisconnectEnabled = false;
         }
 
         private void QueryView_Save(object sender, EventArgs e)

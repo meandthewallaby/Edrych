@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
@@ -124,12 +122,28 @@ namespace SQLiteBrowser
 
         #region Menu Item Handling - Tool Strip
 
-        private void DatabaseDropDown_SelectionChanged(object sender, EventArgs e)
+        private void databaseDropDown_SelectionChanged(object sender, EventArgs e)
         {
             if (App.LoadingDatabases)
                 return;
             if(_activeQuery != null)
                 _activeQuery.SetDatabase(this.databaseDropDown.SelectedItem as string);
+        }
+
+        private void databaseDropDown_KeyUp(object sender, KeyEventArgs e)
+        {
+            if(e.KeyCode == Keys.Enter)
+                _activeQuery.Focus();
+        }
+
+        #endregion
+
+        #region Menu Item Handling - Tree Context Menu
+
+        private void contextRefresh_Click(object sender, EventArgs e)
+        {
+            this.treeViewAdv1.SelectedNode.Collapse();
+            _browserViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
         }
 
         #endregion
@@ -188,13 +202,7 @@ namespace SQLiteBrowser
                 e.Cancel = true;
             }
         }
-
-        private void contextRefresh_Click(object sender, EventArgs e)
-        {
-            this.treeViewAdv1.SelectedNode.Collapse();
-            _browserViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
-        }
-
+        
         private void TreeSelection_Changed(object sender, EventArgs e)
         {
             bool isDisconnectEnabled = this.treeViewAdv1.SelectedNode != null;
@@ -223,6 +231,11 @@ namespace SQLiteBrowser
             this._activeQuery = sender as QueryView;
         }
 
+        private void SwitchDatabases(object sender, EventArgs e)
+        {
+            this.databaseDropDown.Focus();
+        }
+
         #endregion
 
         #region Private Methods
@@ -242,6 +255,7 @@ namespace SQLiteBrowser
             this.treeViewAdv1.SelectionChanged += this.TreeSelection_Changed;
             App.ConnectionChanged += this.QueryConnection_Changed;
             App.ActiveQueryChanged += this.ActiveQuery_Changed;
+            App.SwitchDatabases += this.SwitchDatabases;
 
             App.IsCopyEnabled = false;
             App.IsPasteEnabled = false;

@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Linq;
-using System.Text;
 
 namespace SQLiteBrowser.DataAccess
 {
-    public class ResultSet
+    public class ResultSet : IDisposable
     {
         private DataTable _dt;
         private string _messages = string.Empty;
@@ -26,6 +22,12 @@ namespace SQLiteBrowser.DataAccess
         {
             get { return _messages; }
             set { _messages = value; }
+        }
+
+        public void Dispose()
+        {
+            if (_dt != null)
+                _dt.Dispose();
         }
     }
 }

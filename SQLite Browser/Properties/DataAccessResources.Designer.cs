@@ -61,6 +61,34 @@ namespace SQLiteBrowser.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	TABLE_NAME
+        ///from
+        ///	INFORMATION_SCHEMA.TABLES
+        ///order by
+        ///	1.
+        /// </summary>
+        internal static string ANSI_FindTables {
+            get {
+                return ResourceManager.GetString("ANSI_FindTables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	TABLE_NAME
+        ///from
+        ///	INFORMATION_SCHEMA.VIEWS
+        ///order by
+        ///	1.
+        /// </summary>
+        internal static string ANSI_FindViews {
+            get {
+                return ResourceManager.GetString("ANSI_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data Source=%TEMP%\Test.db3.
         /// </summary>
         internal static string DefaultConnectionString {
@@ -97,6 +125,58 @@ namespace SQLiteBrowser.Properties {
         internal static string SQLite_FindViews {
             get {
                 return ResourceManager.GetString("SQLite_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	COLUMN_NAME as name,
+        ///	DATA_TYPE 
+        ///		+ ISNULL(&apos;(&apos; + cast(character_maximum_length as varchar) + &apos;)&apos;, &apos;&apos;)
+        ///		+ case 
+        ///			when DATA_TYPE in (&apos;decimal&apos;, &apos;numeric&apos;) then
+        ///				ISNULL(&apos;(&apos; + cast(NUMERIC_PRECISION as varchar) + &apos;, &apos; + CAST(NUMERIC_SCALE as varchar) + &apos;)&apos;, &apos;&apos;)
+        ///			else &apos;&apos;
+        ///		  end
+        ///	as type
+        ///from
+        ///	INFORMATION_SCHEMA.COLUMNS
+        ///where
+        ///	TABLE_NAME = @TableName
+        ///order by
+        ///	ORDINAL_POSITION.
+        /// </summary>
+        internal static string SQLServer_FindColumns {
+            get {
+                return ResourceManager.GetString("SQLServer_FindColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	name
+        ///from
+        ///	sys.databases
+        ///order by
+        ///	1.
+        /// </summary>
+        internal static string SQLServer_FindDatabases {
+            get {
+                return ResourceManager.GetString("SQLServer_FindDatabases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to if exists (select 1 from sys.databases d where d.name = @DatabaseName)
+        ///begin
+        ///
+        ///use @DatabaseReplaceName
+        ///
+        ///end.
+        /// </summary>
+        internal static string SQLServer_SetDatabase {
+            get {
+                return ResourceManager.GetString("SQLServer_SetDatabase", resourceCulture);
             }
         }
     }

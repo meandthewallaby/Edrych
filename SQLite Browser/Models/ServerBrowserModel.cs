@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using System.Text;
-using Aga.Controls;
 using Aga.Controls.Tree;
 using SQLiteBrowser.DataAccess;
-using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.Models
 {
@@ -39,7 +35,7 @@ namespace SQLiteBrowser.Models
             else
             {
                 ServerItem server = treePath.FirstNode as ServerItem;
-                DatabaseItem database = treePath.FullPath.FirstOrDefault(i => (i as BaseItem).Type == ItemType.Database) as DatabaseItem;
+                BaseItem database = treePath.FullPath.FirstOrDefault(i => (i as BaseItem).Type == ItemType.Database) as BaseItem;
                 BaseItem parent = treePath.LastNode as BaseItem;
                 if (parent != null && server != null)
                 {
@@ -60,12 +56,12 @@ namespace SQLiteBrowser.Models
                                 break;
                             case ItemType.Folder:
                                 if(database != null)
-                                    items = GetFolderChildren(parent, database);
+                                    items = GetFolderChildren(parent, server, database.Name);
                                 break;
                             case ItemType.Table:
                             case ItemType.View:
                                 if (database != null)
-                                    items = GetColumns(parent, database);
+                                    items = GetColumns(parent, server, database.Name);
                                 break;
                             default:
                                 break;
@@ -122,11 +118,8 @@ namespace SQLiteBrowser.Models
                 }
 
                 TreePath path = new TreePath(items.ToArray());
-                List<string> oldCache = _cache.Keys.Where(k => k.StartsWith(item.ItemPath)).ToList();
-                foreach (string key in oldCache)
-                {
-                    _cache.Remove(key);
-                }
+                RemoveCachedItems(_cache.Keys.Where(k => k.StartsWith(item.ItemPath)).ToList());
+                
                 OnStructureChanged(path);
             }
         }
@@ -157,11 +150,8 @@ namespace SQLiteBrowser.Models
                 //Next, clear the cache
                 _cache["ROOT"].Remove(server as BaseItem);
                 List<BaseItem> serverChildren = _cache.ContainsKey(server.ItemPath) ? serverChildren = _cache[server.ItemPath] : new List<BaseItem>();
-                List<string> cachedItems = _cache.Keys.Where(k => k.StartsWith(server.ItemPath)).ToList();
-                foreach (string key in cachedItems)
-                {
-                    _cache.Remove(key);
-                }
+                RemoveCachedItems(_cache.Keys.Where(k => k.StartsWith(server.ItemPath)).ToList());
+                server.Dispose();
 
                 //Finally, fire the event off
                 OnStructureChanged(TreePath.Empty);
@@ -191,8 +181,7 @@ namespace SQLiteBrowser.Models
 
             foreach (Database db in databases)
             {
-                DatabaseItem dataItem = new DatabaseItem(db.Name, server);
-                dataItem.Database = server.DataAccess;
+                BaseItem dataItem = new BaseItem(ItemType.Database, db.Name, server);
                 items.Add(dataItem);
             }
 
@@ -212,23 +201,25 @@ namespace SQLiteBrowser.Models
             return items;
         }
 
-        private List<BaseItem> GetFolderChildren(BaseItem parent, DatabaseItem database)
+        private List<BaseItem> GetFolderChildren(BaseItem parent, ServerItem server, string DatabaseName)
         {
             List<BaseItem> items = new List<BaseItem>();
-            string findSql = string.Empty;
             ItemType type = ItemType.Table;
             List<TableView> tableViews = null;
 
+            string oldDatabase = server.DataAccess.SelectedDatabase;
+            server.DataAccess.SetDatabase(DatabaseName);
             if (parent.Name == "Tables")
             {
-                tableViews = database.Database.GetTables();
+                tableViews = server.DataAccess.GetTables();
                 type = ItemType.Table;
             }
             else if (parent.Name == "Views")
             {
-                tableViews = database.Database.GetViews();
+                tableViews = server.DataAccess.GetViews();
                 type = ItemType.View;
             }
+            server.DataAccess.SetDatabase(oldDatabase);
 
             if (tableViews != null)
             {
@@ -241,17 +232,38 @@ namespace SQLiteBrowser.Models
             return items;
         }
 
-        private List<BaseItem> GetColumns(BaseItem parent, DatabaseItem database)
+        private List<BaseItem> GetColumns(BaseItem parent, ServerItem server, string DatabaseName)
         {
             List<BaseItem> items = new List<BaseItem>();
-
-            foreach (Column col in database.Database.GetColumns(parent.Name))
+            string oldDatabase = server.DataAccess.SelectedDatabase;
+            server.DataAccess.SetDatabase(DatabaseName);
+            foreach (Column col in server.DataAccess.GetColumns(parent.Name))
             {
                 items.Add(new BaseItem(ItemType.Column, col.Name + " (" + col.DataType + ")", parent));
             }
+            server.DataAccess.SetDatabase(oldDatabase);
 
             return items;
         }
+
+        private void RemoveCachedItems(List<string> oldCache)
+        {
+            foreach (string key in oldCache)
+            {
+                foreach (BaseItem oldItem in _cache[key])
+                {
+                    if (oldItem.Type == ItemType.Server)
+                        ((ServerItem)oldItem).Dispose();
+                    else
+                        oldItem.Dispose();
+                }
+                _cache.Remove(key);
+            }
+        }
+
+        #endregion
+
+        #region Private Event Triggers
 
         private void OnNodesInserted(TreePath Tree, object[] Children)
         {

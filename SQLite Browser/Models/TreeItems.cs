@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using SQLiteBrowser.DataAccess;
 using SQLiteBrowser.Properties;
 
@@ -19,13 +16,14 @@ namespace SQLiteBrowser.Models
         None
     }
 
-    class BaseItem
+    class BaseItem : IDisposable
     {
         private Image _icon;
         private String _name;
         private BaseItem _parent;
         private ItemType _type;
         private string _itemPath;
+
 
         public BaseItem(ItemType Type, string Name, BaseItem Parent)
         {
@@ -93,21 +91,13 @@ namespace SQLiteBrowser.Models
                     break;
             }
         }
-    }
 
-    class DatabaseItem : BaseItem
-    {
-        private DataAccessBase _database;
-
-        public DatabaseItem (string Name, BaseItem Parent) 
-            : base(ItemType.Database, Name, Parent)
+        public void Dispose()
         {
-        }
-
-        public DataAccessBase Database
-        {
-            get { return _database; }
-            set { _database = value; }
+            if (_icon != null)
+                _icon.Dispose();
+            if (_parent != null)
+                _parent.Dispose();
         }
     }
 
@@ -124,6 +114,13 @@ namespace SQLiteBrowser.Models
         {
             get { return _dataAccess; }
             set { _dataAccess = value; }
+        }
+
+        public void Dispose()
+        {
+            if (_dataAccess != null)
+                _dataAccess.Dispose();
+            base.Dispose();
         }
     }
 }

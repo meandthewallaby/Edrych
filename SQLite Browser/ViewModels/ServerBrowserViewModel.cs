@@ -1,17 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using Aga.Controls.Tree;
 using SQLiteBrowser.DataAccess;
 using SQLiteBrowser.Dialogs;
-using SQLiteBrowser.Helpers;
 using SQLiteBrowser.Models;
 
 namespace SQLiteBrowser.ViewModels
 {
-    public class ServerBrowserViewModel
+    public class ServerBrowserViewModel : IDisposable
     {
         #region Private/Global Variables
 
@@ -75,6 +71,12 @@ namespace SQLiteBrowser.ViewModels
             {
                 this._activeConnection = server.DataAccess;
             }
+        }
+
+        public void Dispose()
+        {
+            if (_activeConnection != null)
+                _activeConnection.Dispose();
         }
 
         #endregion

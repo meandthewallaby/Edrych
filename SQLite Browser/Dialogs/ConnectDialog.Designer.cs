@@ -85,6 +85,7 @@
             this.cbConnectionType.Name = "cbConnectionType";
             this.cbConnectionType.Size = new System.Drawing.Size(365, 21);
             this.cbConnectionType.TabIndex = 1;
+            this.cbConnectionType.SelectedIndexChanged += new System.EventHandler(this.cbConnectionType_SelectedIndexChanged);
             // 
             // label2
             // 

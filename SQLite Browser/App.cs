@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using SQLiteBrowser.Helpers;
 
 namespace SQLiteBrowser
@@ -120,6 +117,13 @@ namespace SQLiteBrowser
         {
             if (ActiveQueryChanged != null)
                 ActiveQueryChanged(sender, e);
+        }
+
+        public static event EventHandler SwitchDatabases;
+        public static void OnSwitchDatabases(object sender, EventArgs e)
+        {
+            if (SwitchDatabases != null)
+                SwitchDatabases(sender, e);
         }
     }
 }

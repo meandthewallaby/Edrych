@@ -1,29 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
 
 namespace SQLiteBrowser.DataAccess
 {
-    public abstract class DataAccessBase
+    public abstract class DataAccessBase : IDisposable
     {
+        #region Private/Global Variables
+
         private IDbConnection _conn;
         private IDbCommand _comm;
         private IDbTransaction _tran;
+
+        #endregion
+
+        #region Constructor(s)
 
         public DataAccessBase()
         {
         }
 
+        #endregion
+
+        #region Public Properties
+
         public ConnectionType ConnectionType { get; set; }
         public string ConnectionString { get; set; }
         public string DataSource { get; set; }
-        public string InitialCatalog { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
-        public string AuthType { get; set; }
-        public string Name { get { return _conn.Database; } }
+        public string SelectedDatabase { get { return this._conn.Database; } }
+        public bool IsConnected { get { return _conn != null && _conn.State != ConnectionState.Closed && _conn.State != ConnectionState.Broken; } }
+
+        #endregion
+
+        #region Public Methods
 
         public void Open()
         {
@@ -108,6 +119,21 @@ namespace SQLiteBrowser.DataAccess
             _comm.Parameters.Clear();
         }
 
+        public void Dispose()
+        {
+            this.Close();
+            if(_tran != null)
+                _tran.Dispose();
+            if(_comm != null)
+                _comm.Dispose();
+            if(_conn != null)
+                _conn.Dispose();
+        }
+
+        #endregion
+
+        #region Private Methods
+
         private void PrepareConnection()
         {
             if (_conn == null)
@@ -127,6 +153,10 @@ namespace SQLiteBrowser.DataAccess
             }
         }
 
+        #endregion
+
+        #region Internal Abstract Methods
+
         internal abstract IDbConnection GetDbConnection();
         internal abstract IDbCommand GetDbCommand();
         internal abstract IDbDataParameter GetDbParameter(string Name, object Value);
@@ -135,5 +165,7 @@ namespace SQLiteBrowser.DataAccess
         internal abstract List<TableView> GetViews();
         internal abstract List<Column> GetColumns(string TableName);
         internal abstract void SetDatabase(string DatabaseName);
+
+        #endregion
     }
 }

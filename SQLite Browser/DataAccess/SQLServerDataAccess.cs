@@ -1,40 +1,44 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SQLite;
+using System.Data.SqlClient;
 using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.DataAccess
 {
-    public class SQLiteDataAccess : DataAccessBase
+    class SQLServerDataAccess : DataAccessBase
     {
-        public SQLiteDataAccess()
-        {
-        }
 
         internal override IDbConnection GetDbConnection()
         {
-            this.ConnectionString = "Data Source=" + this.DataSource + (this.Password != null ? ";Password=" + this.Password : "");
-            SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
+            this.ConnectionString = 
+                "Data Source=" + this.DataSource + ";" +
+                (this.Password != null ? "Username=" + this.Username + ";Password=" + this.Password : "Integrated Security=SSPI;");
+            SqlConnection conn = new SqlConnection(this.ConnectionString);
             conn.Open();
             return conn;
         }
 
         internal override IDbCommand GetDbCommand()
         {
-            return new SQLiteCommand();
+            return new SqlCommand();
         }
 
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
-            return new SQLiteParameter(Name, Value);
+            return new SqlParameter(Name, Value);
         }
 
         internal override List<Database> GetDatabases()
         {
             List<Database> databases = new List<Database>();
-            Database db = new Database();
-            db.Name = this.SelectedDatabase;
-            databases.Add(db);
+            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLServer_FindDatabases);
+            while (reader.Read())
+            {
+                Database db = new Database();
+                db.Name = reader["name"].ToString();
+                databases.Add(db);
+            }
+            reader.Close();
             return databases;
         }
 
@@ -42,12 +46,12 @@ namespace SQLiteBrowser.DataAccess
         {
             List<TableView> tables = new List<TableView>();
 
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLite_FindTables);
+            IDataReader reader = this.ExecuteReader(DataAccessResources.ANSI_FindTables);
 
             while (reader.Read())
             {
                 TableView table = new TableView();
-                table.Name = reader["name"].ToString();
+                table.Name = reader["TABLE_NAME"].ToString();
 
                 tables.Add(table);
             }
@@ -61,12 +65,12 @@ namespace SQLiteBrowser.DataAccess
         {
             List<TableView> views = new List<TableView>();
 
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLite_FindViews);
+            IDataReader reader = this.ExecuteReader(DataAccessResources.ANSI_FindViews);
 
             while (reader.Read())
             {
                 TableView view = new TableView();
-                view.Name = reader["name"].ToString();
+                view.Name = reader["TABLE_NAME"].ToString();
 
                 views.Add(view);
             }
@@ -79,8 +83,9 @@ namespace SQLiteBrowser.DataAccess
         internal override List<Column> GetColumns(string TableName)
         {
             List<Column> cols = new List<Column>();
-            string sql = DataAccessResources.SQLite_FindColumns.Replace("@TableName", TableName);
-            IDataReader reader = this.ExecuteReader(sql);
+            this.ClearParameters();
+            this.AddParameter("@TableName", TableName);
+            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLServer_FindColumns);
 
             while (reader.Read())
             {
@@ -91,13 +96,17 @@ namespace SQLiteBrowser.DataAccess
             }
 
             reader.Close();
-
+            this.ClearParameters();
             return cols;
         }
 
         internal override void SetDatabase(string DatabaseName)
         {
-            
+            string sql = DataAccessResources.SQLServer_SetDatabase.Replace("@DatabaseReplaceName", DatabaseName);
+            this.ClearParameters();
+            this.AddParameter("@DatabaseName", DatabaseName);
+            this.ExecuteNonQuery(sql);
+            this.ClearParameters();
         }
     }
 }

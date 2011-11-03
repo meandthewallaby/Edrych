@@ -47,7 +47,6 @@
             this.toolStrip2 = new System.Windows.Forms.ToolStrip();
             this.connectToolStrip = new System.Windows.Forms.ToolStripButton();
             this.disconnectToolStrip = new System.Windows.Forms.ToolStripButton();
-            this.tabControl1 = new SQLiteBrowser.Helpers.TabControlExt();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +92,7 @@
             this.queryDisconnectToolStrip = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.databaseDropDown = new System.Windows.Forms.ToolStripComboBox();
+            this.tabControl1 = new SQLiteBrowser.Helpers.TabControlExt();
             this.toolStripContainer1.SuspendLayout();
             this.toolStripContainer2.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -278,17 +278,6 @@
             this.disconnectToolStrip.Text = "toolStripButton2";
             this.disconnectToolStrip.Click += new System.EventHandler(this.disconnectMenuItem_Click);
             // 
-            // tabControl1
-            // 
-            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
-            this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Name = "tabControl1";
-            this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(667, 453);
-            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
-            this.tabControl1.TabIndex = 0;
-            // 
             // menuStrip1
             // 
             this.menuStrip1.Dock = System.Windows.Forms.DockStyle.None;
@@ -378,7 +367,7 @@
             this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
             this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.saveToolStripMenuItem.Text = "&Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -607,7 +596,7 @@
             this.databaseDropDown});
             this.toolStrip1.Location = new System.Drawing.Point(3, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(239, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(272, 25);
             this.toolStrip1.TabIndex = 1;
             // 
             // newToolStrip
@@ -669,6 +658,19 @@
             this.databaseDropDown.Name = "databaseDropDown";
             this.databaseDropDown.Size = new System.Drawing.Size(121, 25);
             this.databaseDropDown.Sorted = true;
+            this.databaseDropDown.SelectedIndexChanged += new System.EventHandler(this.databaseDropDown_SelectionChanged);
+            this.databaseDropDown.KeyUp += new System.Windows.Forms.KeyEventHandler(this.databaseDropDown_KeyUp);
+            // 
+            // tabControl1
+            // 
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Name = "tabControl1";
+            this.tabControl1.SelectedIndex = 0;
+            this.tabControl1.Size = new System.Drawing.Size(667, 453);
+            this.tabControl1.SizeMode = System.Windows.Forms.TabSizeMode.Fixed;
+            this.tabControl1.TabIndex = 0;
             // 
             // MainWindow
             // 

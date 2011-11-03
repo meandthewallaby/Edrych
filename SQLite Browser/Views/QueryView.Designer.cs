@@ -13,9 +13,14 @@
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            if (disposing && (components != null))
+            if (disposing)
             {
-                components.Dispose();
+                if (components != null)
+                    components.Dispose();
+                if (_queryViewModel != null)
+                    _queryViewModel.Dispose();
+                if (_bgWorker != null)
+                    _bgWorker.Dispose();
             }
             base.Dispose(disposing);
         }
@@ -28,6 +33,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QueryView));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tbQuery = new System.Windows.Forms.RichTextBox();
@@ -133,11 +140,32 @@
             // 
             this.dgResults.AllowUserToAddRows = false;
             this.dgResults.AllowUserToDeleteRows = false;
+            this.dgResults.AllowUserToOrderColumns = true;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.NullValue = "(No column name)";
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dgResults.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dgResults.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle2.NullValue = "NULL";
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dgResults.DefaultCellStyle = dataGridViewCellStyle2;
             this.dgResults.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dgResults.EditMode = System.Windows.Forms.DataGridViewEditMode.EditProgrammatically;
             this.dgResults.Location = new System.Drawing.Point(3, 3);
             this.dgResults.Name = "dgResults";
             this.dgResults.ReadOnly = true;
+            this.dgResults.ShowEditingIcon = false;
             this.dgResults.Size = new System.Drawing.Size(848, 243);
             this.dgResults.TabIndex = 0;
             this.dgResults.Enter += new System.EventHandler(this.Query_Focus);
@@ -149,7 +177,7 @@
             this.tpMessages.Location = new System.Drawing.Point(4, 22);
             this.tpMessages.Name = "tpMessages";
             this.tpMessages.Padding = new System.Windows.Forms.Padding(3);
-            this.tpMessages.Size = new System.Drawing.Size(854, 256);
+            this.tpMessages.Size = new System.Drawing.Size(854, 249);
             this.tpMessages.TabIndex = 1;
             this.tpMessages.Text = "Messages";
             this.tpMessages.UseVisualStyleBackColor = true;

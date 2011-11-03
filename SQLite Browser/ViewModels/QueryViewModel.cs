@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Windows.Forms;
 using SQLiteBrowser.DataAccess;
 using SQLiteBrowser.Dialogs;
@@ -13,7 +9,7 @@ using SQLiteBrowser.Helpers;
 
 namespace SQLiteBrowser.ViewModels
 {
-    public class QueryViewModel : INotifyPropertyChanged
+    public class QueryViewModel : INotifyPropertyChanged, IDisposable
     {
         #region Private/Global Variables
 
@@ -160,13 +156,25 @@ namespace SQLiteBrowser.ViewModels
         public void Disconnect()
         {
             if (this._dab != null)
-                this._dab.Close();
-            this._dab = null;
+            {
+                this._dab.Dispose();
+                this._dab = null;
+            }
         }
 
         public void SetDatabase(string DatabaseName)
         {
+            this.Data.SetDatabase(DatabaseName);
+        }
 
+        public void Dispose()
+        {
+            if (_dataBinding != null)
+                _dataBinding.Dispose();
+            if (_results != null)
+                _results.Dispose();
+            if (_dab != null)
+                _dab.Dispose();
         }
 
         #endregion

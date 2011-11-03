@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using SQLiteBrowser.Properties;
+﻿using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.DataAccess
 {
     public enum ConnectionType
     {
         None,
-        SQLite
+        SQLite,
+        SQLServer
     }
 
     public class DataAccessConnection
@@ -44,6 +41,9 @@ namespace SQLiteBrowser.DataAccess
             {
                 case ConnectionType.SQLite:
                     dab = new SQLiteDataAccess();
+                    break;
+                case ConnectionType.SQLServer:
+                    dab = new SQLServerDataAccess();
                     break;
                 default:
                     dab = new SQLiteDataAccess();

@@ -58,6 +58,7 @@
     <Compile Include="DataAccess\DataAccessFactory.cs" />
     <Compile Include="DataAccess\SQLiteDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessItems.cs" />
+    <Compile Include="DataAccess\SQLServerDataAccess.cs" />
     <Compile Include="Dialogs\ConnectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
