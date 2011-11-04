@@ -143,11 +143,13 @@ namespace SQLiteBrowser.Views
         {
             if (_queryViewModel.Data != null)
             {
+                App.IsDatabaseDropDownEnabled = true;
                 this.connectionLabel.Image = Resources.connect;
                 this.connectionLabel.Text = "        Connected to " + _queryViewModel.Data.DataSource;
             }
             else
             {
+                App.IsDatabaseDropDownEnabled = false;
                 this.connectionLabel.Image = Resources.disconnect;
                 this.connectionLabel.Text = "        Disconnected";
             }
@@ -211,6 +213,7 @@ namespace SQLiteBrowser.Views
             App.IsQueryMenuVisible = true;
             App.IsQueryConnectEnabled = true;
             App.IsQueryDisconnectEnabled = (_queryViewModel.Data != null);
+            App.IsDatabaseDropDownEnabled = (_queryViewModel.Data != null);
 
             App.OnActiveQueryChanged(this, new EventArgs());
             if (this._queryViewModel != null)
@@ -368,6 +371,7 @@ namespace SQLiteBrowser.Views
                     if (tc.TabCount == 0)
                     {
                         App.IsQueryMenuVisible = false;
+                        App.IsDatabaseDropDownEnabled = false;
                     }
                     this.Dispose(true);
                 }

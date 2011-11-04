@@ -158,7 +158,7 @@ namespace SQLiteBrowser
             this.undoToolStripMenuItem.Enabled = App.IsUndoEnabled;
             this.redoToolStripMenuItem.Enabled = App.IsRedoEnabled;
             this.selectAllToolStripMenuItem.Enabled = App.IsSelectAllEnabled;
-            this.databaseDropDown.Enabled = App.IsQueryMenuVisible;
+            this.databaseDropDown.Enabled = App.IsDatabaseDropDownEnabled;
             this.queryConnectToolStrip.Enabled = App.IsQueryConnectEnabled;
             this.queryDisconnectToolStrip.Enabled = App.IsQueryDisconnectEnabled;
             this.queryToolStripMenuItem.Visible = App.IsQueryMenuVisible;
@@ -200,6 +200,10 @@ namespace SQLiteBrowser
             if (result == System.Windows.Forms.DialogResult.Cancel)
             {
                 e.Cancel = true;
+            }
+            else
+            {
+                this._browserViewModel.Dispose();
             }
         }
         
