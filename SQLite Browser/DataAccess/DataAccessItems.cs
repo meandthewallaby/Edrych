@@ -16,4 +16,10 @@
     {
         public string Name { get; set; }
     }
+
+    public class ConnectionSource
+    {
+        public string Name { get; set; }
+        public bool IsAvailable { get; set; }
+    }
 }

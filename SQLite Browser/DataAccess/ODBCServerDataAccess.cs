@@ -1,20 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.Odbc;
 using SQLiteBrowser.Properties;
 
 namespace SQLiteBrowser.DataAccess
 {
-    class SQLServerDataAccess : DataAccessBase
+    class ODBCServerDataAccess : DataAccessBase
     {
-
+        //TODO: Change up Connection String and SQL to fall in line w/ ODBC connections
         internal override bool TestAvailability()
         {
             bool isAvailable = false;
 
             try
             {
-                SqlParameter param = new SqlParameter();
+                OdbcParameter param = new OdbcParameter();
                 isAvailable = true;
             }
             catch
@@ -27,22 +27,23 @@ namespace SQLiteBrowser.DataAccess
 
         internal override IDbConnection GetDbConnection()
         {
-            this.ConnectionString = 
-                "Data Source=" + this.DataSource + ";" +
-                (this.Password != null ? "Username=" + this.Username + ";Password=" + this.Password : "Integrated Security=SSPI;");
-            SqlConnection conn = new SqlConnection(this.ConnectionString);
+            this.ConnectionString =
+                "Driver={ODBC};" +
+                "Server=" + this.DataSource + ";" +
+                (this.Password != null ? "Uid=" + this.Username + ";Pwd=" + this.Password : "Trusted_Connection=yes;");
+            OdbcConnection conn = new OdbcConnection(this.ConnectionString);
             conn.Open();
             return conn;
         }
 
         internal override IDbCommand GetDbCommand()
         {
-            return new SqlCommand();
+            return new OdbcCommand();
         }
 
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
-            return new SqlParameter(Name, Value);
+            return new OdbcParameter(Name, Value);
         }
 
         internal override List<Database> GetDatabases()

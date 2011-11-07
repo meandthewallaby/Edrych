@@ -51,17 +51,20 @@ namespace SQLiteBrowser.Dialogs
         private void PopulateConnectionType()
         {
             this.cbConnectionType.Items.Clear();
-            foreach (ConnectionType connType in Enum.GetValues(typeof(ConnectionType)))
+            int i = 0;
+            int index = 0;
+            foreach (ConnectionSource source in DataAccessFactory.GetSources())
             {
-                //Need to test for installed base
-                if (connType != ConnectionType.None)
+                this.cbConnectionType.Items.Add(source.Name);
+                if (source.Name == DataAccessFactory.DefaultType.ToString())
                 {
-                    this.cbConnectionType.Items.Add(connType.ToString());
+                    index = i;
                 }
+                i++;
             }
             if (this.cbConnectionType.Items.Count > 0)
             {
-                this.cbConnectionType.SelectedIndex = 0;
+                this.cbConnectionType.SelectedIndex = index;
             }
         }
 

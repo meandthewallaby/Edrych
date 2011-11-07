@@ -55,8 +55,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\ODBCServerDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessBase.cs" />
     <Compile Include="DataAccess\DataAccessFactory.cs" />
+    <Compile Include="DataAccess\NoneDataAccess.cs" />
     <Compile Include="DataAccess\SQLiteDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessItems.cs" />
     <Compile Include="DataAccess\SQLServerDataAccess.cs" />

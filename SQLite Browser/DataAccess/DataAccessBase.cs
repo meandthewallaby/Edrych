@@ -157,6 +157,7 @@ namespace SQLiteBrowser.DataAccess
 
         #region Internal Abstract Methods
 
+        internal abstract bool TestAvailability();
         internal abstract IDbConnection GetDbConnection();
         internal abstract IDbCommand GetDbCommand();
         internal abstract IDbDataParameter GetDbParameter(string Name, object Value);

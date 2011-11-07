@@ -11,6 +11,23 @@ namespace SQLiteBrowser.DataAccess
         {
         }
 
+        internal override bool TestAvailability()
+        {
+            bool isAvailable = false;
+
+            try
+            {
+                SQLiteParameter param = new SQLiteParameter();
+                isAvailable = true;
+            }
+            catch
+            {
+                isAvailable = false;
+            }
+
+            return isAvailable;
+        }
+
         internal override IDbConnection GetDbConnection()
         {
             this.ConnectionString = "Data Source=" + this.DataSource + (this.Password != null ? ";Password=" + this.Password : "");
