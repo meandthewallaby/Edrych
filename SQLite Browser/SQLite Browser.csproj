@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="Aga.Controls">
       <HintPath>..\..\..\..\..\Downloads\treeviewadv\Aga.Controls\obj\Release\Aga.Controls.dll</HintPath>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -167,6 +168,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\inactiveClose.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Libs\Aga.Controls.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

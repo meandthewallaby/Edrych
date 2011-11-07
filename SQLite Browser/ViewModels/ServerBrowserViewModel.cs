@@ -66,10 +66,21 @@ namespace SQLiteBrowser.ViewModels
         public void UpdateActiveConnection(TreeNodeAdv Node)
         {
             TreePath path = GetNodePath(Node);
-            ServerItem server = path.FirstNode as ServerItem;
-            if (server.DataAccess.DataSource != this._activeConnection.DataSource)
+            if (path.IsEmpty() == false)
             {
-                this._activeConnection = server.DataAccess;
+                ServerItem server = path.FirstNode as ServerItem;
+                BaseItem db = null;
+                if (path.FullPath.GetLength(0) > 1)
+                {
+                     db = path.FullPath[1] as BaseItem;
+                }
+                if (server != null && server.DataAccess != null)
+                {
+                    if (server.DataAccess.DataSource != this._activeConnection.DataSource)
+                        this._activeConnection = server.DataAccess;
+                    if (db != null)
+                        this._activeConnection.SetDatabase(db.Name);
+                }
             }
         }
 

@@ -147,10 +147,8 @@ namespace SQLiteBrowser.ViewModels
 
         public void Connect()
         {
-            ConnectDialog cd = new ConnectDialog();
-            cd.ShowDialog();
-            if (cd.DataAccess != null)
-                this._dab = cd.DataAccess;
+            this.Disconnect();
+            this.InitQuery(false);
         }
 
         public void Disconnect()

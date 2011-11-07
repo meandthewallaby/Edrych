@@ -140,10 +140,18 @@ namespace SQLiteBrowser
 
         #region Menu Item Handling - Tree Context Menu
 
+        private void contextMenu_Opening(object sender, CancelEventArgs e)
+        {
+            this.contextRefresh.Enabled = this.treeViewAdv1.SelectedNode != null;
+        }
+
         private void contextRefresh_Click(object sender, EventArgs e)
         {
-            this.treeViewAdv1.SelectedNode.Collapse();
-            _browserViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
+            if(this.treeViewAdv1.SelectedNode != null)
+            {
+                this.treeViewAdv1.SelectedNode.Collapse();
+                _browserViewModel.RefreshNode(this.treeViewAdv1.SelectedNode);
+            }
         }
 
         #endregion

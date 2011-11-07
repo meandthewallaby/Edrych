@@ -141,14 +141,18 @@ namespace SQLiteBrowser.Views
 
         private void UpdateConnectionInfo()
         {
-            if (_queryViewModel.Data != null)
+            if (_queryViewModel != null && _queryViewModel.Data != null && _queryViewModel.Databases != null)
             {
+                App.OnConnectionChanged(this, new ConnectionChangedEventArgs(this._queryViewModel.Databases, this._queryViewModel.Data.SelectedDatabase));
                 App.IsDatabaseDropDownEnabled = true;
+                App.IsQueryDisconnectEnabled = true;
+
                 this.connectionLabel.Image = Resources.connect;
                 this.connectionLabel.Text = "        Connected to " + _queryViewModel.Data.DataSource;
             }
             else
             {
+                App.IsQueryDisconnectEnabled = false;
                 App.IsDatabaseDropDownEnabled = false;
                 this.connectionLabel.Image = Resources.disconnect;
                 this.connectionLabel.Text = "        Disconnected";
@@ -212,14 +216,10 @@ namespace SQLiteBrowser.Views
 
             App.IsQueryMenuVisible = true;
             App.IsQueryConnectEnabled = true;
-            App.IsQueryDisconnectEnabled = (_queryViewModel.Data != null);
-            App.IsDatabaseDropDownEnabled = (_queryViewModel.Data != null);
 
             App.OnActiveQueryChanged(this, new EventArgs());
-            if (this._queryViewModel != null)
-            {
-                App.OnConnectionChanged(this, new ConnectionChangedEventArgs(this._queryViewModel.Databases, this._queryViewModel.Data.SelectedDatabase));
-            }
+            UpdateConnectionInfo();
+            
             this.tbQuery.Focus();
         }
 

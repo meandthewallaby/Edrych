@@ -96,8 +96,6 @@ namespace SQLiteBrowser.Models
         {
             if (_icon != null)
                 _icon.Dispose();
-            if (_parent != null)
-                _parent.Dispose();
         }
     }
 

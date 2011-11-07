@@ -40,6 +40,8 @@
             this.toolStripContainer3 = new System.Windows.Forms.ToolStripContainer();
             this.treeViewAdv1 = new Aga.Controls.Tree.TreeViewAdv();
             this.treeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.newQueryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.contextRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.expandingIcon1 = new Aga.Controls.Tree.NodeControls.ExpandingIcon();
             this._icon = new Aga.Controls.Tree.NodeControls.NodeIcon();
@@ -215,15 +217,31 @@
             // treeContextMenu
             // 
             this.treeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.newQueryToolStripMenuItem,
+            this.toolStripSeparator9,
             this.contextRefresh});
             this.treeContextMenu.Name = "treeContextMenu";
-            this.treeContextMenu.Size = new System.Drawing.Size(114, 26);
+            this.treeContextMenu.Size = new System.Drawing.Size(153, 76);
+            this.treeContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenu_Opening);
+            // 
+            // newQueryToolStripMenuItem
+            // 
+            this.newQueryToolStripMenuItem.Image = global::SQLiteBrowser.Properties.Resources.newIcon;
+            this.newQueryToolStripMenuItem.Name = "newQueryToolStripMenuItem";
+            this.newQueryToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newQueryToolStripMenuItem.Text = "New Query";
+            this.newQueryToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(149, 6);
             // 
             // contextRefresh
             // 
             this.contextRefresh.Image = global::SQLiteBrowser.Properties.Resources.refresh;
             this.contextRefresh.Name = "contextRefresh";
-            this.contextRefresh.Size = new System.Drawing.Size(113, 22);
+            this.contextRefresh.Size = new System.Drawing.Size(152, 22);
             this.contextRefresh.Text = "Refresh";
             this.contextRefresh.Click += new System.EventHandler(this.contextRefresh_Click);
             // 
@@ -265,6 +283,7 @@
             this.connectToolStrip.Name = "connectToolStrip";
             this.connectToolStrip.Size = new System.Drawing.Size(23, 22);
             this.connectToolStrip.Text = "toolStripButton1";
+            this.connectToolStrip.ToolTipText = "Add a connection to the Browser";
             this.connectToolStrip.Click += new System.EventHandler(this.connectMenuItem_Click);
             // 
             // disconnectToolStrip
@@ -276,6 +295,7 @@
             this.disconnectToolStrip.Name = "disconnectToolStrip";
             this.disconnectToolStrip.Size = new System.Drawing.Size(23, 22);
             this.disconnectToolStrip.Text = "toolStripButton2";
+            this.disconnectToolStrip.ToolTipText = "Remove a connection from the Browser";
             this.disconnectToolStrip.Click += new System.EventHandler(this.disconnectMenuItem_Click);
             // 
             // tabControl1
@@ -618,6 +638,7 @@
             this.newToolStrip.Name = "newToolStrip";
             this.newToolStrip.Size = new System.Drawing.Size(23, 22);
             this.newToolStrip.Text = "toolStripButton1";
+            this.newToolStrip.ToolTipText = "Create a new query";
             this.newToolStrip.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // openToolStrip
@@ -628,6 +649,7 @@
             this.openToolStrip.Name = "openToolStrip";
             this.openToolStrip.Size = new System.Drawing.Size(23, 22);
             this.openToolStrip.Text = "toolStripButton2";
+            this.openToolStrip.ToolTipText = "Open a query";
             this.openToolStrip.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // toolStripSeparator7
@@ -644,6 +666,7 @@
             this.queryConnectToolStrip.Name = "queryConnectToolStrip";
             this.queryConnectToolStrip.Size = new System.Drawing.Size(23, 22);
             this.queryConnectToolStrip.Text = "toolStripButton1";
+            this.queryConnectToolStrip.ToolTipText = "Connect the query";
             this.queryConnectToolStrip.Click += new System.EventHandler(this.queryConnectMenuItem_Click);
             // 
             // queryDisconnectToolStrip
@@ -655,6 +678,7 @@
             this.queryDisconnectToolStrip.Name = "queryDisconnectToolStrip";
             this.queryDisconnectToolStrip.Size = new System.Drawing.Size(23, 22);
             this.queryDisconnectToolStrip.Text = "toolStripButton2";
+            this.queryDisconnectToolStrip.ToolTipText = "Disconnect the query";
             this.queryDisconnectToolStrip.Click += new System.EventHandler(this.queryDisconnectMenuItem_Click);
             // 
             // toolStripSeparator8
@@ -774,6 +798,8 @@
         private System.Windows.Forms.ToolStrip toolStrip2;
         private System.Windows.Forms.ToolStripButton connectToolStrip;
         private System.Windows.Forms.ToolStripButton disconnectToolStrip;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripMenuItem newQueryToolStripMenuItem;
     }
 }
 

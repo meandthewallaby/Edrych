@@ -100,7 +100,8 @@ namespace SQLiteBrowser.Models
                 items.Add(item);
                 _cache.Add("ROOT", items);
             }
-            OnStructureChanged(TreePath.Empty);
+
+            OnNodesInserted(TreePath.Empty, new int[] { _cache["ROOT"].Count - 1 }, new object[] { item });
         }
 
         public void RefreshNode(TreeNodeAdv SelectedNode)
@@ -148,13 +149,14 @@ namespace SQLiteBrowser.Models
             if (server != null)
             {
                 //Next, clear the cache
+                int index = SelectedNode.Index;
                 _cache["ROOT"].Remove(server as BaseItem);
                 List<BaseItem> serverChildren = _cache.ContainsKey(server.ItemPath) ? serverChildren = _cache[server.ItemPath] : new List<BaseItem>();
                 RemoveCachedItems(_cache.Keys.Where(k => k.StartsWith(server.ItemPath)).ToList());
                 server.Dispose();
 
                 //Finally, fire the event off
-                OnStructureChanged(TreePath.Empty);
+                OnNodesRemoved(TreePath.Empty, new int[] { index }, new object[] { server });
             }
         }
 
@@ -239,7 +241,7 @@ namespace SQLiteBrowser.Models
             server.DataAccess.SetDatabase(DatabaseName);
             foreach (Column col in server.DataAccess.GetColumns(parent.Name))
             {
-                items.Add(new BaseItem(ItemType.Column, col.Name + " (" + col.DataType + ")", parent));
+                items.Add(new BaseItem(ItemType.Column, col.Name + " (" + col.DataType + ", " + (col.IsNullable ? "null" : "not null") + ")", parent));
             }
             server.DataAccess.SetDatabase(oldDatabase);
 
@@ -265,27 +267,39 @@ namespace SQLiteBrowser.Models
 
         #region Private Event Triggers
 
-        private void OnNodesInserted(TreePath Tree, object[] Children)
+        private void OnNodesInserted(TreePath Tree, int[] Indices, object[] Children)
         {
-            if (NodesInserted != null)
+            if (NodesInserted != null && Children != null)
             {
-                NodesInserted(this, new TreeModelEventArgs(Tree, Children));
+                if (Indices == null)
+                {
+                    Indices = BuildIndices(Children.Length);
+                }
+                NodesInserted(this, new TreeModelEventArgs(Tree, Indices, Children));
             }
         }
 
-        private void OnNodesChanged(TreePath Tree, object[] Children)
+        private void OnNodesChanged(TreePath Tree, int[] Indices, object[] Children)
         {
-            if (NodesChanged != null)
+            if (NodesChanged != null && Children != null)
             {
-                NodesChanged(this, new TreeModelEventArgs(Tree, Children));
+                if (Indices == null)
+                {
+                    Indices = BuildIndices(Children.Length);
+                }
+                NodesChanged(this, new TreeModelEventArgs(Tree, Indices, Children));
             }
         }
 
-        private void OnNodesRemoved(TreePath Tree, object[] Children)
+        private void OnNodesRemoved(TreePath Tree, int[] Indices, object[] Children)
         {
-            if (NodesRemoved != null)
+            if (NodesRemoved != null && Children != null)
             {
-                NodesRemoved(this, new TreeModelEventArgs(Tree, Children));
+                if (Indices == null)
+                {
+                    Indices = BuildIndices(Children.Length);
+                }
+                NodesRemoved(this, new TreeModelEventArgs(Tree, Indices, Children));
             }
         }
 
@@ -295,6 +309,16 @@ namespace SQLiteBrowser.Models
             {
                 StructureChanged(this, new TreePathEventArgs(Tree));
             }
+        }
+
+        private int[] BuildIndices(int Length)
+        {
+            int[] indices = new int[Length];
+            for (int i = 0; i < Length; i++)
+            {
+                indices[i] = i;
+            }
+            return indices;
         }
 
         #endregion

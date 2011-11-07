@@ -138,7 +138,8 @@ namespace SQLiteBrowser.Properties {
         ///				ISNULL(&apos;(&apos; + cast(NUMERIC_PRECISION as varchar) + &apos;, &apos; + CAST(NUMERIC_SCALE as varchar) + &apos;)&apos;, &apos;&apos;)
         ///			else &apos;&apos;
         ///		  end
-        ///	as type
+        ///	as type,
+        ///	IS_NULLABLE
         ///from
         ///	INFORMATION_SCHEMA.COLUMNS
         ///where

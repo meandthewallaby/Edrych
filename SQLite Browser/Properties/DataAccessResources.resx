@@ -159,7 +159,8 @@ ORDER BY name;</value>
 				ISNULL('(' + cast(NUMERIC_PRECISION as varchar) + ', ' + CAST(NUMERIC_SCALE as varchar) + ')', '')
 			else ''
 		  end
-	as type
+	as type,
+	IS_NULLABLE
 from
 	INFORMATION_SCHEMA.COLUMNS
 where

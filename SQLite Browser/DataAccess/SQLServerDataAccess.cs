@@ -92,6 +92,7 @@ namespace SQLiteBrowser.DataAccess
                 Column col = new Column();
                 col.Name = reader["name"].ToString();
                 col.DataType = reader["type"].ToString();
+                col.IsNullable = reader["IS_NULLABLE"].ToString() == "YES";
                 cols.Add(col);
             }
 
