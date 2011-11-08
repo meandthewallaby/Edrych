@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Edrych.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Aga.Controls">
       <HintPath>..\..\..\..\..\Downloads\treeviewadv\Aga.Controls\obj\Release\Aga.Controls.dll</HintPath>
@@ -62,6 +65,12 @@
     <Compile Include="DataAccess\SQLiteDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessItems.cs" />
     <Compile Include="DataAccess\SQLServerDataAccess.cs" />
+    <Compile Include="Dialogs\AboutDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\AboutDialog.Designer.cs">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Dialogs\ConnectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -69,6 +78,12 @@
       <DependentUpon>ConnectDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="App.cs" />
+    <Compile Include="Dialogs\OptionsDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Dialogs\OptionsDialog.Designer.cs">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\CustomEventArgs.cs" />
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\TabControlExt.cs">
@@ -98,8 +113,14 @@
       <DependentUpon>QueryView.cs</DependentUpon>
     </Compile>
     <Compile Include="ViewModels\QueryViewModel.cs" />
+    <EmbeddedResource Include="Dialogs\AboutDialog.resx">
+      <DependentUpon>AboutDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Dialogs\ConnectDialog.resx">
       <DependentUpon>ConnectDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Dialogs\OptionsDialog.resx">
+      <DependentUpon>OptionsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>

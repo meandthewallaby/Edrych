@@ -28,7 +28,18 @@ namespace Edrych.DataAccess
 
     public class DataAccessFactory
     {
-        public const ConnectionType DefaultType = ConnectionType.SQLServer;
+        public static ConnectionType DefaultType
+        {
+            get 
+            {
+                ConnectionType type;
+                if (!Enum.TryParse<ConnectionType>(Settings.Default.DefaultConnection, out type))
+                {
+                    type = ConnectionType.None;
+                }
+                return type; 
+            }
+        }
 
         public static DataAccessBase GetDataAccess()
         {
@@ -68,6 +79,12 @@ namespace Edrych.DataAccess
             }
 
             return sources;
+        }
+
+        public static void SetDefaultType(ConnectionType ConnectionType)
+        {
+            Settings.Default.DefaultConnection = ConnectionType.ToString();
+            Settings.Default.Save();
         }
 
         private static DataAccessBase GetConnection(ConnectionType ConnectionType)

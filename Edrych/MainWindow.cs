@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Edrych.Dialogs;
 using Edrych.Helpers;
 using Edrych.Views;
 using Edrych.ViewModels;
@@ -116,6 +117,26 @@ namespace Edrych
         private void queryDisconnectMenuItem_Click(object sender, EventArgs e)
         {
             App.OnQueryDisconnect(sender, e);
+        }
+
+        #endregion
+
+        #region Menu Item Handling - Tools Menu
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OptionsDialog options = new OptionsDialog();
+            options.ShowDialog();
+        }
+
+        #endregion
+
+        #region Menu Item Handling - Help Menu
+
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AboutDialog about = new AboutDialog();
+            about.ShowDialog();
         }
 
         #endregion
