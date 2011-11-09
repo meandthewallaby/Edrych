@@ -138,7 +138,7 @@ namespace Edrych.DataAccess
                     sb.Append("Integrated Security=SSPI;");
                     break;
                 case AuthType.Basic:
-                    sb.Append("Username=" + this.Username + ";Password=" + this.Password + ";");
+                    sb.Append("User Id=" + this.Username + ";Password=" + this.Password + ";");
                     break;
             }
             return sb.ToString();
