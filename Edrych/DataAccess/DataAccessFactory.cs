@@ -6,14 +6,6 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
-    public enum ConnectionType
-    {
-        None,
-        ODBC,
-        SQLite,
-        SQLServer
-    }
-
     public class DataAccessConnection
     {
         public DataAccessConnection(ConnectionType Type, string ConnectionString)
@@ -43,19 +35,25 @@ namespace Edrych.DataAccess
 
         public static DataAccessBase GetDataAccess()
         {
-            return GetDataAccess(ConnectionType.SQLite, DataAccessResources.DefaultConnectionString);
+            return GetDataAccess(ConnectionType.SQLite, DataAccessResources.DefaultConnectionString, AuthType.None);
         }
 
         public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource)
         {
-            return GetDataAccess(ConnectionType, DataSource, null, null);
+            return GetDataAccess(ConnectionType, DataSource, AuthType.None, null, null);
         }
 
-        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string Username, string Password)
+        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, AuthType Auth)
+        {
+            return GetDataAccess(ConnectionType, DataSource, Auth, null, null);
+        }
+
+        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, AuthType Auth, string Username, string Password)
         {
             DataAccessBase dab = GetConnection(ConnectionType);
 
             dab.DataSource = DataSource;
+            dab.Authentication = Auth;
             dab.Username = Username;
             dab.Password = Password;
             dab.Open();
@@ -69,11 +67,7 @@ namespace Edrych.DataAccess
 
             foreach (ConnectionType type in Enum.GetValues(typeof(ConnectionType)))
             {
-                ConnectionSource source = new ConnectionSource();
-                source.Name = type.ToString();
-                DataAccessBase db = GetConnection(type);
-                source.IsAvailable = db.TestAvailability();
-                db.Dispose();
+                ConnectionSource source = BuildConnectionSource(type);
                 if(source.IsAvailable)
                     sources.Add(source);
             }
@@ -85,6 +79,37 @@ namespace Edrych.DataAccess
         {
             Settings.Default.DefaultConnection = ConnectionType.ToString();
             Settings.Default.Save();
+        }
+
+        private static ConnectionSource BuildConnectionSource(ConnectionType ConnectionType)
+        {
+            ConnectionSource source = new ConnectionSource();
+            source.Name = ConnectionType.ToString();
+            source.ConnType = ConnectionType;
+            switch (ConnectionType)
+            {
+                case ConnectionType.ODBC:
+                case ConnectionType.SQLServer:
+                    source.AcceptsUsername = true;
+                    source.AcceptsPassword = true;
+                    source.AuthTypes = new List<AuthType>() { AuthType.Integrated, AuthType.Basic};
+                    break;
+                case ConnectionType.SQLite:
+                    source.AcceptsUsername = false;
+                    source.AcceptsPassword = true;
+                    source.AuthTypes = new List<AuthType>() { AuthType.None, AuthType.Basic};
+                    break;
+                case ConnectionType.None:
+                default:
+                    source.AcceptsUsername = false;
+                    source.AcceptsPassword = false;
+                    source.AuthTypes = new List<AuthType>() { AuthType.None };
+                    break;
+            }
+            DataAccessBase db = GetConnection(ConnectionType);
+            source.IsAvailable = db.TestAvailability();
+            db.Dispose();
+            return source;
         }
 
         private static DataAccessBase GetConnection(ConnectionType ConnectionType)

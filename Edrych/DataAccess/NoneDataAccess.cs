@@ -51,5 +51,10 @@ namespace Edrych.DataAccess
         {
             throw new NotImplementedException();
         }
+
+        internal override string BuildConnectionString()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

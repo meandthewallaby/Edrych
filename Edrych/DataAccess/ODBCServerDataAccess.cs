@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Odbc;
+using System.Text;
 using Edrych.Properties;
 
 namespace Edrych.DataAccess
@@ -126,6 +127,24 @@ namespace Edrych.DataAccess
             this.AddParameter("@DatabaseName", DatabaseName);
             this.ExecuteNonQuery(sql);
             this.ClearParameters();
+        }
+
+        internal override string BuildConnectionString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Driver={ODBC};Server=");
+            sb.Append(this.DataSource);
+            sb.Append(";");
+            switch (this.Authentication)
+            {
+                case AuthType.Integrated:
+                    sb.Append("Trusted_Connection=yes;");
+                    break;
+                case AuthType.Basic:
+                    sb.Append("Uid=" + this.Username + ";Pwd=" + this.Password + ";");
+                    break;
+            }
+            return sb.ToString();
         }
     }
 }

@@ -27,6 +27,7 @@ namespace Edrych.DataAccess
         public ConnectionType ConnectionType { get; set; }
         public string ConnectionString { get; set; }
         public string DataSource { get; set; }
+        public AuthType Authentication { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
         public string SelectedDatabase { get { return this._conn.Database; } }
@@ -155,7 +156,7 @@ namespace Edrych.DataAccess
 
         #endregion
 
-        #region Internal Abstract Methods
+        #region Abstract Methods
 
         internal abstract bool TestAvailability();
         internal abstract IDbConnection GetDbConnection();
@@ -166,6 +167,7 @@ namespace Edrych.DataAccess
         internal abstract List<TableView> GetViews();
         internal abstract List<Column> GetColumns(string TableName);
         internal abstract void SetDatabase(string DatabaseName);
+        internal abstract string BuildConnectionString();
 
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Text;
 using Edrych.Properties;
 
 namespace Edrych.DataAccess
@@ -27,9 +28,7 @@ namespace Edrych.DataAccess
 
         internal override IDbConnection GetDbConnection()
         {
-            this.ConnectionString = 
-                "Data Source=" + this.DataSource + ";" +
-                (this.Password != null ? "Username=" + this.Username + ";Password=" + this.Password : "Integrated Security=SSPI;");
+            this.ConnectionString = BuildConnectionString();
             SqlConnection conn = new SqlConnection(this.ConnectionString);
             conn.Open();
             return conn;
@@ -125,6 +124,24 @@ namespace Edrych.DataAccess
             this.AddParameter("@DatabaseName", DatabaseName);
             this.ExecuteNonQuery(sql);
             this.ClearParameters();
+        }
+
+        internal override string BuildConnectionString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Data Source=");
+            sb.Append(this.DataSource);
+            sb.Append(";");
+            switch (this.Authentication)
+            {
+                case AuthType.Integrated:
+                    sb.Append("Integrated Security=SSPI;");
+                    break;
+                case AuthType.Basic:
+                    sb.Append("Username=" + this.Username + ";Password=" + this.Password + ";");
+                    break;
+            }
+            return sb.ToString();
         }
     }
 }

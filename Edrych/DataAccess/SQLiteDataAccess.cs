@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Text;
 using Edrych.Properties;
 
 namespace Edrych.DataAccess
@@ -30,7 +31,7 @@ namespace Edrych.DataAccess
 
         internal override IDbConnection GetDbConnection()
         {
-            this.ConnectionString = "Data Source=" + this.DataSource + (this.Password != null ? ";Password=" + this.Password : "");
+            this.ConnectionString = BuildConnectionString();
             SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
             conn.Open();
             return conn;
@@ -116,6 +117,21 @@ namespace Edrych.DataAccess
         internal override void SetDatabase(string DatabaseName)
         {
             
+        }
+
+        internal override string BuildConnectionString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append("Data Source=");
+            sb.Append(this.DataSource);
+            sb.Append(";");
+            switch (this.Authentication)
+            {
+                case AuthType.Basic:
+                    sb.Append("Password=" + this.Password + ";");
+                    break;
+            }
+            return sb.ToString();
         }
     }
 }
