@@ -89,6 +89,53 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	LTRIM(RTRIM(COLNAME)) as COLNAME,
+        ///	NULLS,
+        ///	case
+        ///		when TYPENAME = &apos;DECIMAL&apos; then CONCAT(LTRIM(RTRIM(TYPENAME)), CONCAT(&apos; (&apos;,CONCAT(LENGTH, CONCAT(&apos;, &apos;, CONCAT(SCALE, &apos;)&apos;)))))
+        ///		when TYPENAME like &apos;%CHAR%&apos; then CONCAT(LTRIM(RTRIM(TYPENAME)), CONCAT(&apos; (&apos;,CONCAT(LENGTH, &apos;)&apos;)))
+        ///		else LTRIM(RTRIM(TYPENAME))
+        ///	end as COLTYPE
+        ///from
+        ///	syscat.columns
+        ///where
+        ///	TABSCHEMA = @SchemaName
+        ///	and TABNAME = @TableName
+        ///order by
+        ///	COLNO.
+        /// </summary>
+        internal static string DB2_FindColumns {
+            get {
+                return ResourceManager.GetString("DB2_FindColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select 
+        ///	LTRIM(RTRIM(TABSCHEMA)) as TABSCHEMA, 
+        ///	LTRIM(RTRIM(TABNAME)) as TABNAME
+        ///from 
+        ///	syscat.tables 
+        ///order by 
+        ///	1,2.
+        /// </summary>
+        internal static string DB2_FindTables {
+            get {
+                return ResourceManager.GetString("DB2_FindTables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select LTRIM(RTRIM(VIEWSCHEMA)) as VIEWSCHEMA, LTRIM(RTRIM(VIEWNAME)) as VIEWNAME from syscat.views order by 1,2.
+        /// </summary>
+        internal static string DB2_FindViews {
+            get {
+                return ResourceManager.GetString("DB2_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data Source=%TEMP%\Test.db3.
         /// </summary>
         internal static string DefaultConnectionString {

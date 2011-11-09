@@ -40,19 +40,20 @@ namespace Edrych.DataAccess
 
         public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource)
         {
-            return GetDataAccess(ConnectionType, DataSource, AuthType.None, null, null);
+            return GetDataAccess(ConnectionType, DataSource, null, AuthType.None, null, null);
         }
 
         public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, AuthType Auth)
         {
-            return GetDataAccess(ConnectionType, DataSource, Auth, null, null);
+            return GetDataAccess(ConnectionType, DataSource, null, Auth, null, null);
         }
 
-        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, AuthType Auth, string Username, string Password)
+        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
         {
             DataAccessBase dab = GetConnection(ConnectionType);
 
             dab.DataSource = DataSource;
+            dab.InitialCatalog = InitialCatalog;
             dab.Authentication = Auth;
             dab.Username = Username;
             dab.Password = Password;
@@ -84,23 +85,32 @@ namespace Edrych.DataAccess
         private static ConnectionSource BuildConnectionSource(ConnectionType ConnectionType)
         {
             ConnectionSource source = new ConnectionSource();
-            source.Name = ConnectionType.ToString();
+            source.Name = ConnectionType.ToString().Replace("_", " ");
             source.ConnType = ConnectionType;
             switch (ConnectionType)
             {
                 case ConnectionType.ODBC:
-                case ConnectionType.SQLServer:
+                case ConnectionType.SQL_Server:
+                    source.AuthTypes = new List<AuthType>() { AuthType.Integrated, AuthType.Basic };
+                    source.AcceptsDatabase = false;
                     source.AcceptsUsername = true;
                     source.AcceptsPassword = true;
-                    source.AuthTypes = new List<AuthType>() { AuthType.Integrated, AuthType.Basic};
                     break;
                 case ConnectionType.SQLite:
+                    source.AuthTypes = new List<AuthType>() { AuthType.None, AuthType.Basic };
+                    source.AcceptsDatabase = false;
                     source.AcceptsUsername = false;
                     source.AcceptsPassword = true;
-                    source.AuthTypes = new List<AuthType>() { AuthType.None, AuthType.Basic};
+                    break;
+                case ConnectionType.DB2:
+                    source.AuthTypes = new List<AuthType>() { AuthType.Basic };
+                    source.AcceptsDatabase = true;
+                    source.AcceptsUsername = true;
+                    source.AcceptsPassword = true;
                     break;
                 case ConnectionType.None:
                 default:
+                    source.AcceptsDatabase = false;
                     source.AcceptsUsername = false;
                     source.AcceptsPassword = false;
                     source.AuthTypes = new List<AuthType>() { AuthType.None };
@@ -121,13 +131,16 @@ namespace Edrych.DataAccess
                 case ConnectionType.None:
                     dab = new NoneDataAccess();
                     break;
+                case ConnectionType.DB2:
+                    dab = new DB2DataAccess();
+                    break;
                 case ConnectionType.ODBC:
                     dab = new ODBCServerDataAccess();
                     break;
                 case ConnectionType.SQLite:
                     dab = new SQLiteDataAccess();
                     break;
-                case ConnectionType.SQLServer:
+                case ConnectionType.SQL_Server:
                     dab = new SQLServerDataAccess();
                     break;
                 default:

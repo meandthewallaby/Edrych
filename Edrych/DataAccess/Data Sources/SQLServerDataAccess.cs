@@ -1,50 +1,28 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.Odbc;
+using System.Data.SqlClient;
 using System.Text;
 using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
-    class ODBCServerDataAccess : DataAccessBase
+    class SQLServerDataAccess : DataAccessBase
     {
-        //TODO: Change up Connection String and SQL to fall in line w/ ODBC connections
-        internal override bool TestAvailability()
-        {
-            bool isAvailable = false;
-
-            try
-            {
-                OdbcParameter param = new OdbcParameter();
-                isAvailable = true;
-            }
-            catch
-            {
-                isAvailable = false;
-            }
-
-            return isAvailable;
-        }
-
         internal override IDbConnection GetDbConnection()
         {
-            this.ConnectionString =
-                "Driver={ODBC};" +
-                "Server=" + this.DataSource + ";" +
-                (this.Password != null ? "Uid=" + this.Username + ";Pwd=" + this.Password : "Trusted_Connection=yes;");
-            OdbcConnection conn = new OdbcConnection(this.ConnectionString);
+            SqlConnection conn = new SqlConnection(this.ConnectionString);
             conn.Open();
             return conn;
         }
 
         internal override IDbCommand GetDbCommand()
         {
-            return new OdbcCommand();
+            return new SqlCommand();
         }
 
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
-            return new OdbcParameter(Name, Value);
+            return new SqlParameter(Name, Value);
         }
 
         internal override List<Database> GetDatabases()
@@ -132,16 +110,16 @@ namespace Edrych.DataAccess
         internal override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("Driver={ODBC};Server=");
+            sb.Append("Data Source=");
             sb.Append(this.DataSource);
             sb.Append(";");
             switch (this.Authentication)
             {
                 case AuthType.Integrated:
-                    sb.Append("Trusted_Connection=yes;");
+                    sb.Append("Integrated Security=SSPI;");
                     break;
                 case AuthType.Basic:
-                    sb.Append("Uid=" + this.Username + ";Pwd=" + this.Password + ";");
+                    sb.Append("User Id=" + this.Username + ";Password=" + this.Password + ";");
                     break;
             }
             return sb.ToString();

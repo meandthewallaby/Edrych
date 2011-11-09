@@ -7,11 +7,6 @@ namespace Edrych.DataAccess
 {
     class NoneDataAccess : DataAccessBase
     {
-        internal override bool TestAvailability()
-        {
-            return false;
-        }
-
         internal override System.Data.IDbConnection GetDbConnection()
         {
             throw new NotImplementedException();

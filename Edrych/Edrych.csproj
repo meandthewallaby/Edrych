@@ -42,6 +42,7 @@
       <HintPath>..\..\..\..\..\Downloads\treeviewadv\Aga.Controls\obj\Release\Aga.Controls.dll</HintPath>
       <EmbedInteropTypes>False</EmbedInteropTypes>
     </Reference>
+    <Reference Include="IBM.Data.DB2, Version=9.7.4.4, Culture=neutral, PublicKeyToken=7c307b91aa13d208, processorArchitecture=x86" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.SQLite, Version=1.0.74.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
@@ -58,13 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\ODBCServerDataAccess.cs" />
+    <Compile Include="DataAccess\Data Sources\DB2DataAccess.cs" />
+    <Compile Include="DataAccess\Data Sources\ODBCServerDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessBase.cs" />
     <Compile Include="DataAccess\DataAccessFactory.cs" />
-    <Compile Include="DataAccess\NoneDataAccess.cs" />
-    <Compile Include="DataAccess\SQLiteDataAccess.cs" />
+    <Compile Include="DataAccess\Data Sources\NoneDataAccess.cs" />
+    <Compile Include="DataAccess\Data Sources\SQLiteDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessItems.cs" />
-    <Compile Include="DataAccess\SQLServerDataAccess.cs" />
+    <Compile Include="DataAccess\Data Sources\SQLServerDataAccess.cs" />
     <Compile Include="Dialogs\AboutDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -95,7 +97,6 @@
     <Compile Include="MainWindow.Designer.cs">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="DataAccess\ResultSet.cs" />
     <Compile Include="Models\TreeItems.cs" />
     <Compile Include="Models\ServerBrowserModel.cs" />
     <Compile Include="Program.cs" />
@@ -195,6 +196,7 @@
   <ItemGroup>
     <Content Include="Libs\Aga.Controls.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

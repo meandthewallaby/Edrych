@@ -76,9 +76,12 @@ namespace Edrych.Helpers
                 {
                     string connType = conn.Element("Type").Value;
                     string connSource = conn.Element("Source").Value;
-                    ConnectionType type = (ConnectionType)Enum.Parse(typeof(ConnectionType), connType);
-                    DataAccessConnection dac = new DataAccessConnection(type, connSource);
-                    _recentConnections.Add(dac);
+                    ConnectionType type;
+                    if (Enum.TryParse<ConnectionType>(connType, out type))
+                    {
+                        DataAccessConnection dac = new DataAccessConnection(type, connSource);
+                        _recentConnections.Add(dac);
+                    }
                 }
             }
 

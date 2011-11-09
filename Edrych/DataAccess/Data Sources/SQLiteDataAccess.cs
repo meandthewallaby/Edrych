@@ -1,60 +1,36 @@
 ﻿using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
+using System.Data.SQLite;
 using System.Text;
 using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
-    class SQLServerDataAccess : DataAccessBase
+    public class SQLiteDataAccess : DataAccessBase
     {
-
-        internal override bool TestAvailability()
-        {
-            bool isAvailable = false;
-
-            try
-            {
-                SqlParameter param = new SqlParameter();
-                isAvailable = true;
-            }
-            catch
-            {
-                isAvailable = false;
-            }
-
-            return isAvailable;
-        }
-
         internal override IDbConnection GetDbConnection()
         {
-            this.ConnectionString = BuildConnectionString();
-            SqlConnection conn = new SqlConnection(this.ConnectionString);
+            SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
             conn.Open();
             return conn;
         }
 
         internal override IDbCommand GetDbCommand()
         {
-            return new SqlCommand();
+            return new SQLiteCommand();
         }
 
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
-            return new SqlParameter(Name, Value);
+            return new SQLiteParameter(Name, Value);
         }
 
         internal override List<Database> GetDatabases()
         {
             List<Database> databases = new List<Database>();
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLServer_FindDatabases);
-            while (reader.Read())
-            {
-                Database db = new Database();
-                db.Name = reader["name"].ToString();
-                databases.Add(db);
-            }
-            reader.Close();
+            Database db = new Database();
+            db.Name = this.SelectedDatabase;
+            databases.Add(db);
             return databases;
         }
 
@@ -62,12 +38,12 @@ namespace Edrych.DataAccess
         {
             List<TableView> tables = new List<TableView>();
 
-            IDataReader reader = this.ExecuteReader(DataAccessResources.ANSI_FindTables);
+            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLite_FindTables);
 
             while (reader.Read())
             {
                 TableView table = new TableView();
-                table.Name = reader["TABLE_NAME"].ToString();
+                table.Name = reader["name"].ToString();
 
                 tables.Add(table);
             }
@@ -81,12 +57,12 @@ namespace Edrych.DataAccess
         {
             List<TableView> views = new List<TableView>();
 
-            IDataReader reader = this.ExecuteReader(DataAccessResources.ANSI_FindViews);
+            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLite_FindViews);
 
             while (reader.Read())
             {
                 TableView view = new TableView();
-                view.Name = reader["TABLE_NAME"].ToString();
+                view.Name = reader["name"].ToString();
 
                 views.Add(view);
             }
@@ -99,31 +75,26 @@ namespace Edrych.DataAccess
         internal override List<Column> GetColumns(string TableName)
         {
             List<Column> cols = new List<Column>();
-            this.ClearParameters();
-            this.AddParameter("@TableName", TableName);
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLServer_FindColumns);
+            string sql = DataAccessResources.SQLite_FindColumns.Replace("@TableName", TableName);
+            IDataReader reader = this.ExecuteReader(sql);
 
             while (reader.Read())
             {
                 Column col = new Column();
                 col.Name = reader["name"].ToString();
                 col.DataType = reader["type"].ToString();
-                col.IsNullable = reader["IS_NULLABLE"].ToString() == "YES";
+                col.IsNullable = reader["notnull"].ToString() == "0";
                 cols.Add(col);
             }
 
             reader.Close();
-            this.ClearParameters();
+
             return cols;
         }
 
         internal override void SetDatabase(string DatabaseName)
         {
-            string sql = DataAccessResources.SQLServer_SetDatabase.Replace("@DatabaseReplaceName", DatabaseName);
-            this.ClearParameters();
-            this.AddParameter("@DatabaseName", DatabaseName);
-            this.ExecuteNonQuery(sql);
-            this.ClearParameters();
+            
         }
 
         internal override string BuildConnectionString()
@@ -134,11 +105,8 @@ namespace Edrych.DataAccess
             sb.Append(";");
             switch (this.Authentication)
             {
-                case AuthType.Integrated:
-                    sb.Append("Integrated Security=SSPI;");
-                    break;
                 case AuthType.Basic:
-                    sb.Append("User Id=" + this.Username + ";Password=" + this.Password + ";");
+                    sb.Append("Password=" + this.Password + ";");
                     break;
             }
             return sb.ToString();

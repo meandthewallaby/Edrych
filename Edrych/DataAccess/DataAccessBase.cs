@@ -25,8 +25,9 @@ namespace Edrych.DataAccess
         #region Public Properties
 
         public ConnectionType ConnectionType { get; set; }
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get { return this.BuildConnectionString(); } }
         public string DataSource { get; set; }
+        public string InitialCatalog { get; set; }
         public AuthType Authentication { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
@@ -36,6 +37,23 @@ namespace Edrych.DataAccess
         #endregion
 
         #region Public Methods
+
+        public bool TestAvailability()
+        {
+            bool isAvailable = false;
+
+            try
+            {
+                IDbCommand param = this.GetDbCommand();
+                isAvailable = true;
+            }
+            catch
+            {
+                isAvailable = false;
+            }
+
+            return isAvailable;
+        }
 
         public void Open()
         {
@@ -158,7 +176,6 @@ namespace Edrych.DataAccess
 
         #region Abstract Methods
 
-        internal abstract bool TestAvailability();
         internal abstract IDbConnection GetDbConnection();
         internal abstract IDbCommand GetDbCommand();
         internal abstract IDbDataParameter GetDbParameter(string Name, object Value);

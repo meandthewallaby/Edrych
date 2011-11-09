@@ -35,15 +35,6 @@ namespace Edrych.Dialogs
 
         #endregion
 
-        #region Public Methods
-
-        public void InitiatlizeData(ConnectionType ConnType, string DataSource, AuthType Auth, string Username, string Password)
-        {
-            this._dataAccess = DataAccessFactory.GetDataAccess(ConnType, DataSource, Auth, Username, Password);
-        }
-
-        #endregion
-
         #region Private Methods
 
         private void PopulateConnectionType()
@@ -79,12 +70,13 @@ namespace Edrych.Dialogs
             }
 
             this.cbDataSource.Items.Add("Browse for more...");
-            this.cbDataSource.Focus();
         }
 
         private void SetAvailableOptions()
         {
+
             ConnectionSource source = this.cbConnectionType.SelectedItem as ConnectionSource;
+            this.tbDatabase.Enabled = source.AcceptsDatabase;
             this.cbAuthType.Items.Clear();
             foreach (AuthType auth in source.AuthTypes)
             {
@@ -129,7 +121,15 @@ namespace Edrych.Dialogs
         {
             try
             {
-                InitiatlizeData(this.SelectedConnectionType, this.cbDataSource.Text, this.SelectedAuthType, this.tbUsername.Text, this.tbPassword.Text);
+                this._dataAccess =
+                   DataAccessFactory.GetDataAccess(
+                       this.SelectedConnectionType,
+                       this.cbDataSource.Text,
+                       this.tbDatabase.Text,
+                       this.SelectedAuthType,
+                       this.tbUsername.Text,
+                       this.tbPassword.Text
+                   );
 
                 DataAccessConnection current = new DataAccessConnection(this.SelectedConnectionType, this.cbDataSource.Text);
 
