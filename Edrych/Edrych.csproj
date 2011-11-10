@@ -57,10 +57,31 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Teradata.Client.Entity, Version=13.11.0.0, Culture=neutral, PublicKeyToken=76b417ee2e04956c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Teradata.Client.Entity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Teradata.Client.Provider, Version=13.11.0.0, Culture=neutral, PublicKeyToken=76b417ee2e04956c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Teradata.Client.Provider.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Teradata.Client.VS, Version=13.11.0.0, Culture=neutral, PublicKeyToken=76b417ee2e04956c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Teradata.Client.VS.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Teradata.Net.Security.Tdgss, Version=13.11.0.0, Culture=neutral, PublicKeyToken=76b417ee2e04956c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Teradata.Net.Security.Tdgss.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\Data Sources\DB2DataAccess.cs" />
     <Compile Include="DataAccess\Data Sources\ODBCServerDataAccess.cs" />
+    <Compile Include="DataAccess\Data Sources\TeradataDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessBase.cs" />
     <Compile Include="DataAccess\DataAccessFactory.cs" />
     <Compile Include="DataAccess\Data Sources\NoneDataAccess.cs" />
@@ -87,6 +108,9 @@
       <DependentUpon>OptionsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Helpers\CustomEventArgs.cs" />
+    <Compile Include="Helpers\DataGridViewExt.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\TabControlExt.cs">
       <SubType>Component</SubType>

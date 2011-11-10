@@ -108,12 +108,18 @@ namespace Edrych.DataAccess
                     source.AcceptsUsername = true;
                     source.AcceptsPassword = true;
                     break;
+                case ConnectionType.Teradata:
+                    source.AuthTypes = new List<AuthType>() { AuthType.Basic };
+                    source.AcceptsDatabase = false;
+                    source.AcceptsUsername = true;
+                    source.AcceptsPassword = true;
+                    break;
                 case ConnectionType.None:
                 default:
+                    source.AuthTypes = new List<AuthType>() { AuthType.None };
                     source.AcceptsDatabase = false;
                     source.AcceptsUsername = false;
                     source.AcceptsPassword = false;
-                    source.AuthTypes = new List<AuthType>() { AuthType.None };
                     break;
             }
             DataAccessBase db = GetConnection(ConnectionType);
@@ -142,6 +148,9 @@ namespace Edrych.DataAccess
                     break;
                 case ConnectionType.SQL_Server:
                     dab = new SQLServerDataAccess();
+                    break;
+                case ConnectionType.Teradata:
+                    dab = new TeradataDataAccess();
                     break;
                 default:
                     dab = new NoneDataAccess();

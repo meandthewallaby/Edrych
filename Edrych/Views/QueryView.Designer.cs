@@ -1,4 +1,6 @@
-﻿namespace Edrych.Views
+﻿using Edrych.Helpers;
+
+namespace Edrych.Views
 {
     partial class QueryView
     {
@@ -41,7 +43,7 @@
             this.tbLines = new System.Windows.Forms.RichTextBox();
             this.tcResults = new System.Windows.Forms.TabControl();
             this.tpResults = new System.Windows.Forms.TabPage();
-            this.dgResults = new System.Windows.Forms.DataGridView();
+            this.dgResults = new Edrych.Helpers.DataGridViewExt();
             this.tpMessages = new System.Windows.Forms.TabPage();
             this.tbMessages = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -141,6 +143,7 @@
             this.dgResults.AllowUserToAddRows = false;
             this.dgResults.AllowUserToDeleteRows = false;
             this.dgResults.AllowUserToOrderColumns = true;
+            this.dgResults.AllowUserToResizeRows = false;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
             dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -165,6 +168,8 @@
             this.dgResults.Location = new System.Drawing.Point(3, 3);
             this.dgResults.Name = "dgResults";
             this.dgResults.ReadOnly = true;
+            this.dgResults.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
+            this.dgResults.RowTemplate.ReadOnly = true;
             this.dgResults.ShowEditingIcon = false;
             this.dgResults.Size = new System.Drawing.Size(848, 243);
             this.dgResults.TabIndex = 0;
@@ -194,7 +199,7 @@
             this.tbMessages.ReadOnly = true;
             this.tbMessages.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.tbMessages.ShortcutsEnabled = false;
-            this.tbMessages.Size = new System.Drawing.Size(848, 250);
+            this.tbMessages.Size = new System.Drawing.Size(848, 243);
             this.tbMessages.TabIndex = 0;
             // 
             // panel1
@@ -255,7 +260,7 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.DataGridView dgResults;
+        private DataGridViewExt dgResults;
         private System.Windows.Forms.RichTextBox tbQuery;
         private System.Windows.Forms.RichTextBox tbLines;
         private System.Windows.Forms.Panel panel1;

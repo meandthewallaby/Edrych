@@ -213,4 +213,38 @@ order by
   <data name="DB2_FindViews" xml:space="preserve">
     <value>select LTRIM(RTRIM(VIEWSCHEMA)) as VIEWSCHEMA, LTRIM(RTRIM(VIEWNAME)) as VIEWNAME from syscat.views order by 1,2</value>
   </data>
+  <data name="Teradata_FindColumns" xml:space="preserve">
+    <value>help column @DatabaseName.@TableName.*</value>
+  </data>
+  <data name="Teradata_FindDatabases" xml:space="preserve">
+    <value>select
+	DatabaseName
+from
+	DBC.DatabasesX
+WHERE
+	DBKind = 'D'
+order by 1</value>
+  </data>
+  <data name="Teradata_FindTables" xml:space="preserve">
+    <value>select
+	TableName
+from
+	DBC.TablesX
+where
+	DatabaseName = ?
+	and TableKind = 'T'
+order by
+	TableName</value>
+  </data>
+  <data name="Teradata_FindViews" xml:space="preserve">
+    <value>select
+	TableName
+from
+	DBC.TablesX
+where
+	DatabaseName = ?
+	and TableKind = 'V'
+order by
+	TableName</value>
+  </data>
 </root>

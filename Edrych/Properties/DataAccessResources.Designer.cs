@@ -227,5 +227,63 @@ namespace Edrych.Properties {
                 return ResourceManager.GetString("SQLServer_SetDatabase", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to help column @DatabaseName.@TableName.*.
+        /// </summary>
+        internal static string Teradata_FindColumns {
+            get {
+                return ResourceManager.GetString("Teradata_FindColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	DatabaseName
+        ///from
+        ///	DBC.DatabasesX
+        ///WHERE
+        ///	DBKind = &apos;D&apos;
+        ///order by 1.
+        /// </summary>
+        internal static string Teradata_FindDatabases {
+            get {
+                return ResourceManager.GetString("Teradata_FindDatabases", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	TableName
+        ///from
+        ///	DBC.TablesX
+        ///where
+        ///	DatabaseName = ?
+        ///	and TableKind = &apos;T&apos;
+        ///order by
+        ///	TableName.
+        /// </summary>
+        internal static string Teradata_FindTables {
+            get {
+                return ResourceManager.GetString("Teradata_FindTables", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	TableName
+        ///from
+        ///	DBC.TablesX
+        ///where
+        ///	DatabaseName = ?
+        ///	and TableKind = &apos;V&apos;
+        ///order by
+        ///	TableName.
+        /// </summary>
+        internal static string Teradata_FindViews {
+            get {
+                return ResourceManager.GetString("Teradata_FindViews", resourceCulture);
+            }
+        }
     }
 }

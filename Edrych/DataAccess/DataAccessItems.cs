@@ -61,6 +61,7 @@
         DB2,
         ODBC,
         SQLite,
-        SQL_Server
+        SQL_Server,
+        Teradata
     }
 }
