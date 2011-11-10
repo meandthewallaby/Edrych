@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OptionsDialog));
             this.btnOkay = new System.Windows.Forms.Button();
             this.btnCancel = new System.Windows.Forms.Button();
             this.btnApply = new System.Windows.Forms.Button();
@@ -107,9 +108,9 @@
             this.flowLayoutPanel1.Controls.Add(this.btnOkay);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(153, 151);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(153, 150);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
-            this.flowLayoutPanel1.Size = new System.Drawing.Size(333, 28);
+            this.flowLayoutPanel1.Size = new System.Drawing.Size(333, 29);
             this.flowLayoutPanel1.TabIndex = 4;
             // 
             // label1
@@ -118,7 +119,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.label1.Location = new System.Drawing.Point(3, 32);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(144, 116);
+            this.label1.Size = new System.Drawing.Size(144, 115);
             this.label1.TabIndex = 5;
             this.label1.Text = "Connection Type:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -129,6 +130,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(489, 182);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "OptionsDialog";
             this.Text = "Edrych Options";
             this.tableLayoutPanel1.ResumeLayout(false);

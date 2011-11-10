@@ -45,7 +45,7 @@ namespace Edrych.Dialogs
             foreach (ConnectionSource source in DataAccessFactory.GetSources())
             {
                 this.cbConnectionType.Items.Add(source);
-                if (source.Name == DataAccessFactory.DefaultType.ToString())
+                if (source.ConnType == DataAccessFactory.DefaultType)
                 {
                     index = i;
                 }
@@ -69,7 +69,11 @@ namespace Edrych.Dialogs
                 }
             }
 
-            this.cbDataSource.Items.Add("Browse for more...");
+            ConnectionSource source = this.cbConnectionType.SelectedItem as ConnectionSource;
+            if (source != null && source.AllowBrowse)
+            {
+                this.cbDataSource.Items.Add("Browse for more...");
+            }
         }
 
         private void SetAvailableOptions()

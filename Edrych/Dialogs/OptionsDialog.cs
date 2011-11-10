@@ -61,7 +61,7 @@ namespace Edrych.Dialogs
         private void SaveOptions()
         {
             ConnectionType type;
-            if (this.cbConnectionType.SelectedText != null && Enum.TryParse<ConnectionType>(this.cbConnectionType.SelectedItem.ToString(), out type))
+            if (this.cbConnectionType.SelectedText != null && Enum.TryParse<ConnectionType>(this.cbConnectionType.Text.Replace(" ", "_"), out type))
             {
                 DataAccessFactory.SetDefaultType(type);
                 _saved = true;

@@ -95,24 +95,28 @@ namespace Edrych.DataAccess
                     source.AcceptsDatabase = false;
                     source.AcceptsUsername = true;
                     source.AcceptsPassword = true;
+                    source.AllowBrowse = false;
                     break;
                 case ConnectionType.SQLite:
                     source.AuthTypes = new List<AuthType>() { AuthType.None, AuthType.Basic };
                     source.AcceptsDatabase = false;
                     source.AcceptsUsername = false;
                     source.AcceptsPassword = true;
+                    source.AllowBrowse = true;
                     break;
                 case ConnectionType.DB2:
                     source.AuthTypes = new List<AuthType>() { AuthType.Basic };
                     source.AcceptsDatabase = true;
                     source.AcceptsUsername = true;
                     source.AcceptsPassword = true;
+                    source.AllowBrowse = false;
                     break;
                 case ConnectionType.Teradata:
                     source.AuthTypes = new List<AuthType>() { AuthType.Basic };
                     source.AcceptsDatabase = false;
                     source.AcceptsUsername = true;
                     source.AcceptsPassword = true;
+                    source.AllowBrowse = false;
                     break;
                 case ConnectionType.None:
                 default:
@@ -120,6 +124,7 @@ namespace Edrych.DataAccess
                     source.AcceptsDatabase = false;
                     source.AcceptsUsername = false;
                     source.AcceptsPassword = false;
+                    source.AllowBrowse = false;
                     break;
             }
             DataAccessBase db = GetConnection(ConnectionType);

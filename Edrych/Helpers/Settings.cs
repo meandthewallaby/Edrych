@@ -11,7 +11,7 @@ namespace Edrych.Helpers
     {
         #region Constants
 
-        private string SETTINGS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/SQLiteBrowser/";
+        private string SETTINGS_PATH = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "/Edrych/";
         private const string RECENT_CONNECTIONS_FILE = "RecentConnections.xml";
 
         #endregion

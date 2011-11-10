@@ -119,19 +119,25 @@
   </resheader>
   <data name="ANSI_FindTables" xml:space="preserve">
     <value>select
+	TABLE_SCHEMA,
 	TABLE_NAME
 from
 	INFORMATION_SCHEMA.TABLES
+where
+	TABLE_TYPE = 'BASE TABLE'
 order by
-	1</value>
+	TABLE_SCHEMA,
+	TABLE_NAME</value>
   </data>
   <data name="ANSI_FindViews" xml:space="preserve">
     <value>select
+	TABLE_SCHEMA,
 	TABLE_NAME
 from
 	INFORMATION_SCHEMA.VIEWS
 order by
-	1</value>
+	TABLE_SCHEMA,
+	TABLE_NAME</value>
   </data>
   <data name="DefaultConnectionString" xml:space="preserve">
     <value>Data Source=%TEMP%\Test.db3</value>

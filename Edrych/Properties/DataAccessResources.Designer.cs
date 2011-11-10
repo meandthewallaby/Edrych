@@ -62,11 +62,15 @@ namespace Edrych.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to select
+        ///	TABLE_SCHEMA,
         ///	TABLE_NAME
         ///from
         ///	INFORMATION_SCHEMA.TABLES
+        ///where
+        ///	TABLE_TYPE = &apos;BASE TABLE&apos;
         ///order by
-        ///	1.
+        ///	TABLE_SCHEMA,
+        ///	TABLE_NAME.
         /// </summary>
         internal static string ANSI_FindTables {
             get {
@@ -76,11 +80,13 @@ namespace Edrych.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to select
+        ///	TABLE_SCHEMA,
         ///	TABLE_NAME
         ///from
         ///	INFORMATION_SCHEMA.VIEWS
         ///order by
-        ///	1.
+        ///	TABLE_SCHEMA,
+        ///	TABLE_NAME.
         /// </summary>
         internal static string ANSI_FindViews {
             get {

@@ -46,6 +46,7 @@
         public List<AuthType> AuthTypes { get; set; }
         public bool AcceptsUsername { get; set; }
         public bool AcceptsPassword { get; set; }
+        public bool AllowBrowse { get; set; }
     }
 
     public enum AuthType

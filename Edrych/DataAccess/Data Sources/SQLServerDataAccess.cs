@@ -53,7 +53,7 @@ namespace Edrych.DataAccess
                 (reader) =>
                 {
                     TableView tv = new TableView();
-                    tv.Name = reader["TABLE_NAME"].ToString();
+                    tv.Name = reader["TABLE_SCHEMA"].ToString() + "." + reader["TABLE_NAME"].ToString();
                     return tv;
                 });
 
