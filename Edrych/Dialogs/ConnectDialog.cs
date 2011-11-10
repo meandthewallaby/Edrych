@@ -135,9 +135,18 @@ namespace Edrych.Dialogs
                        this.tbPassword.Text
                    );
 
-                DataAccessConnection current = new DataAccessConnection(this.SelectedConnectionType, this.cbDataSource.Text);
+                DataAccessConnection current = new DataAccessConnection(
+                    this.SelectedConnectionType, 
+                    this.cbDataSource.Text, 
+                    this.tbDatabase.Text, 
+                    this.SelectedAuthType, 
+                    this.tbUsername.Text, 
+                    (this.cbxSavePassword.Enabled && this.cbxSavePassword.Checked ? this.tbPassword.Text : null)
+                    );
 
-                int currIndex = _settings.RecentConnections.IndexOf(_settings.RecentConnections.FirstOrDefault(c => c.Connection == current.Connection && c.DataSource == current.DataSource));
+                int currIndex = _settings.RecentConnections.IndexOf(
+                    _settings.RecentConnections.FirstOrDefault(c => c.Connection == current.Connection && c.DataSource == current.DataSource)
+                    );
                 if (currIndex >= 0)
                 {
                     _settings.RecentConnections.RemoveAt(currIndex);
@@ -179,6 +188,18 @@ namespace Edrych.Dialogs
                     this.cbDataSource.SelectedItem = fileName;
                 }
             }
+            else
+            {
+                DataAccessConnection dac = _settings.RecentConnections.FirstOrDefault(c => c.Connection == this.SelectedConnectionType && c.DataSource == this.cbDataSource.Text);
+                if (dac != null)
+                {
+                    this.tbDatabase.Text = dac.Database;
+                    this.cbAuthType.SelectedItem = dac.Auth;
+                    this.tbUsername.Text = dac.Username;
+                    this.tbPassword.Text = dac.Password;
+                    this.cbxSavePassword.Checked = !string.IsNullOrEmpty(dac.Password);
+                }
+            }
         }
 
         private void cbAuthType_SelectedIndexChanged(object sender, EventArgs e)
@@ -189,11 +210,13 @@ namespace Edrych.Dialogs
             {
                 this.tbUsername.Enabled = source.AcceptsUsername;
                 this.tbPassword.Enabled = source.AcceptsPassword;
+                this.cbxSavePassword.Enabled = source.AcceptsPassword;
             }
             else
             {
                 this.tbUsername.Enabled = false;
                 this.tbPassword.Enabled = false;
+                this.cbxSavePassword.Enabled = false;
             }
         }
 

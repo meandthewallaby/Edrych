@@ -6,18 +6,6 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
-    public class DataAccessConnection
-    {
-        public DataAccessConnection(ConnectionType Type, string ConnectionString)
-        {
-            this.Connection = Type;
-            this.DataSource = ConnectionString;
-        }
-
-        public ConnectionType Connection { get; set; }
-        public string DataSource { get; set; }
-    }
-
     public class DataAccessFactory
     {
         public static ConnectionType DefaultType

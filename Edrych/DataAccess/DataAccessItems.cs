@@ -4,6 +4,30 @@
     using System.Collections.Generic;
     using System.Data;
 
+    public class DataAccessConnection
+    {
+        public DataAccessConnection()
+        {
+        }
+
+        public DataAccessConnection(ConnectionType Type, string DataSource, string Database, AuthType Auth, string Username, string Password)
+        {
+            this.Connection = Type;
+            this.DataSource = DataSource;
+            this.Database = Database;
+            this.Auth = Auth;
+            this.Username = Username;
+            this.Password = Password;
+        }
+
+        public ConnectionType Connection { get; set; }
+        public string DataSource { get; set; }
+        public string Database { get; set; }
+        public AuthType Auth { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
+    }
+
     public class ResultSet : IDisposable
     {
         private DataTable _dt;

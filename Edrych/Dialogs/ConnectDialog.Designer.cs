@@ -46,6 +46,7 @@
             this.label6 = new System.Windows.Forms.Label();
             this.tbDatabase = new System.Windows.Forms.TextBox();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.cbxSavePassword = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -55,7 +56,7 @@
             this.tableLayoutPanel1.ColumnCount = 2;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 125F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 7);
+            this.tableLayoutPanel1.Controls.Add(this.flowLayoutPanel1, 1, 8);
             this.tableLayoutPanel1.Controls.Add(this.cbConnectionType, 1, 1);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 1);
             this.tableLayoutPanel1.Controls.Add(this.label2, 0, 2);
@@ -68,10 +69,11 @@
             this.tableLayoutPanel1.Controls.Add(this.cbAuthType, 1, 4);
             this.tableLayoutPanel1.Controls.Add(this.label6, 0, 3);
             this.tableLayoutPanel1.Controls.Add(this.tbDatabase, 1, 3);
+            this.tableLayoutPanel1.Controls.Add(this.cbxSavePassword, 1, 7);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 8;
+            this.tableLayoutPanel1.RowCount = 9;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
@@ -79,8 +81,9 @@
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 28F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(455, 213);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(455, 246);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -89,11 +92,11 @@
             this.flowLayoutPanel1.Controls.Add(this.btnOpen);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            this.flowLayoutPanel1.Location = new System.Drawing.Point(125, 185);
+            this.flowLayoutPanel1.Location = new System.Drawing.Point(125, 218);
             this.flowLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             this.flowLayoutPanel1.Name = "flowLayoutPanel1";
             this.flowLayoutPanel1.Size = new System.Drawing.Size(330, 28);
-            this.flowLayoutPanel1.TabIndex = 10;
+            this.flowLayoutPanel1.TabIndex = 100;
             // 
             // btnCancel
             // 
@@ -102,7 +105,7 @@
             this.btnCancel.Location = new System.Drawing.Point(252, 3);
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(75, 23);
-            this.btnCancel.TabIndex = 7;
+            this.btnCancel.TabIndex = 8;
             this.btnCancel.Text = "Cancel";
             this.btnCancel.UseVisualStyleBackColor = true;
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
@@ -114,7 +117,7 @@
             this.btnOpen.Location = new System.Drawing.Point(171, 3);
             this.btnOpen.Name = "btnOpen";
             this.btnOpen.Size = new System.Drawing.Size(75, 23);
-            this.btnOpen.TabIndex = 6;
+            this.btnOpen.TabIndex = 7;
             this.btnOpen.Text = "Open";
             this.btnOpen.UseVisualStyleBackColor = true;
             this.btnOpen.Click += new System.EventHandler(this.btnOpen_Click);
@@ -125,7 +128,7 @@
             this.cbConnectionType.DisplayMember = "Name";
             this.cbConnectionType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbConnectionType.FormattingEnabled = true;
-            this.cbConnectionType.Location = new System.Drawing.Point(128, 38);
+            this.cbConnectionType.Location = new System.Drawing.Point(128, 46);
             this.cbConnectionType.Name = "cbConnectionType";
             this.cbConnectionType.Size = new System.Drawing.Size(324, 21);
             this.cbConnectionType.TabIndex = 0;
@@ -135,7 +138,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label1.Location = new System.Drawing.Point(3, 35);
+            this.label1.Location = new System.Drawing.Point(3, 43);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(119, 25);
             this.label1.TabIndex = 0;
@@ -146,7 +149,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(3, 60);
+            this.label2.Location = new System.Drawing.Point(3, 68);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(119, 25);
             this.label2.TabIndex = 2;
@@ -157,7 +160,7 @@
             // 
             this.cbDataSource.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbDataSource.FormattingEnabled = true;
-            this.cbDataSource.Location = new System.Drawing.Point(128, 63);
+            this.cbDataSource.Location = new System.Drawing.Point(128, 71);
             this.cbDataSource.Name = "cbDataSource";
             this.cbDataSource.Size = new System.Drawing.Size(324, 21);
             this.cbDataSource.TabIndex = 1;
@@ -167,7 +170,7 @@
             // 
             this.label4.AutoSize = true;
             this.label4.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label4.Location = new System.Drawing.Point(3, 160);
+            this.label4.Location = new System.Drawing.Point(3, 168);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(119, 25);
             this.label4.TabIndex = 8;
@@ -178,7 +181,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label3.Location = new System.Drawing.Point(3, 135);
+            this.label3.Location = new System.Drawing.Point(3, 143);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(119, 25);
             this.label3.TabIndex = 5;
@@ -189,7 +192,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label5.Location = new System.Drawing.Point(3, 110);
+            this.label5.Location = new System.Drawing.Point(3, 118);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(119, 25);
             this.label5.TabIndex = 9;
@@ -200,7 +203,7 @@
             // 
             this.tbPassword.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbPassword.Enabled = false;
-            this.tbPassword.Location = new System.Drawing.Point(128, 163);
+            this.tbPassword.Location = new System.Drawing.Point(128, 171);
             this.tbPassword.Name = "tbPassword";
             this.tbPassword.Size = new System.Drawing.Size(324, 20);
             this.tbPassword.TabIndex = 5;
@@ -210,7 +213,7 @@
             // 
             this.tbUsername.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbUsername.Enabled = false;
-            this.tbUsername.Location = new System.Drawing.Point(128, 138);
+            this.tbUsername.Location = new System.Drawing.Point(128, 146);
             this.tbUsername.Name = "tbUsername";
             this.tbUsername.Size = new System.Drawing.Size(324, 20);
             this.tbUsername.TabIndex = 4;
@@ -220,7 +223,7 @@
             this.cbAuthType.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.cbAuthType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbAuthType.FormattingEnabled = true;
-            this.cbAuthType.Location = new System.Drawing.Point(128, 113);
+            this.cbAuthType.Location = new System.Drawing.Point(128, 121);
             this.cbAuthType.Name = "cbAuthType";
             this.cbAuthType.Size = new System.Drawing.Size(324, 21);
             this.cbAuthType.TabIndex = 3;
@@ -230,7 +233,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label6.Location = new System.Drawing.Point(3, 85);
+            this.label6.Location = new System.Drawing.Point(3, 93);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(119, 25);
             this.label6.TabIndex = 10;
@@ -241,7 +244,7 @@
             // 
             this.tbDatabase.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.tbDatabase.Enabled = false;
-            this.tbDatabase.Location = new System.Drawing.Point(128, 88);
+            this.tbDatabase.Location = new System.Drawing.Point(128, 96);
             this.tbDatabase.Name = "tbDatabase";
             this.tbDatabase.Size = new System.Drawing.Size(324, 20);
             this.tbDatabase.TabIndex = 2;
@@ -250,13 +253,24 @@
             // 
             this.openFileDialog1.CheckFileExists = false;
             // 
+            // cbxSavePassword
+            // 
+            this.cbxSavePassword.AutoSize = true;
+            this.cbxSavePassword.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cbxSavePassword.Location = new System.Drawing.Point(128, 196);
+            this.cbxSavePassword.Name = "cbxSavePassword";
+            this.cbxSavePassword.Size = new System.Drawing.Size(324, 19);
+            this.cbxSavePassword.TabIndex = 6;
+            this.cbxSavePassword.Text = "Save Password?";
+            this.cbxSavePassword.UseVisualStyleBackColor = true;
+            // 
             // ConnectDialog
             // 
             this.AcceptButton = this.btnOpen;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.btnCancel;
-            this.ClientSize = new System.Drawing.Size(455, 213);
+            this.ClientSize = new System.Drawing.Size(455, 246);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ConnectDialog";
@@ -287,5 +301,6 @@
         private System.Windows.Forms.Button btnOpen;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tbDatabase;
+        private System.Windows.Forms.CheckBox cbxSavePassword;
     }
 }
