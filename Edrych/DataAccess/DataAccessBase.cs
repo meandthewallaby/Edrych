@@ -187,5 +187,21 @@ namespace Edrych.DataAccess
         internal abstract string BuildConnectionString();
 
         #endregion
+
+        protected delegate object ReadItem(IDataReader reader);
+
+        protected List<T> GetDbItems<T>(string Sql, ReadItem Read)
+        {
+            List<T> collection = new List<T>();
+            IDataReader reader = this.ExecuteReader(Sql);
+            while (reader.Read())
+            {
+                T item = (T)Read(reader);
+                collection.Add(item);
+            }
+            reader.Close();
+
+            return collection;
+        }
     }
 }

@@ -36,59 +36,39 @@ namespace Edrych.DataAccess
 
         internal override List<TableView> GetTables()
         {
-            List<TableView> tables = new List<TableView>();
-
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLite_FindTables);
-
-            while (reader.Read())
-            {
-                TableView table = new TableView();
-                table.Name = reader["name"].ToString();
-
-                tables.Add(table);
-            }
-
-            reader.Close();
-
-            return tables;
+            return GetTablesOrViews(DataAccessResources.SQLite_FindTables);
         }
 
         internal override List<TableView> GetViews()
         {
-            List<TableView> views = new List<TableView>();
+            return GetTablesOrViews(DataAccessResources.SQLite_FindViews);
+        }
 
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLite_FindViews);
+        private List<TableView> GetTablesOrViews(string Sql)
+        {
+            List<TableView> tableViews = GetDbItems<TableView>(Sql,
+                (reader) =>
+                {
+                    TableView tv = new TableView();
+                    tv.Name = reader["name"].ToString();
+                    return tv;
+                });
 
-            while (reader.Read())
-            {
-                TableView view = new TableView();
-                view.Name = reader["name"].ToString();
-
-                views.Add(view);
-            }
-
-            reader.Close();
-
-            return views;
+            return tableViews;
         }
 
         internal override List<Column> GetColumns(string TableName)
         {
-            List<Column> cols = new List<Column>();
             string sql = DataAccessResources.SQLite_FindColumns.Replace("@TableName", TableName);
-            IDataReader reader = this.ExecuteReader(sql);
-
-            while (reader.Read())
-            {
-                Column col = new Column();
-                col.Name = reader["name"].ToString();
-                col.DataType = reader["type"].ToString();
-                col.IsNullable = reader["notnull"].ToString() == "0";
-                cols.Add(col);
-            }
-
-            reader.Close();
-
+            List<Column> cols = GetDbItems<Column>(sql,
+                (reader) =>
+                {
+                    Column col = new Column();
+                    col.Name = reader["name"].ToString();
+                    col.DataType = reader["type"].ToString();
+                    col.IsNullable = reader["notnull"].ToString() == "0";
+                    return col;
+                });
             return cols;
         }
 

@@ -113,8 +113,8 @@ namespace Edrych.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to select 
-        ///	LTRIM(RTRIM(TABSCHEMA)) as TABSCHEMA, 
-        ///	LTRIM(RTRIM(TABNAME)) as TABNAME
+        ///	LTRIM(RTRIM(TABSCHEMA)) as SCHEMA, 
+        ///	LTRIM(RTRIM(TABNAME)) as NAME
         ///from 
         ///	syscat.tables 
         ///order by 
@@ -127,7 +127,7 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to select LTRIM(RTRIM(VIEWSCHEMA)) as VIEWSCHEMA, LTRIM(RTRIM(VIEWNAME)) as VIEWNAME from syscat.views order by 1,2.
+        ///   Looks up a localized string similar to select LTRIM(RTRIM(VIEWSCHEMA)) as SCHEMA, LTRIM(RTRIM(VIEWNAME)) as NAME from syscat.views order by 1,2.
         /// </summary>
         internal static string DB2_FindViews {
             get {

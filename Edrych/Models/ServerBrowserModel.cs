@@ -27,9 +27,10 @@ namespace Edrych.Models
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
 
-        public Dictionary<string, List<BaseItem>> Cache
+        //Have to limit this to internal, otherwise it throws an inconsistent accessibility error
+        internal Dictionary<string, List<BaseItem>> Cache
         {
             get { return _cache; }
             set { if (value != _cache) _cache = value; }

@@ -27,73 +27,52 @@ namespace Edrych.DataAccess
 
         internal override List<Database> GetDatabases()
         {
-            List<Database> databases = new List<Database>();
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLServer_FindDatabases);
-            while (reader.Read())
-            {
-                Database db = new Database();
-                db.Name = reader["name"].ToString();
-                databases.Add(db);
-            }
-            reader.Close();
+            List<Database> databases = GetDbItems<Database>(DataAccessResources.SQLServer_FindDatabases,
+                (reader) => 
+                {
+                    Database db = new Database();
+                    db.Name = reader["name"].ToString();
+                    return db;
+                });
             return databases;
         }
 
         internal override List<TableView> GetTables()
         {
-            List<TableView> tables = new List<TableView>();
-
-            IDataReader reader = this.ExecuteReader(DataAccessResources.ANSI_FindTables);
-
-            while (reader.Read())
-            {
-                TableView table = new TableView();
-                table.Name = reader["TABLE_NAME"].ToString();
-
-                tables.Add(table);
-            }
-
-            reader.Close();
-
-            return tables;
+            return GetTablesOrViews(DataAccessResources.ANSI_FindTables);
         }
 
         internal override List<TableView> GetViews()
         {
-            List<TableView> views = new List<TableView>();
+            return GetTablesOrViews(DataAccessResources.ANSI_FindViews);
+        }
 
-            IDataReader reader = this.ExecuteReader(DataAccessResources.ANSI_FindViews);
+        private List<TableView> GetTablesOrViews(string Sql)
+        {
+            List<TableView> tableViews = GetDbItems<TableView>(Sql,
+                (reader) =>
+                {
+                    TableView tv = new TableView();
+                    tv.Name = reader["TABLE_NAME"].ToString();
+                    return tv;
+                });
 
-            while (reader.Read())
-            {
-                TableView view = new TableView();
-                view.Name = reader["TABLE_NAME"].ToString();
-
-                views.Add(view);
-            }
-
-            reader.Close();
-
-            return views;
+            return tableViews;
         }
 
         internal override List<Column> GetColumns(string TableName)
         {
-            List<Column> cols = new List<Column>();
             this.ClearParameters();
             this.AddParameter("@TableName", TableName);
-            IDataReader reader = this.ExecuteReader(DataAccessResources.SQLServer_FindColumns);
-
-            while (reader.Read())
-            {
-                Column col = new Column();
-                col.Name = reader["name"].ToString();
-                col.DataType = reader["type"].ToString();
-                col.IsNullable = reader["IS_NULLABLE"].ToString() == "YES";
-                cols.Add(col);
-            }
-
-            reader.Close();
+            List<Column> cols = GetDbItems<Column>(DataAccessResources.SQLServer_FindColumns,
+                (reader) =>
+                {
+                    Column col = new Column();
+                    col.Name = reader["name"].ToString();
+                    col.DataType = reader["type"].ToString();
+                    col.IsNullable = reader["IS_NULLABLE"].ToString() == "YES";
+                    return col;
+                });
             this.ClearParameters();
             return cols;
         }

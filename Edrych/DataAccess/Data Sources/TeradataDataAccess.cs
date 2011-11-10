@@ -77,93 +77,69 @@ namespace Edrych.DataAccess
 
         internal override List<Database> GetDatabases()
         {
-            List<Database> databases = new List<Database>();
-            IDataReader reader = this.ExecuteReader(DataAccessResources.Teradata_FindDatabases);
-            while (reader.Read())
-            {
-                Database db = new Database();
-                db.Name = reader["DatabaseName"].ToString();
-                databases.Add(db);
-            }
-            reader.Close();
+            List<Database> databases = GetDbItems<Database>(DataAccessResources.Teradata_FindDatabases,
+                (reader) =>
+                {
+                    Database db = new Database();
+                    db.Name = reader["DatabaseName"].ToString();
+                    return db;
+                });
             return databases;
         }
 
         internal override List<TableView> GetTables()
         {
-            List<TableView> tables = new List<TableView>();
-            this.ClearParameters();
-            this.AddParameter("@DatabaseName", this.ActiveDatabase);
-            IDataReader reader = this.ExecuteReader(DataAccessResources.Teradata_FindTables);
-
-            while (reader.Read())
-            {
-                TableView table = new TableView();
-                table.Name = reader["TableName"].ToString();
-
-                tables.Add(table);
-            }
-
-            reader.Close();
-            this.ClearParameters();
-            return tables;
+            return GetTablesOrViews(DataAccessResources.Teradata_FindTables);
         }
 
         internal override List<TableView> GetViews()
         {
-            List<TableView> views = new List<TableView>();
+            return GetTablesOrViews(DataAccessResources.Teradata_FindViews);
+        }
+
+        private List<TableView> GetTablesOrViews(string Sql)
+        {
             this.ClearParameters();
             this.AddParameter("@DatabaseName", this.ActiveDatabase);
-            IDataReader reader = this.ExecuteReader(DataAccessResources.Teradata_FindViews);
-
-            while (reader.Read())
-            {
-                TableView view = new TableView();
-                view.Name = reader["TableName"].ToString();
-
-                views.Add(view);
-            }
-
-            reader.Close();
+            List<TableView> tableViews = GetDbItems<TableView>(Sql,
+                (reader) =>
+                {
+                    TableView tv = new TableView();
+                    tv.Name = reader["TableName"].ToString();
+                    return tv;
+                });
             this.ClearParameters();
-            return views;
+            return tableViews;
         }
 
         internal override List<Column> GetColumns(string TableName)
         {
-            List<Column> columns = new List<Column>();
-            this.ClearParameters();
             string sql = DataAccessResources.Teradata_FindColumns.Replace("@DatabaseName", this.ActiveDatabase).Replace("@TableName", TableName);
-            IDataReader reader = this.ExecuteReader(sql);
-
-            while (reader.Read())
-            {
-                Column col = new Column();
-                col.Name = reader["Column Name"].ToString().Trim();
-                //TODO: Fix this to actually have a column type!
-                string dataType = COLUMN_TYPE_LOOKUP[reader["Type"].ToString().Trim()];
-                string maxLength = reader["Max Length"].ToString().Trim();
-                string scale = reader["Decimal Total Digits"].ToString().Trim();
-                string precision = reader["Decimal Fractional Digits"].ToString().Trim();
-                if(dataType.Contains("CHAR") && !string.IsNullOrEmpty(maxLength))
+            List<Column> columns = GetDbItems<Column>(sql,
+                (reader) =>
                 {
-                    col.DataType = dataType + " (" + maxLength + ")";
-                }
-                else if (dataType == "DECIMAL" && !string.IsNullOrEmpty(scale) && !string.IsNullOrEmpty(precision))
-                {
-                    col.DataType = dataType + " (" + scale + ", " + precision + ")";
-                }
-                else
-                {
-                    col.DataType = dataType;
-                }
-                col.IsNullable = reader["Nullable"].ToString() == "Y";
+                    Column col = new Column();
+                    col.Name = reader["Column Name"].ToString().Trim();
+                    string dataType = COLUMN_TYPE_LOOKUP[reader["Type"].ToString().Trim()];
+                    string maxLength = reader["Max Length"].ToString().Trim();
+                    string scale = reader["Decimal Total Digits"].ToString().Trim();
+                    string precision = reader["Decimal Fractional Digits"].ToString().Trim();
+                    if (dataType.Contains("CHAR") && !string.IsNullOrEmpty(maxLength))
+                    {
+                        col.DataType = dataType + " (" + maxLength + ")";
+                    }
+                    else if (dataType == "DECIMAL" && !string.IsNullOrEmpty(scale) && !string.IsNullOrEmpty(precision))
+                    {
+                        col.DataType = dataType + " (" + scale + ", " + precision + ")";
+                    }
+                    else
+                    {
+                        col.DataType = dataType;
+                    }
+                    col.IsNullable = reader["Nullable"].ToString() == "Y";
 
-                columns.Add(col);
-            }
-
-            reader.Close();
-            this.ClearParameters();
+                    return col;
+                });
             return columns;
         }
 

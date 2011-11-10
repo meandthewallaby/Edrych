@@ -36,53 +36,44 @@ namespace Edrych.DataAccess
 
         internal override List<TableView> GetTables()
         {
-            List<TableView> tables = new List<TableView>();
-            IDataReader reader = this.ExecuteReader(DataAccessResources.DB2_FindTables);
-            while (reader.Read())
-            {
-                TableView table = new TableView();
-                table.Name = reader["TABSCHEMA"].ToString() + "." + reader["TABNAME"].ToString();
-                tables.Add(table);
-            }
-            reader.Close();
-            return tables;
+            return GetTablesOrViews(DataAccessResources.DB2_FindTables);
         }
 
         internal override List<TableView> GetViews()
         {
-            List<TableView> views = new List<TableView>();
-            IDataReader reader = this.ExecuteReader(DataAccessResources.DB2_FindViews);
-            while (reader.Read())
-            {
-                TableView table = new TableView();
-                table.Name = reader["VIEWSCHEMA"].ToString() + "." + reader["VIEWNAME"].ToString();
-                views.Add(table);
-            }
-            reader.Close();
-            return views;
+            return GetTablesOrViews(DataAccessResources.DB2_FindViews);
+        }
+
+        private List<TableView> GetTablesOrViews(string Sql)
+        {
+            List<TableView> tableViews = GetDbItems<TableView>(Sql,
+                (reader) =>
+                {
+                    TableView tv = new TableView();
+                    tv.Name = reader["SCHEMA"].ToString() + "." + reader["NAME"].ToString();
+                    return tv;
+                });
+            return tableViews;
         }
 
         internal override List<Column> GetColumns(string TableName)
         {
             List<Column> cols = new List<Column>();
             int dotIndex = TableName.IndexOf('.');
-            this.ClearParameters();
             if (dotIndex > 0 && dotIndex < TableName.Length - 1)
             {
+                this.ClearParameters();
                 this.AddParameter("@SchemaName", TableName.Substring(0, dotIndex));
                 this.AddParameter("@TableName", TableName.Substring(dotIndex + 1));
-                IDataReader reader = this.ExecuteReader(DataAccessResources.DB2_FindColumns);
-
-                while (reader.Read())
-                {
-                    Column col = new Column();
-                    col.Name = reader["COLNAME"].ToString();
-                    col.DataType = reader["COLTYPE"].ToString();
-                    col.IsNullable = reader["NULLS"].ToString() == "Y";
-                    cols.Add(col);
-                }
-
-                reader.Close();
+                cols = GetDbItems<Column>(DataAccessResources.DB2_FindColumns,
+                    (reader) =>
+                    {
+                        Column col = new Column();
+                        col.Name = reader["COLNAME"].ToString();
+                        col.DataType = reader["COLTYPE"].ToString();
+                        col.IsNullable = reader["NULLS"].ToString() == "Y";
+                        return col;
+                    });
                 this.ClearParameters();
             }
 
