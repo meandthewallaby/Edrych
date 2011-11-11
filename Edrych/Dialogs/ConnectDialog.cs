@@ -60,7 +60,28 @@ namespace Edrych.Dialogs
         private void PopulateDataSource()
         {
             this.cbDataSource.Items.Clear();
+            ConnectionSource source = this.cbConnectionType.SelectedItem as ConnectionSource;
 
+            if (source != null)
+            {
+                if (source.ConnType == ConnectionType.ODBC)
+                {
+                    AddOdbcConnections();
+                }
+                else
+                {
+                    AddRecentConnections();
+                }
+
+                if (source.AllowBrowse)
+                {
+                    this.cbDataSource.Items.Add("Browse for more...");
+                }
+            }
+        }
+
+        private void AddRecentConnections()
+        {
             if (_settings.RecentConnections != null)
             {
                 foreach (DataAccessConnection conn in _settings.RecentConnections.Where(r => r.Connection == this.SelectedConnectionType))
@@ -68,11 +89,16 @@ namespace Edrych.Dialogs
                     this.cbDataSource.Items.Add(conn.DataSource);
                 }
             }
+        }
 
-            ConnectionSource source = this.cbConnectionType.SelectedItem as ConnectionSource;
-            if (source != null && source.AllowBrowse)
+        private void AddOdbcConnections()
+        {
+            if (_settings.OdbcConnections != null)
             {
-                this.cbDataSource.Items.Add("Browse for more...");
+                foreach (DataAccessConnection conn in _settings.OdbcConnections)
+                {
+                    this.cbDataSource.Items.Add(conn.DataSource);
+                }
             }
         }
 
@@ -136,11 +162,11 @@ namespace Edrych.Dialogs
                    );
 
                 DataAccessConnection current = new DataAccessConnection(
-                    this.SelectedConnectionType, 
-                    this.cbDataSource.Text, 
-                    this.tbDatabase.Text, 
-                    this.SelectedAuthType, 
-                    this.tbUsername.Text, 
+                    this.SelectedConnectionType,
+                    this.cbDataSource.Text,
+                    this.tbDatabase.Text,
+                    this.SelectedAuthType,
+                    this.tbUsername.Text,
                     (this.cbxSavePassword.Enabled && this.cbxSavePassword.Checked ? this.tbPassword.Text : null)
                     );
 
@@ -173,6 +199,10 @@ namespace Edrych.Dialogs
 
         private void cbConnectionType_SelectedIndexChanged(object sender, EventArgs e)
         {
+            this.cbDataSource.Text = null;
+            this.tbDatabase.Text = null;
+            this.tbUsername.Text = null;
+            this.tbPassword.Text = null;
             PopulateDataSource();
             SetAvailableOptions();
         }
@@ -184,21 +214,28 @@ namespace Edrych.Dialogs
                 if (this.openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     string fileName = this.openFileDialog1.FileName;
-                    this.cbDataSource.Items.Insert(0, fileName);
-                    this.cbDataSource.SelectedItem = fileName;
+                    this.cbDataSource.Text = fileName;
                 }
+            }
+            else if (this.SelectedConnectionType == ConnectionType.ODBC)
+            {
+                ApplySavedConnection(_settings.OdbcConnections.FirstOrDefault(c => c.DataSource == this.cbDataSource.Text));
             }
             else
             {
-                DataAccessConnection dac = _settings.RecentConnections.FirstOrDefault(c => c.Connection == this.SelectedConnectionType && c.DataSource == this.cbDataSource.Text);
-                if (dac != null)
-                {
-                    this.tbDatabase.Text = dac.Database;
-                    this.cbAuthType.SelectedItem = dac.Auth;
-                    this.tbUsername.Text = dac.Username;
-                    this.tbPassword.Text = dac.Password;
-                    this.cbxSavePassword.Checked = !string.IsNullOrEmpty(dac.Password);
-                }
+                ApplySavedConnection(_settings.RecentConnections.FirstOrDefault(c => c.Connection == this.SelectedConnectionType && c.DataSource == this.cbDataSource.Text));
+            }
+        }
+
+        private void ApplySavedConnection(DataAccessConnection dac)
+        {
+            if (dac != null)
+            {
+                this.tbDatabase.Text = dac.Database;
+                this.cbAuthType.SelectedItem = dac.Auth.ToString();
+                this.tbUsername.Text = dac.Username;
+                this.tbPassword.Text = dac.Password;
+                this.cbxSavePassword.Checked = !string.IsNullOrEmpty(dac.Password);
             }
         }
 

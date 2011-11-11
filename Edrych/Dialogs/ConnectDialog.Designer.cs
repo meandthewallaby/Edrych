@@ -45,8 +45,8 @@
             this.cbAuthType = new System.Windows.Forms.ComboBox();
             this.label6 = new System.Windows.Forms.Label();
             this.tbDatabase = new System.Windows.Forms.TextBox();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.cbxSavePassword = new System.Windows.Forms.CheckBox();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.flowLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
@@ -249,10 +249,6 @@
             this.tbDatabase.Size = new System.Drawing.Size(324, 20);
             this.tbDatabase.TabIndex = 2;
             // 
-            // openFileDialog1
-            // 
-            this.openFileDialog1.CheckFileExists = false;
-            // 
             // cbxSavePassword
             // 
             this.cbxSavePassword.AutoSize = true;
@@ -263,6 +259,10 @@
             this.cbxSavePassword.TabIndex = 6;
             this.cbxSavePassword.Text = "Save Password?";
             this.cbxSavePassword.UseVisualStyleBackColor = true;
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.CheckFileExists = false;
             // 
             // ConnectDialog
             // 

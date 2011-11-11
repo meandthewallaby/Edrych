@@ -90,7 +90,7 @@ namespace Edrych.DataAccess
         internal override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("Driver={ODBC};Server=");
+            sb.Append("Dsn=");
             sb.Append(this.DataSource);
             sb.Append(";");
             switch (this.Authentication)
