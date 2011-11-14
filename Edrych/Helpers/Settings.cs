@@ -115,7 +115,7 @@ namespace Edrych.Helpers
                                     dac.Username = element.Value;
                                     break;
                                 case "Password":
-                                    if(!string.IsNullOrEmpty(dac.Password))
+                                    if(!string.IsNullOrEmpty(element.Value))
                                         dac.Password = ToInsecureString(DecryptString(element.Value));
                                     break;
                                 default:
@@ -126,8 +126,9 @@ namespace Edrych.Helpers
                     }
                 }
             }
-            finally
+            catch
             {
+                _recentConnections.Clear();
             }
         }
 

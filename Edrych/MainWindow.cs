@@ -31,6 +31,15 @@ namespace Edrych
 
         #endregion
 
+        #region Public Properties
+
+        public ServerBrowserViewModel Browser
+        {
+            get { return _browserViewModel; }
+        }
+
+        #endregion
+
         #region Menu Item Handling - File Menu
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
