@@ -24,10 +24,10 @@ namespace Edrych.Views
 
         #region Constructor(s)
 
-        public QueryView(DataAccess.DataAccessBase Dab)
+        public QueryView(ServerBrowserViewModel Browser)
         {
             InitializeComponent();
-            _queryViewModel = new QueryViewModel(Dab);
+            _queryViewModel = new QueryViewModel(Browser);
             this.dgResults.DataSource = _queryViewModel.DataBinding;
             this.tbMessages.DataBindings.Add("Text", _queryViewModel, "Messages");
             this.Name = Guid.NewGuid().ToString();

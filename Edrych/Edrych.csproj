@@ -89,6 +89,7 @@
     <Compile Include="DataAccess\Data Sources\SQLiteDataAccess.cs" />
     <Compile Include="DataAccess\DataAccessItems.cs" />
     <Compile Include="DataAccess\Data Sources\SQLServerDataAccess.cs" />
+    <Compile Include="DataAccess\DataAccessQuery.cs" />
     <Compile Include="Dialogs\AboutDialog.cs">
       <SubType>Form</SubType>
     </Compile>

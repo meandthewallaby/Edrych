@@ -68,17 +68,10 @@ namespace Edrych.DataAccess
                 _conn.Close();
         }
 
-        public ResultSet GetDataSet(string sqlQuery)
+        public ResultSet GetDataSet(string sqlQuery, ViewModels.ServerBrowserViewModel Browser)
         {
-            IDataReader reader = this.ExecuteReader(sqlQuery);
-            ResultSet rs = new ResultSet();
-
-            rs.Messages = reader.RecordsAffected + " rows affected";
-            rs.Data.Load(reader);
-
-            reader.Close();
-
-            return rs;
+            DataAccessQuery daq = new DataAccessQuery(this, Browser);
+            return daq.RunQuery(sqlQuery);
         }
 
         public IDataReader ExecuteReader(string sqlQuery)
@@ -188,6 +181,8 @@ namespace Edrych.DataAccess
 
         #endregion
 
+        #region Protected Methods
+        
         protected delegate object ReadItem(IDataReader reader);
 
         protected List<T> GetDbItems<T>(string Sql, ReadItem Read)
@@ -203,5 +198,7 @@ namespace Edrych.DataAccess
 
             return collection;
         }
+
+        #endregion
     }
 }

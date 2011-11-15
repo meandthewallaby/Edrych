@@ -40,6 +40,24 @@ namespace Edrych
 
         #endregion
 
+        #region Public Methods
+
+        public void Dispose()
+        {
+            if(_browserViewModel != null)
+                _browserViewModel.Dispose();
+            if (this.tabControl1 != null && this.tabControl1.TabCount > 0)
+            {
+                foreach (QueryView query in this.tabControl1.TabPages)
+                {
+                    tabControl1.TabPages.Remove(query);
+                }
+            }
+            this.Dispose(true);
+        }
+
+        #endregion
+
         #region Menu Item Handling - File Menu
 
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
@@ -284,7 +302,7 @@ namespace Edrych
 
         private void CreateQueryTab(bool IsOpen)
         {
-            QueryView qp = new QueryView(_browserViewModel.ActiveConnection);
+            QueryView qp = new QueryView(_browserViewModel);
             this.tabControl1.TabPages.Insert(0, qp);
             qp.CreateQueryView(IsOpen);
             this.tabControl1.SelectedIndex = 0;

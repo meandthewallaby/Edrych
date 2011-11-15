@@ -14,6 +14,7 @@ namespace Edrych.ViewModels
         #region Private/Global Variables
 
         private DataAccessBase _dab;
+        private ServerBrowserViewModel _browser;
         private ResultSet _results = new ResultSet();
         private BindingSource _dataBinding = new BindingSource();
         private string _messages = string.Empty;
@@ -29,9 +30,10 @@ namespace Edrych.ViewModels
 
         #region Constructor(s)
 
-        public QueryViewModel(DataAccessBase Dab)
+        public QueryViewModel(ServerBrowserViewModel Browser)
         {
-            _dab = Dab;
+            _dab = Browser.ActiveConnection;
+            _browser = Browser;
         }
 
         #endregion
@@ -255,7 +257,7 @@ namespace Edrych.ViewModels
 
             if (!string.IsNullOrEmpty(Query) && res == null)
             {
-                res = _dab.GetDataSet(Query);
+                res = _dab.GetDataSet(Query, _browser);
             }
 
             return res;

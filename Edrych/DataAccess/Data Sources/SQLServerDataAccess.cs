@@ -63,7 +63,20 @@ namespace Edrych.DataAccess
         internal override List<Column> GetColumns(string TableName)
         {
             this.ClearParameters();
-            this.AddParameter("@TableName", TableName);
+            int dotIndex = TableName.IndexOf(".");
+            string schema = "dbo";
+            string table;
+            if (dotIndex > 0)
+            {
+                schema = TableName.Substring(0, TableName.IndexOf("."));
+                table = TableName.Substring(TableName.IndexOf(".") + 1);
+            }
+            else
+            {
+                table = TableName;
+            }
+            this.AddParameter("@SchemaName", schema);
+            this.AddParameter("@TableName", table);
             List<Column> cols = GetDbItems<Column>(DataAccessResources.SQLServer_FindColumns,
                 (reader) =>
                 {

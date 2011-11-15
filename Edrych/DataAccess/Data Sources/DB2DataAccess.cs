@@ -10,6 +10,8 @@ namespace Edrych.DataAccess
 {
     class DB2DataAccess : DataAccessBase
     {
+        /// <summary>Opens up the connection to a DB2 database</summary>
+        /// <returns>DB2Connection, which inherits the IDbConnection interface</returns>
         internal override System.Data.IDbConnection GetDbConnection()
         {
             DB2Connection conn = new DB2Connection(this.ConnectionString);
@@ -17,16 +19,24 @@ namespace Edrych.DataAccess
             return conn;
         }
 
+        /// <summary>Creates a new DB2Command object</summary>
+        /// <returns>DB2Command, which inherits the IDbCommand interface</returns>
         internal override System.Data.IDbCommand GetDbCommand()
         {
             return new DB2Command();
         }
 
+        /// <summary>Creates a DB2Parameter based on the Name and value passed</summary>
+        /// <param name="Name">Name of the parameter to add</param>
+        /// <param name="Value">Value of the parameter to add</param>
+        /// <returns>DB2Parameter, which inherits the IDbDataParameter interface</returns>
         internal override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new DB2Parameter(Name, Value);
         }
 
+        /// <summary>Gets the databases on the server. In the case of DB2, this is only the active database.</summary>
+        /// <returns>List of Database objects representing the databases</returns>
         internal override List<Database> GetDatabases()
         {
             Database db = new Database();
@@ -34,16 +44,23 @@ namespace Edrych.DataAccess
             return new List<Database>() { db };
         }
 
+        /// <summary>Gets the tables in a database.</summary>
+        /// <returns>List of TableView objects representing the tables in the selected database</returns>
         internal override List<TableView> GetTables()
         {
             return GetTablesOrViews(DataAccessResources.DB2_FindTables);
         }
 
+        /// <summary>Gets the views in a database.</summary>
+        /// <returns>List of TableView objects representing the views in the selected database</returns>
         internal override List<TableView> GetViews()
         {
             return GetTablesOrViews(DataAccessResources.DB2_FindViews);
         }
 
+        /// <summary>Gets the tables or views in a database.</summary>
+        /// <param name="Sql">SQL query to get the tables or views</param>
+        /// <returns>List of TableView objects returned by the passed SQL</returns>
         private List<TableView> GetTablesOrViews(string Sql)
         {
             List<TableView> tableViews = GetDbItems<TableView>(Sql,
@@ -55,6 +72,7 @@ namespace Edrych.DataAccess
                 });
             return tableViews;
         }
+
 
         internal override List<Column> GetColumns(string TableName)
         {

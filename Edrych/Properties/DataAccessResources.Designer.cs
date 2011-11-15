@@ -183,22 +183,23 @@ namespace Edrych.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to select
-        ///	COLUMN_NAME as name,
-        ///	DATA_TYPE 
-        ///		+ ISNULL(&apos;(&apos; + cast(character_maximum_length as varchar) + &apos;)&apos;, &apos;&apos;)
-        ///		+ case 
-        ///			when DATA_TYPE in (&apos;decimal&apos;, &apos;numeric&apos;) then
-        ///				ISNULL(&apos;(&apos; + cast(NUMERIC_PRECISION as varchar) + &apos;, &apos; + CAST(NUMERIC_SCALE as varchar) + &apos;)&apos;, &apos;&apos;)
-        ///			else &apos;&apos;
-        ///		  end
-        ///	as type,
-        ///	IS_NULLABLE
+        ///  COLUMN_NAME as name,
+        ///  DATA_TYPE 
+        ///    + ISNULL(&apos;(&apos; + cast(character_maximum_length as varchar) + &apos;)&apos;, &apos;&apos;)
+        ///    + case 
+        ///      when DATA_TYPE in (&apos;decimal&apos;, &apos;numeric&apos;) then
+        ///        ISNULL(&apos;(&apos; + cast(NUMERIC_PRECISION as varchar) + &apos;, &apos; + CAST(NUMERIC_SCALE as varchar) + &apos;)&apos;, &apos;&apos;)
+        ///      else &apos;&apos;
+        ///      end
+        ///  as type,
+        ///  IS_NULLABLE
         ///from
-        ///	INFORMATION_SCHEMA.COLUMNS
+        ///  INFORMATION_SCHEMA.COLUMNS c
         ///where
-        ///	TABLE_NAME = @TableName
+        ///  TABLE_NAME = @TableName
+        ///  and TABLE_SCHEMA = @SchemaName
         ///order by
-        ///	ORDINAL_POSITION.
+        ///  ORDINAL_POSITION.
         /// </summary>
         internal static string SQLServer_FindColumns {
             get {

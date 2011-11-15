@@ -157,22 +157,23 @@ ORDER BY name;</value>
   </data>
   <data name="SQLServer_FindColumns" xml:space="preserve">
     <value>select
-	COLUMN_NAME as name,
-	DATA_TYPE 
-		+ ISNULL('(' + cast(character_maximum_length as varchar) + ')', '')
-		+ case 
-			when DATA_TYPE in ('decimal', 'numeric') then
-				ISNULL('(' + cast(NUMERIC_PRECISION as varchar) + ', ' + CAST(NUMERIC_SCALE as varchar) + ')', '')
-			else ''
-		  end
-	as type,
-	IS_NULLABLE
+  COLUMN_NAME as name,
+  DATA_TYPE 
+    + ISNULL('(' + cast(character_maximum_length as varchar) + ')', '')
+    + case 
+      when DATA_TYPE in ('decimal', 'numeric') then
+        ISNULL('(' + cast(NUMERIC_PRECISION as varchar) + ', ' + CAST(NUMERIC_SCALE as varchar) + ')', '')
+      else ''
+      end
+  as type,
+  IS_NULLABLE
 from
-	INFORMATION_SCHEMA.COLUMNS
+  INFORMATION_SCHEMA.COLUMNS c
 where
-	TABLE_NAME = @TableName
+  TABLE_NAME = @TableName
+  and TABLE_SCHEMA = @SchemaName
 order by
-	ORDINAL_POSITION</value>
+  ORDINAL_POSITION</value>
   </data>
   <data name="SQLServer_FindDatabases" xml:space="preserve">
     <value>select
