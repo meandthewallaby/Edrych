@@ -6,8 +6,10 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
-    public class SQLiteDataAccess : DataAccessBase
+    /// <summary>SQLite Data Access object</summary>
+    class SQLiteDataAccess : DataAccessBase
     {
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
         internal override IDbConnection GetDbConnection()
         {
             SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
@@ -15,16 +17,19 @@ namespace Edrych.DataAccess
             return conn;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
         internal override IDbCommand GetDbCommand()
         {
             return new SQLiteCommand();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new SQLiteParameter(Name, Value);
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDatabases"/></summary>
         internal override List<Database> GetDatabases()
         {
             List<Database> databases = new List<Database>();
@@ -34,16 +39,21 @@ namespace Edrych.DataAccess
             return databases;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetTables"/></summary>
         internal override List<TableView> GetTables()
         {
             return GetTablesOrViews(DataAccessResources.SQLite_FindTables);
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetViews"/></summary>
         internal override List<TableView> GetViews()
         {
             return GetTablesOrViews(DataAccessResources.SQLite_FindViews);
         }
 
+        /// <summary>Gets the tables or views in a database.</summary>
+        /// <param name="Sql">SQL query to get the tables or views</param>
+        /// <returns>List of TableView objects returned by the passed SQL</returns>
         private List<TableView> GetTablesOrViews(string Sql)
         {
             List<TableView> tableViews = GetDbItems<TableView>(Sql,
@@ -57,6 +67,7 @@ namespace Edrych.DataAccess
             return tableViews;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
         internal override List<Column> GetColumns(string TableName)
         {
             string sql = DataAccessResources.SQLite_FindColumns.Replace("@TableName", TableName);
@@ -72,11 +83,13 @@ namespace Edrych.DataAccess
             return cols;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
         internal override void SetDatabase(string DatabaseName)
         {
             
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
         internal override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();

@@ -214,6 +214,7 @@ namespace Edrych.Dialogs
                 if (this.openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                 {
                     string fileName = this.openFileDialog1.FileName;
+                    this.cbDataSource.Items.Insert(0, fileName);
                     this.cbDataSource.Text = fileName;
                 }
             }

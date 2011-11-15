@@ -8,10 +8,10 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
+    /// <summary>DB2 Data Access object</summary>
     class DB2DataAccess : DataAccessBase
     {
-        /// <summary>Opens up the connection to a DB2 database</summary>
-        /// <returns>DB2Connection, which inherits the IDbConnection interface</returns>
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
         internal override System.Data.IDbConnection GetDbConnection()
         {
             DB2Connection conn = new DB2Connection(this.ConnectionString);
@@ -19,24 +19,19 @@ namespace Edrych.DataAccess
             return conn;
         }
 
-        /// <summary>Creates a new DB2Command object</summary>
-        /// <returns>DB2Command, which inherits the IDbCommand interface</returns>
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
         internal override System.Data.IDbCommand GetDbCommand()
         {
             return new DB2Command();
         }
 
-        /// <summary>Creates a DB2Parameter based on the Name and value passed</summary>
-        /// <param name="Name">Name of the parameter to add</param>
-        /// <param name="Value">Value of the parameter to add</param>
-        /// <returns>DB2Parameter, which inherits the IDbDataParameter interface</returns>
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
         internal override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new DB2Parameter(Name, Value);
         }
 
-        /// <summary>Gets the databases on the server. In the case of DB2, this is only the active database.</summary>
-        /// <returns>List of Database objects representing the databases</returns>
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDatabases"/></summary>
         internal override List<Database> GetDatabases()
         {
             Database db = new Database();
@@ -44,15 +39,13 @@ namespace Edrych.DataAccess
             return new List<Database>() { db };
         }
 
-        /// <summary>Gets the tables in a database.</summary>
-        /// <returns>List of TableView objects representing the tables in the selected database</returns>
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetTables"/></summary>
         internal override List<TableView> GetTables()
         {
             return GetTablesOrViews(DataAccessResources.DB2_FindTables);
         }
 
-        /// <summary>Gets the views in a database.</summary>
-        /// <returns>List of TableView objects representing the views in the selected database</returns>
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetViews"/></summary>
         internal override List<TableView> GetViews()
         {
             return GetTablesOrViews(DataAccessResources.DB2_FindViews);
@@ -73,7 +66,7 @@ namespace Edrych.DataAccess
             return tableViews;
         }
 
-
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
         internal override List<Column> GetColumns(string TableName)
         {
             List<Column> cols = new List<Column>();
@@ -98,11 +91,13 @@ namespace Edrych.DataAccess
             return cols;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
         internal override void SetDatabase(string DatabaseName)
         {
             
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
         internal override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();

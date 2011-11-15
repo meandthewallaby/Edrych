@@ -8,6 +8,7 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
+    /// <summary>Teradata Data Access object</summary>
     class TeradataDataAccess : DataAccessBase
     {
         private Dictionary<string, string> COLUMN_TYPE_LOOKUP = new Dictionary<string, string>()
@@ -50,14 +51,9 @@ namespace Edrych.DataAccess
             {"UT", "UDT Type"}
         };
 
-        private string _database;
+        private string _activeDatabase;
 
-        private string ActiveDatabase
-        {
-            get { return _database; }
-        }
-
-
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
         internal override System.Data.IDbConnection GetDbConnection()
         {
             TdConnection conn = new TdConnection(this.ConnectionString);
@@ -65,16 +61,19 @@ namespace Edrych.DataAccess
             return conn;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
         internal override System.Data.IDbCommand GetDbCommand()
         {
             return new TdCommand();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
         internal override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new TdParameter(Name, Value);
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDatabases"/></summary>
         internal override List<Database> GetDatabases()
         {
             List<Database> databases = GetDbItems<Database>(DataAccessResources.Teradata_FindDatabases,
@@ -87,20 +86,25 @@ namespace Edrych.DataAccess
             return databases;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetTables"/></summary>
         internal override List<TableView> GetTables()
         {
             return GetTablesOrViews(DataAccessResources.Teradata_FindTables);
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetViews"/></summary>
         internal override List<TableView> GetViews()
         {
             return GetTablesOrViews(DataAccessResources.Teradata_FindViews);
         }
 
+        /// <summary>Gets the tables or views in a database.</summary>
+        /// <param name="Sql">SQL query to get the tables or views</param>
+        /// <returns>List of TableView objects returned by the passed SQL</returns>
         private List<TableView> GetTablesOrViews(string Sql)
         {
             this.ClearParameters();
-            this.AddParameter("@DatabaseName", this.ActiveDatabase);
+            this.AddParameter("@DatabaseName", _activeDatabase);
             List<TableView> tableViews = GetDbItems<TableView>(Sql,
                 (reader) =>
                 {
@@ -112,9 +116,10 @@ namespace Edrych.DataAccess
             return tableViews;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
         internal override List<Column> GetColumns(string TableName)
         {
-            string sql = DataAccessResources.Teradata_FindColumns.Replace("@DatabaseName", this.ActiveDatabase).Replace("@TableName", TableName);
+            string sql = DataAccessResources.Teradata_FindColumns.Replace("@DatabaseName", _activeDatabase).Replace("@TableName", TableName);
             List<Column> columns = GetDbItems<Column>(sql,
                 (reader) =>
                 {
@@ -143,11 +148,13 @@ namespace Edrych.DataAccess
             return columns;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
         internal override void SetDatabase(string DatabaseName)
         {
-            _database = DatabaseName;
+            _activeDatabase = DatabaseName;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
         internal override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();

@@ -9,6 +9,7 @@ using Edrych.ViewModels;
 
 namespace Edrych.DataAccess
 {
+    /// <summary>Handles the query aspect of the Data Access layer</summary>
     class DataAccessQuery
     {
         #region Private/Global Variables
@@ -22,6 +23,9 @@ namespace Edrych.DataAccess
 
         #region Constructor(s)
 
+        /// <summary>Creates the query</summary>
+        /// <param name="Dab">Data Access object to run the queries</param>
+        /// <param name="Browser">Server tree from the active browser</param>
         public DataAccessQuery(DataAccessBase Dab, ServerBrowserViewModel Browser)
         {
             _dab = Dab;
@@ -32,12 +36,15 @@ namespace Edrych.DataAccess
 
         #region Public Methods
 
+        /// <summary>The main entry point to running a query. This determines whether the query is an External Query or an Internal Query</summary>
+        /// <param name="Query">Query to run</param>
+        /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
         public ResultSet RunQuery(string Query)
         {
             ResultSet rs;
-            if (TestQuery(Query))
+            if (IsExternalQuery(Query))
             {
-                rs = ProcessExtraserverQuery(Query);
+                rs = ProcessExternalQuery(Query);
             }
             else
             {
@@ -50,20 +57,31 @@ namespace Edrych.DataAccess
 
         #region Private Methods
 
-        private Match RunRegEx(string pattern, string query)
+        /// <summary>Basic method to get a Match from a regular expression pattern and input</summary>
+        /// <param name="pattern">RegEx pattern to apply</param>
+        /// <param name="input">String to match against the pattern</param>
+        /// <returns>Match object with the RegEx results</returns>
+        private Match RunRegEx(string pattern, string input)
         {
             Regex reg = new Regex(pattern);
-            query = query.Replace("\r\n", " ");
-            query = query.Replace("\n", " ");
-            return reg.Match(query);
+            input = input.Replace("\r\n", " ");
+            input = input.Replace("\n", " ");
+            return reg.Match(input);
         }
 
-        private bool TestQuery(string Query)
+        /// <summary>Tests whether the given query is an external or internal query</summary>
+        /// <param name="Query">Query to parse</param>
+        /// <returns>Boolean representing whether the given query is an external query</returns>
+        private bool IsExternalQuery(string Query)
         {
             Match mt = RunRegEx(BASE_PATTERN, Query);
             return mt.Success;
         }
 
+        /// <summary>Processes an internal query, relative to the data access object</summary>
+        /// <param name="Dab">DataAccessBase object to execute the query against</param>
+        /// <param name="Query">Query to run</param>
+        /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
         private ResultSet ProcessInternalQuery(DataAccessBase Dab, string Query)
         {
             IDataReader reader = Dab.ExecuteReader(Query);
@@ -81,7 +99,10 @@ namespace Edrych.DataAccess
 
         #region Private Methods - Extraserver Query Parsing
 
-        private ResultSet ProcessExtraserverQuery(string Query)
+        /// <summary>Parses and executes an external query</summary>
+        /// <param name="Query">Query to process</param>
+        /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
+        private ResultSet ProcessExternalQuery(string Query)
         {
             ResultSet rs = new ResultSet();
             string pattern = @"^insert\s+into\s+([a-zA-Z0-9\._\-#]+?)\s+(\(\s*([a-zA-Z0-9\,\s_\-]+?)\s*\)\s+)*?" + BASE_PATTERN + @"\s?;\s?$";
@@ -94,7 +115,7 @@ namespace Edrych.DataAccess
                 string colList = mt.Groups[3].Value;
                 string externalQuery = mt.Groups[6].Value;
 
-                rs = InsertExtraserverData(server, database, externalQuery, insertTable, colList);
+                rs = InsertExternalData(server, database, externalQuery, insertTable, colList);
             }
             else
             {
@@ -104,7 +125,14 @@ namespace Edrych.DataAccess
             return rs;
         }
 
-        private ResultSet InsertExtraserverData(string server, string database, string externalQuery, string insertTable, string colList)
+        /// <summary>Inserts data from an external source to a local source</summary>
+        /// <param name="server">External server to get data from</param>
+        /// <param name="database">Database to use on the external server</param>
+        /// <param name="externalQuery">Query to use to read the data from an external server</param>
+        /// <param name="insertTable">Local table to insert the data into</param>
+        /// <param name="colList">Column list from the local table to </param>
+        /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
+        private ResultSet InsertExternalData(string server, string database, string externalQuery, string insertTable, string colList)
         {
             DataAccessBase externalDab = null;
             ResultSet externalRs = null;
@@ -199,6 +227,9 @@ namespace Edrych.DataAccess
             }
         }
 
+        /// <summary>Determines if the local table exists</summary>
+        /// <param name="TableName">Name of the table to check</param>
+        /// <returns>Boolean representing whether the local table exists</returns>
         private bool InsertTableExists(string TableName)
         {
             IDataReader reader = null;

@@ -6,8 +6,10 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
+    /// <summary>Factory that creates Data Access objects</summary>
     public class DataAccessFactory
     {
+        /// <summary>Gets the default connection type from the user's settings</summary>
         public static ConnectionType DefaultType
         {
             get 
@@ -21,21 +23,14 @@ namespace Edrych.DataAccess
             }
         }
 
-        public static DataAccessBase GetDataAccess()
-        {
-            return GetDataAccess(ConnectionType.SQLite, DataAccessResources.DefaultConnectionString, AuthType.None);
-        }
-
-        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource)
-        {
-            return GetDataAccess(ConnectionType, DataSource, null, AuthType.None, null, null);
-        }
-
-        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, AuthType Auth)
-        {
-            return GetDataAccess(ConnectionType, DataSource, null, Auth, null, null);
-        }
-
+        /// <summary>Gets the data access object for the specified connection information</summary>
+        /// <param name="ConnectionType">Type of database server to connect to</param>
+        /// <param name="DataSource">Server to connect to</param>
+        /// <param name="InitialCatalog">Initial database</param>
+        /// <param name="Auth">Authentication method to use</param>
+        /// <param name="Username">Username for basic authentication</param>
+        /// <param name="Password">Password for basic authentication</param>
+        /// <returns>DataAccessBase object for the specified connection type</returns>
         public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
         {
             DataAccessBase dab = GetConnection(ConnectionType);
@@ -50,6 +45,8 @@ namespace Edrych.DataAccess
             return dab;
         }
 
+        /// <summary>Get a list of connection types along with their properties</summary>
+        /// <returns>List of ConnectionSource objects representing the available connection types</returns>
         public static List<ConnectionSource> GetSources()
         {
             List<ConnectionSource> sources = new List<ConnectionSource>();
@@ -64,12 +61,17 @@ namespace Edrych.DataAccess
             return sources;
         }
 
+        /// <summary>Update a user's settings to change their default connection type</summary>
+        /// <param name="ConnectionType">ConnectionType value to set as the default</param>
         public static void SetDefaultType(ConnectionType ConnectionType)
         {
             Settings.Default.DefaultConnection = ConnectionType.ToString();
             Settings.Default.Save();
         }
 
+        /// <summary>Builds a ConnectionSource object give a connection type</summary>
+        /// <param name="ConnectionType">ConnectionType value to build a ConnectionSource for</param>
+        /// <returns>ConnectionSource object for the given ConnectionType</returns>
         private static ConnectionSource BuildConnectionSource(ConnectionType ConnectionType)
         {
             ConnectionSource source = new ConnectionSource();
@@ -121,6 +123,9 @@ namespace Edrych.DataAccess
             return source;
         }
 
+        /// <summary>Creates a DataAccess object for the specific connection type</summary>
+        /// <param name="ConnectionType">ConnectionType value to get the data access object for</param>
+        /// <returns>DataAccessBase object for the connection type</returns>
         private static DataAccessBase GetConnection(ConnectionType ConnectionType)
         {
             DataAccessBase dab;

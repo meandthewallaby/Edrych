@@ -6,8 +6,10 @@ using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
+    /// <summary>SQL Server Data Access object</summary>
     class SQLServerDataAccess : DataAccessBase
     {
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
         internal override IDbConnection GetDbConnection()
         {
             SqlConnection conn = new SqlConnection(this.ConnectionString);
@@ -15,16 +17,19 @@ namespace Edrych.DataAccess
             return conn;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
         internal override IDbCommand GetDbCommand()
         {
             return new SqlCommand();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
         internal override IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new SqlParameter(Name, Value);
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDatabases"/></summary>
         internal override List<Database> GetDatabases()
         {
             List<Database> databases = GetDbItems<Database>(DataAccessResources.SQLServer_FindDatabases,
@@ -37,16 +42,21 @@ namespace Edrych.DataAccess
             return databases;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetTables"/></summary>
         internal override List<TableView> GetTables()
         {
             return GetTablesOrViews(DataAccessResources.ANSI_FindTables);
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetViews"/></summary>
         internal override List<TableView> GetViews()
         {
             return GetTablesOrViews(DataAccessResources.ANSI_FindViews);
         }
 
+        /// <summary>Gets the tables or views in a database.</summary>
+        /// <param name="Sql">SQL query to get the tables or views</param>
+        /// <returns>List of TableView objects returned by the passed SQL</returns>
         private List<TableView> GetTablesOrViews(string Sql)
         {
             List<TableView> tableViews = GetDbItems<TableView>(Sql,
@@ -60,6 +70,7 @@ namespace Edrych.DataAccess
             return tableViews;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
         internal override List<Column> GetColumns(string TableName)
         {
             this.ClearParameters();
@@ -90,6 +101,7 @@ namespace Edrych.DataAccess
             return cols;
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
         internal override void SetDatabase(string DatabaseName)
         {
             string sql = DataAccessResources.SQLServer_SetDatabase.Replace("@DatabaseReplaceName", DatabaseName);
@@ -99,6 +111,7 @@ namespace Edrych.DataAccess
             this.ClearParameters();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
         internal override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();
