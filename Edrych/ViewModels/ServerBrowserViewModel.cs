@@ -9,6 +9,7 @@ using Edrych.Models;
 
 namespace Edrych.ViewModels
 {
+    /// <summary>ViewModel that handles the browser tree model</summary>
     public class ServerBrowserViewModel : IDisposable
     {
         #region Private/Global Variables
@@ -20,6 +21,7 @@ namespace Edrych.ViewModels
 
         #region Constructor(s)
 
+        /// <summary>Initializes the browser and opens a connection</summary>
         public ServerBrowserViewModel()
         {
             _tree = new ServerBrowserModel(this);
@@ -30,11 +32,13 @@ namespace Edrych.ViewModels
 
         #region Public Properties
 
+        /// <summary>Gets the active data access object</summary>
         public DataAccessBase ActiveConnection
         {
             get { return _activeConnection; }
         }
 
+        /// <summary>Gets the model for the browser</summary>
         public ServerBrowserModel Tree
         {
             get { return _tree; }
@@ -44,6 +48,7 @@ namespace Edrych.ViewModels
 
         #region Public Methods - Called from View
 
+        /// <summary>Creates a connection on the browser</summary>
         public void CreateConnection()
         {
             ConnectDialog cd = new ConnectDialog();
@@ -55,6 +60,8 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Refreshes the node in the tree</summary>
+        /// <param name="SelectedNode">Node to refresh</param>
         public void RefreshNode(TreeNodeAdv SelectedNode)
         {
             if (SelectedNode != null)
@@ -76,6 +83,8 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Removes a server from the tree</summary>
+        /// <param name="SelectedNode">Node to remove</param>
         public void RemoveConnection(TreeNodeAdv SelectedNode)
         {
             //Find the server
@@ -111,6 +120,8 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Updates the active connection with the selected database</summary>
+        /// <param name="Node">Node that drives the update</param>
         public void UpdateActiveConnection(TreeNodeAdv Node)
         {
             TreePath path = GetNodePath(Node);
@@ -132,6 +143,7 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Disposes of the item</summary>
         public void Dispose()
         {
             if (_activeConnection != null)
@@ -142,6 +154,9 @@ namespace Edrych.ViewModels
 
         #region Public Methods - Called from Model
 
+        /// <summary>Grabs the children of the passed path</summary>
+        /// <param name="treePath">Path to get the children of</param>
+        /// <returns>IEnumerable collection with the child items</returns>
         public IEnumerable GetChildren(TreePath treePath)
         {
             List<BaseItem> items = new List<BaseItem>();
@@ -202,6 +217,9 @@ namespace Edrych.ViewModels
             return items;
         }
 
+        /// <summary>Determines whether or not a node is a leaf node</summary>
+        /// <param name="treePath">Path to test</param>
+        /// <returns>Boolean whether the node is a leaf</returns>
         public bool IsLeaf(TreePath treePath)
         {
             return treePath.LastNode != null && ((BaseItem)treePath.LastNode).Type == ItemType.Column;
@@ -211,6 +229,9 @@ namespace Edrych.ViewModels
 
         #region Private Methods - Get Children
 
+        /// <summary>Gets the databases for a server</summary>
+        /// <param name="server">Server to get the databases of</param>
+        /// <returns>List of database items</returns>
         private List<BaseItem> GetDatabases(ServerItem server)
         {
             List<BaseItem> items = new List<BaseItem>();
@@ -225,6 +246,9 @@ namespace Edrych.ViewModels
             return items;
         }
 
+        /// <summary>Gets the folders under a database</summary>
+        /// <param name="parent">Database to get the children of</param>
+        /// <returns>List of folders</returns>
         private List<BaseItem> GetDatabaseChildren(BaseItem parent)
         {
             List<BaseItem> items = new List<BaseItem>();
@@ -238,6 +262,11 @@ namespace Edrych.ViewModels
             return items;
         }
 
+        /// <summary>Gets the tables or views</summary>
+        /// <param name="parent">Folder that was expanded</param>
+        /// <param name="server">Server item the tables are under</param>
+        /// <param name="DatabaseName">Name of the database to look in</param>
+        /// <returns>List of table or view items</returns>
         private List<BaseItem> GetFolderChildren(BaseItem parent, ServerItem server, string DatabaseName)
         {
             List<BaseItem> items = new List<BaseItem>();
@@ -269,6 +298,11 @@ namespace Edrych.ViewModels
             return items;
         }
 
+        /// <summary>Gets the columns in a table or view</summary>
+        /// <param name="parent">Table or view that was expanded</param>
+        /// <param name="server">Server item the tables are under</param>
+        /// <param name="DatabaseName">Name of the database to look in</param>
+        /// <returns>List of column items</returns>
         private List<BaseItem> GetColumns(BaseItem parent, ServerItem server, string DatabaseName)
         {
             List<BaseItem> items = new List<BaseItem>();
@@ -287,6 +321,8 @@ namespace Edrych.ViewModels
 
         #region Private Methods
 
+        /// <summary>Adds a server to the tree</summary>
+        /// <param name="dataAccess">Data access object to associate with the server</param>
         private void AddServer(DataAccessBase dataAccess)
         {
             ServerItem item = new ServerItem(dataAccess.DataSource);
@@ -305,6 +341,8 @@ namespace Edrych.ViewModels
             _tree.OnNodesInserted(TreePath.Empty, new int[] { _tree.Cache["ROOT"].Count - 1 }, new object[] { item });
         }
 
+        /// <summary>Removes items from the cache</summary>
+        /// <param name="oldCache">Keys to remove from the cache</param>
         private void RemoveCachedItems(List<string> oldCache)
         {
             foreach (string key in oldCache)
@@ -320,6 +358,9 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Gets the path of a given node</summary>
+        /// <param name="Node">Node to trace</param>
+        /// <returns>TreePath object representing the total path of the node</returns>
         private TreePath GetNodePath(TreeNodeAdv Node)
         {
             BaseItem item = Node.Tag as BaseItem;

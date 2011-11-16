@@ -12,6 +12,7 @@ using Edrych.DataAccess;
 
 namespace Edrych.Helpers
 {
+    /// <summary>Class to contain the various application settings</summary>
     public class Settings
     {
         #region Constants
@@ -25,24 +26,30 @@ namespace Edrych.Helpers
 
         private List<DataAccessConnection> _recentConnections;
         private List<DataAccessConnection> _odbcConnections;
+        private byte[] entropy = System.Text.Encoding.ASCII.GetBytes("It was love at first sight. The first time Yossarian saw the chaplain, he fell madly in love with him.");
 
         #endregion
 
         #region Constructor(s)
+
+        /// <summary>Initializes and loads the settings</summary>
         public Settings()
         {
             EnsureFolderExists();
             LoadSettings();
         }
+
         #endregion
 
         #region Public Properties
 
+        /// <summary>List of recent connections</summary>
         public List<DataAccessConnection> RecentConnections
         {
             get { return _recentConnections; }
         }
 
+        /// <summary>List of ODBC connections</summary>
         public List<DataAccessConnection> OdbcConnections
         {
             get { return _odbcConnections; }
@@ -52,6 +59,7 @@ namespace Edrych.Helpers
 
         #region Public Methods
 
+        /// <summary>Public method to initiate settings to save</summary>
         public void Save()
         {
             SaveRecentConnections();
@@ -61,6 +69,7 @@ namespace Edrych.Helpers
 
         #region Private Methods
 
+        /// <summary>Makes certain the Edrych folder exists in the user's AppData folder</summary>
         private void EnsureFolderExists()
         {
             if (!Directory.Exists(SETTINGS_PATH))
@@ -69,12 +78,14 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Loads the recent and ODBC connections</summary>
         private void LoadSettings()
         {
             GetRecentConnections();
             GetOdbcConnections();
         }
 
+        /// <summary>Loads the recent connections from an XML file</summary>
         private void GetRecentConnections()
         {
             _recentConnections = new List<DataAccessConnection>();
@@ -132,6 +143,7 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Loads user and system DSN entries into the ODBC connections list</summary>
         private void GetOdbcConnections()
         {
             _odbcConnections = new List<DataAccessConnection>();
@@ -139,6 +151,7 @@ namespace Edrych.Helpers
             GetOdbcFromRegistry(Registry.LocalMachine);
         }
 
+        /// <summary>Saves the recent connections to an XML file</summary>
         private void SaveRecentConnections()
         {
             XElement root = new XElement("Connections");
@@ -159,11 +172,20 @@ namespace Edrych.Helpers
             root.Save(SETTINGS_PATH + RECENT_CONNECTIONS_FILE);
         }
 
+        /// <summary>One override of the CreateElement method for unencrypted strings</summary>
+        /// <param name="Name">Name of the element</param>
+        /// <param name="Value">Value of the element</param>
+        /// <returns>XElement for the Name node</returns>
         private XElement CreateElement(string Name, string Value)
         {
             return CreateElement(Name, Value, false);
         }
 
+        /// <summary>Creates an element for us in an XML file</summary>
+        /// <param name="Name">Name of the node</param>
+        /// <param name="Value">Value of the node</param>
+        /// <param name="Encrypt">Whether or not to encrypt the value of the node</param>
+        /// <returns>XElement</returns>
         private XElement CreateElement(string Name, string Value, bool Encrypt)
         {
             XElement element = new XElement(Name);
@@ -185,6 +207,8 @@ namespace Edrych.Helpers
 
         #region Private Methods - Registry
 
+        /// <summary>Loads the ODBC DSN entries from the registry given the starting key</summary>
+        /// <param name="key">Registry key representing the top level registry to look into</param>
         private void GetOdbcFromRegistry(RegistryKey key)
         {
             try
@@ -207,6 +231,9 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Looks in the registry entry for a DSN to find the saved authentication mode</summary>
+        /// <param name="key">Registry key for the DSN connection</param>
+        /// <returns></returns>
         private AuthType GetAuthTypeOfDsn(RegistryKey key)
         {
             try
@@ -222,6 +249,9 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Looks in the registry entry for a DSN to find the saved username</summary>
+        /// <param name="key">Registry key for the DSN connection</param>
+        /// <returns>String representing the username of the DSN</returns>
         private string GetUsernameOfDsn(RegistryKey key)
         {
             try
@@ -237,6 +267,9 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Looks in recent connections to see if the selected ODBC has a saved password</summary>
+        /// <param name="DataSource">Name of the DSN</param>
+        /// <returns>String representing the saved password</returns>
         private string GetPasswordOfDsn(string DataSource)
         {
             DataAccessConnection dac = _recentConnections.FirstOrDefault(c => c.Connection == ConnectionType.ODBC && c.DataSource == DataSource);
@@ -252,8 +285,9 @@ namespace Edrych.Helpers
 
         #region Private Variables and Methods - Encryption
 
-        private byte[] entropy = System.Text.Encoding.ASCII.GetBytes("It was love at first sight. The first time Yossarian saw the chaplain, he fell madly in love with him.");
-
+        /// <summary>Encrypts a given string for storage</summary>
+        /// <param name="input">SecureString containing the value to encrypt</param>
+        /// <returns>String representing the encrypted value</returns>
         public string EncryptString(System.Security.SecureString input)
         {
             byte[] encryptedData = ProtectedData.Protect(
@@ -263,6 +297,9 @@ namespace Edrych.Helpers
             return Convert.ToBase64String(encryptedData);
         }
 
+        /// <summary>Decrypts an encrypted string from storage</summary>
+        /// <param name="encryptedData">Encrypted string to decrypt</param>
+        /// <returns>SecureString containing the decrypted value</returns>
         public SecureString DecryptString(string encryptedData)
         {
             try
@@ -279,6 +316,9 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Converts a string to a SecureString</summary>
+        /// <param name="input">Value to convert</param>
+        /// <returns>SecureString object with the same value as the input</returns>
         public SecureString ToSecureString(string input)
         {
             SecureString secure = new SecureString();
@@ -290,6 +330,9 @@ namespace Edrych.Helpers
             return secure;
         }
 
+        /// <summary>Converts a SecureString to a string</summary>
+        /// <param name="input">SecureString to convert</param>
+        /// <returns>String with the same value as the input</returns>
         public string ToInsecureString(SecureString input)
         {
             string returnValue = string.Empty;

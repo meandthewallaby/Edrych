@@ -5,6 +5,7 @@ using Edrych.Properties;
 
 namespace Edrych.Models
 {
+    /// <summary>Types of items that can go into a tree</summary>
     enum ItemType
     {
         Server,
@@ -16,6 +17,7 @@ namespace Edrych.Models
         None
     }
 
+    /// <summary>Base class for database items</summary>
     class BaseItem : IDisposable
     {
         private Image _icon;
@@ -24,7 +26,10 @@ namespace Edrych.Models
         private ItemType _type;
         private string _itemPath;
 
-
+        /// <summary>Constructor to build the base item</summary>
+        /// <param name="Type">Type of item to build</param>
+        /// <param name="Name">Name of the item</param>
+        /// <param name="Parent">Parent of the item</param>
         public BaseItem(ItemType Type, string Name, BaseItem Parent)
         {
             _type = Type;
@@ -37,33 +42,40 @@ namespace Edrych.Models
             SetIcon();
         }
 
+        /// <summary>Icon to represent the item in the tree</summary>
         public Image Icon
         {
             get { return _icon; }
         }
 
+        /// <summary>Name of the item</summary>
         public String Name
         {
             get { return _name; }
         }
 
+        /// <summary>Parent item of the item</summary>
         public BaseItem Parent
         {
             get { return _parent; }
         }
 
+        /// <summary>Type of the item</summary>
         public ItemType Type
         {
             get { return _type; }
         }
 
+        /// <summary>Pipe-delimited path of the item</summary>
         public string ItemPath
         {
             get { return _itemPath; }
         }
 
+        /// <summary>Whether or not the item has been loaded in the tree</summary>
         public bool IsLoaded { get; set; }
 
+        /// <summary>Sets the icon based on item type</summary>
         private void SetIcon()
         {
             switch(this._type)
@@ -92,6 +104,7 @@ namespace Edrych.Models
             }
         }
 
+        /// <summary>Disposes of the item</summary>
         public void Dispose()
         {
             if (_icon != null)
@@ -99,21 +112,26 @@ namespace Edrych.Models
         }
     }
 
+    /// <summary>Item representing a server</summary>
     class ServerItem : BaseItem
     {
         private DataAccessBase _dataAccess;
 
+        /// <summary>Constructor</summary>
+        /// <param name="Name">Name of the server</param>
         public ServerItem(string Name)
             : base(ItemType.Server, Name, null)
         {
         }
 
+        /// <summary>Data Access object associated with the server</summary>
         public DataAccessBase DataAccess
         {
             get { return _dataAccess; }
             set { _dataAccess = value; }
         }
 
+        /// <summary>Dispose of the item</summary>
         public void Dispose()
         {
             if (_dataAccess != null)

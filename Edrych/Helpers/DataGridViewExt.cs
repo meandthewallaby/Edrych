@@ -7,12 +7,15 @@ using System.Windows.Forms;
 
 namespace Edrych.Helpers
 {
+    /// <summary>Extended DataGridView object, which includes row numbers</summary>
     public class DataGridViewExt : DataGridView
     {
+        /// <summary>Empty constructor</summary>
         public DataGridViewExt()
         {
         }
 
+        /// <summary>Overrides the RowPostPaint event to draw on row numbers</summary>
         protected override void  OnRowPostPaint(DataGridViewRowPostPaintEventArgs e)
         {
             string strRowNumber = (e.RowIndex + 1).ToString();

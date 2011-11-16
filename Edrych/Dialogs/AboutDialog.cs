@@ -8,6 +8,7 @@ using System.Windows.Forms;
 
 namespace Edrych.Dialogs
 {
+    /// <summary>Dialog window for the About information. This is entirely system generated.</summary>
     partial class AboutDialog : Form
     {
         public AboutDialog()

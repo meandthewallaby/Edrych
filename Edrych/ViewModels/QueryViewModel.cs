@@ -9,6 +9,7 @@ using Edrych.Helpers;
 
 namespace Edrych.ViewModels
 {
+    /// <summary>ViewModel for the query and results window</summary>
     public class QueryViewModel : INotifyPropertyChanged, IDisposable
     {
         #region Private/Global Variables
@@ -30,6 +31,8 @@ namespace Edrych.ViewModels
 
         #region Constructor(s)
 
+        /// <summary>Initializes the query with the reference to the browser tree</summary>
+        /// <param name="Browser">ViewModel of the browser tree</param>
         public QueryViewModel(ServerBrowserViewModel Browser)
         {
             _dab = Browser.ActiveConnection;
@@ -40,38 +43,45 @@ namespace Edrych.ViewModels
 
         #region Public Properties
         
+        /// <summary>Returns the query's data access object</summary>
         public DataAccessBase Data
         {
             get { return _dab; }
         }
 
+        /// <summary>Returns the query's results object</summary>
         public ResultSet Results
         {
             get { return _results; }
         }
 
+        /// <summary>Returns the binding source which is used to bind the results to the UI</summary>
         public BindingSource DataBinding
         {
             get { return _dataBinding; }
             set { _dataBinding = value; }
         }
 
+        /// <summary>Returns the messages of the results. Used for binding to the UI</summary>
         public string Messages
         {
             get { return _messages; }
         }
 
+        /// <summary>Returns the safe file name of the query</summary>
         public string SafeFileName
         {
             get { return _safeFileName; }
         }
 
+        /// <summary>Whether or not the query's been saved</summary>
         public bool IsSaved
         {
             get { return _isSaved; }
             set { _isSaved = value; }
         }
 
+        /// <summary>Returns the list of available databases in the connection</summary>
         public List<Database> Databases
         {
             get { return _databases; }
@@ -81,6 +91,9 @@ namespace Edrych.ViewModels
 
         #region Public Methods
 
+        /// <summary>Initialize the query</summary>
+        /// <param name="OpenQuery">Whether or not to open an existing query</param>
+        /// <returns>String representing the initial text of the query</returns>
         public string InitQuery(bool OpenQuery)
         {
             string queryText = string.Empty;
@@ -119,11 +132,16 @@ namespace Edrych.ViewModels
             return queryText;
         }
 
+        /// <summary>Runs a query</summary>
+        /// <param name="Query">Text of the query to run</param>
         public void RunQuery(string Query)
         {
             this.RunQueryAsync(Query);
         }
 
+        /// <summary>Save the query</summary>
+        /// <param name="Query">Text to save</param>
+        /// <param name="IsSaveAs">Whether or not to save as</param>
         public void SaveQuery(string Query, bool IsSaveAs)
         {
             if(string.IsNullOrEmpty(this._fileName) || IsSaveAs)
@@ -147,12 +165,14 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Connects the query to a data source</summary>
         public void Connect()
         {
             this.Disconnect();
             this.InitQuery(false);
         }
 
+        /// <summary>Disconnects the query from a data source</summary>
         public void Disconnect()
         {
             if (this._dab != null)
@@ -162,11 +182,14 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Sets the active database of the query</summary>
+        /// <param name="DatabaseName">Name of the database to select</param>
         public void SetDatabase(string DatabaseName)
         {
             this.Data.SetDatabase(DatabaseName);
         }
 
+        /// <summary>Disposes of the query</summary>
         public void Dispose()
         {
             if (_dataBinding != null)
@@ -181,22 +204,30 @@ namespace Edrych.ViewModels
 
         #region Public Events
 
+        /// <summary>Event to fire when the query begins</summary>
         public event EventHandler BeginQuery;
+        /// <summary>Event to fire when the query ends</summary>
         public event EndQueryEventHandler EndQuery;
+        /// <summary>INotifyPropertyChanged interface event to notify data bound properties of changes</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
+        /// <summary>Triggers the BeginQuery event</summary>
         private void OnBeginQuery()
         {
             if (BeginQuery != null)
                 BeginQuery(this, new EventArgs());
         }
 
+        /// <summary>Triggers the EndQuery event</summary>
+        /// <param name="IsError">Whether or not there's an error</param>
         private void OnEndQuery(bool IsError)
         {
             if (EndQuery != null)
                 EndQuery(this, new EndQueryEventArgs(IsError));
         }
 
+        /// <summary>Triggers the PropertyChanged event</summary>
+        /// <param name="Property">Name of the property to notify of the change</param>
         private void NotifyPropertyChanged(string Property)
         {
             if (PropertyChanged != null)
@@ -209,6 +240,8 @@ namespace Edrych.ViewModels
 
         #region Private Methods
 
+        /// <summary>Saves the query</summary>
+        /// <param name="Query">Query to save</param>
         private void CommitSave(string Query)
         {
             FileStream saveFile = new FileStream(this._fileName, FileMode.Create, FileAccess.Write);
@@ -225,10 +258,16 @@ namespace Edrych.ViewModels
 
         #region Private/Protected Async
 
+        /// <summary>Delegate to run the query</summary>
+        /// <param name="Query">Query to run</param>
+        /// <returns>ResultSet that is the result of the given query</returns>
         private delegate ResultSet RunQueryDelegate(string Query);
+
+        /// <summary>Event that signals the query is complete</summary>
         private event RunQueryCompletedEventHandler RunQueryCompleted;
 
-        protected virtual void OnRunQueryCompleted(CustomEventArgs e)
+        /// <summary>Triggers the RunQueryCompleted event</summary>
+        protected virtual void OnRunQueryCompleted(RunQueryCompletedEventArgs e)
         {
             if (RunQueryCompleted != null)
             {
@@ -236,6 +275,8 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Begins the async process to run the query</summary>
+        /// <param name="Query">Query to execute</param>
         private void RunQueryAsync(string Query)
         {
             RunQueryCompleted += this.RunQuery_Completed;
@@ -246,6 +287,9 @@ namespace Edrych.ViewModels
             IAsyncResult ar = dl.BeginInvoke(Query, new AsyncCallback(RunQueryCallback), async);
         }
 
+        /// <summary>Worker function which actually runs the query</summary>
+        /// <param name="Query">Query to execute</param>
+        /// <returns>ResultSet that is the result of the given query</returns>
         private ResultSet RunQueryWorker(string Query)
         {
             ResultSet res = null;
@@ -263,12 +307,14 @@ namespace Edrych.ViewModels
             return res;
         }
 
+        /// <summary>Callback method for the async thread</summary>
+        /// <param name="ar">Async result object</param>
         private void RunQueryCallback(IAsyncResult ar)
         {
             RunQueryDelegate dl = (RunQueryDelegate)((System.Runtime.Remoting.Messaging.AsyncResult)ar).AsyncDelegate;
             AsyncOperation async = (AsyncOperation)ar.AsyncState;
             ResultSet results;
-            CustomEventArgs completedArgs = new CustomEventArgs(null, false, null);
+            RunQueryCompletedEventArgs completedArgs = new RunQueryCompletedEventArgs(null, false, null);
 
             try
             {
@@ -277,15 +323,16 @@ namespace Edrych.ViewModels
             }
             catch(Exception ex)
             {
-                completedArgs = new CustomEventArgs(ex, false, null);
+                completedArgs = new RunQueryCompletedEventArgs(ex, false, null);
             }
             finally
             {
-                async.PostOperationCompleted(delegate(object e) { OnRunQueryCompleted((CustomEventArgs)e); }, completedArgs);
+                async.PostOperationCompleted(delegate(object e) { OnRunQueryCompleted((RunQueryCompletedEventArgs)e); }, completedArgs);
             }
         }
 
-        private void RunQuery_Completed(object sender, CustomEventArgs e)
+        /// <summary>Sets all the properties after the query completes</summary>
+        private void RunQuery_Completed(object sender, RunQueryCompletedEventArgs e)
         {
             bool isError = true;
             if (e.Error == null)

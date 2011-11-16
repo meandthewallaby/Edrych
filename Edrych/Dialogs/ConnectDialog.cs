@@ -6,6 +6,7 @@ using Edrych.Helpers;
 
 namespace Edrych.Dialogs
 {
+    /// <summary>Dialog window that creates a connection</summary>
     public partial class ConnectDialog : Form
     {
         #region Private/Global Variables
@@ -17,6 +18,7 @@ namespace Edrych.Dialogs
 
         #region Constructor(s)
         
+        /// <summary>Creates the dialog</summary>
         public ConnectDialog()
         {
             InitializeComponent();
@@ -28,6 +30,7 @@ namespace Edrych.Dialogs
 
         #region Public Properties
 
+        /// <summary>Data Access object that the dialog creates</summary>
         public DataAccessBase DataAccess
         {
             get { return _dataAccess; }
@@ -37,6 +40,7 @@ namespace Edrych.Dialogs
 
         #region Private Methods
 
+        /// <summary>Grabs the available connection types and puts them in the drop down</summary>
         private void PopulateConnectionType()
         {
             this.cbConnectionType.Items.Clear();
@@ -57,6 +61,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Grabs the available connections of the connection type</summary>
         private void PopulateDataSource()
         {
             this.cbDataSource.Items.Clear();
@@ -80,6 +85,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Adds recent connections to the data source drop down</summary>
         private void AddRecentConnections()
         {
             if (_settings.RecentConnections != null)
@@ -91,6 +97,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Adds ODBC connections to the data source drop down</summary>
         private void AddOdbcConnections()
         {
             if (_settings.OdbcConnections != null)
@@ -102,6 +109,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Enables controls in the dialog based on the connection type and authentication mode</summary>
         private void SetAvailableOptions()
         {
 
@@ -115,10 +123,25 @@ namespace Edrych.Dialogs
             this.cbAuthType.SelectedIndex = 0;
         }
 
+        /// <summary>Updates the dialog with info from saved connectios (either ODBC or a recent connection)</summary>
+        /// <param name="dac">Saved connection to use to populate the dialog</param>
+        private void ApplySavedConnection(DataAccessConnection dac)
+        {
+            if (dac != null)
+            {
+                this.tbDatabase.Text = dac.Database;
+                this.cbAuthType.SelectedItem = dac.Auth.ToString();
+                this.tbUsername.Text = dac.Username;
+                this.tbPassword.Text = dac.Password;
+                this.cbxSavePassword.Checked = !string.IsNullOrEmpty(dac.Password);
+            }
+        }
+
         #endregion
 
         #region Private Properties
 
+        /// <summary>Property which returns the connection type of the selected data source</summary>
         private ConnectionType SelectedConnectionType
         {
             get
@@ -133,6 +156,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Returns the selected authentication mode</summary>
         private AuthType SelectedAuthType
         {
             get
@@ -147,6 +171,7 @@ namespace Edrych.Dialogs
 
         #region Private Methods - Event Handlers
 
+        /// <summary>Handles when Open is clicked. Creates the data connection from the supplied information</summary>
         private void btnOpen_Click(object sender, EventArgs e)
         {
             try
@@ -190,6 +215,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Clears out the info and closes the dialog when the Cancel button is clicked.</summary>
         private void btnCancel_Click(object sender, EventArgs e)
         {
             _dataAccess = null;
@@ -197,6 +223,7 @@ namespace Edrych.Dialogs
             this.Close();
         }
 
+        /// <summary>Updates the data sources when a connection type is selected</summary>
         private void cbConnectionType_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.cbDataSource.Text = null;
@@ -207,6 +234,7 @@ namespace Edrych.Dialogs
             SetAvailableOptions();
         }
 
+        /// <summary>Updates the info when a data source is selected.</summary>
         private void cbDataSource_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (this.cbDataSource.Text == "Browse for more...")
@@ -228,18 +256,7 @@ namespace Edrych.Dialogs
             }
         }
 
-        private void ApplySavedConnection(DataAccessConnection dac)
-        {
-            if (dac != null)
-            {
-                this.tbDatabase.Text = dac.Database;
-                this.cbAuthType.SelectedItem = dac.Auth.ToString();
-                this.tbUsername.Text = dac.Username;
-                this.tbPassword.Text = dac.Password;
-                this.cbxSavePassword.Checked = !string.IsNullOrEmpty(dac.Password);
-            }
-        }
-
+        /// <summary>Handles the UI changes when the authentication mode is changed</summary>
         private void cbAuthType_SelectedIndexChanged(object sender, EventArgs e)
         {
             AuthType auth;

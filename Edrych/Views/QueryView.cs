@@ -12,6 +12,7 @@ using Edrych.Properties;
 
 namespace Edrych.Views
 {
+    /// <summary>UI class of the query/results tab</summary>
     public partial class QueryView : TabPage
     {
         #region Private/Global Variables
@@ -24,6 +25,8 @@ namespace Edrych.Views
 
         #region Constructor(s)
 
+        /// <summary>Initializes the tab</summary>
+        /// <param name="Browser">BrowserViewModel to use</param>
         public QueryView(ServerBrowserViewModel Browser)
         {
             InitializeComponent();
@@ -48,11 +51,13 @@ namespace Edrych.Views
 
         #region Public Properties
 
+        /// <summary>Returns the name of the tab</summary>
         public string TabName
         {
             get { return _queryViewModel.SafeFileName; }
         }
 
+        /// <summary>Returns whether or not the tab is saved</summary>
         public bool IsSaved
         {
             get { return _queryViewModel.IsSaved; }
@@ -62,6 +67,8 @@ namespace Edrych.Views
 
         #region Public Methods
 
+        /// <summary>Creates the query</summary>
+        /// <param name="OpenQuery">Whether or not to open an existing query</param>
         public void CreateQueryView(bool OpenQuery)
         {
             TabControlExt tc = this.Parent as TabControlExt;
@@ -74,6 +81,8 @@ namespace Edrych.Views
             this.tbQuery.Focus();
         }
 
+        /// <summary>Sets the active database of the query</summary>
+        /// <param name="DatabaseName">Name of the database</param>
         public void SetDatabase(string DatabaseName)
         {
             _queryViewModel.SetDatabase(DatabaseName);
@@ -83,6 +92,7 @@ namespace Edrych.Views
 
         #region Private Methods
 
+        /// <summary>Redraws the line numbers on the query</summary>
         private void UpdateLineNumbers()
         {
             int d = this.tbQuery.GetPositionFromCharIndex(0).Y %
@@ -100,6 +110,7 @@ namespace Edrych.Views
             this.tbLines.Lines = lines.ToArray();
         }
 
+        /// <summary>Updates the tab's name</summary>
         private void ResetTabName()
         {
             this.Text = this.TabName;
@@ -109,7 +120,8 @@ namespace Edrych.Views
             }
         }
 
-        private void AddTabs()
+        /// <summary>Adds corresponding tab indents to the current line</summary>
+        private void AddTabIndents()
         {
             int currLineChar = this.tbQuery.GetFirstCharIndexOfCurrentLine();
             int currLine = this.tbQuery.GetLineFromCharIndex(currLineChar);
@@ -131,7 +143,6 @@ namespace Edrych.Views
 
                 for (int i = 0; i < counter; i++)
                 {
-                    //why is this not working?!
                     this.tbQuery.Text = this.tbQuery.Text.Insert(currLineChar, "\t");
                 }
 
@@ -139,6 +150,7 @@ namespace Edrych.Views
             }
         }
 
+        /// <summary>Updates the status bar on the bottom of the query to the current connection info</summary>
         private void UpdateConnectionInfo()
         {
             if (_queryViewModel != null && _queryViewModel.Data != null && _queryViewModel.Databases != null)
@@ -161,8 +173,9 @@ namespace Edrych.Views
 
         #endregion
 
-        #region Event Handlers
+        #region Private Methods - Event Handlers
 
+        /// <summary>Handles when the query text is changed</summary>
         private void QueryView_QueryChanged(object sender, EventArgs e)
         {
             int newLines = this.tbQuery.Lines.Count();
@@ -170,7 +183,7 @@ namespace Edrych.Views
             if (_numLines != newLines)
             {
                 UpdateLineNumbers();
-                AddTabs();
+                AddTabIndents();
             }
 
             _numLines = newLines;
@@ -185,6 +198,7 @@ namespace Edrych.Views
             }
         }
 
+        /// <summary>Handles when the keyboard is pressed</summary>
         private void QueryView_KeyUp(object sender, KeyEventArgs e)
         {
             if (e.KeyCode == Keys.F5)
@@ -202,11 +216,13 @@ namespace Edrych.Views
             }
         }
 
+        /// <summary>Handles when the query text is scrolled</summary>
         private void QueryView_Scrolling(object sender, EventArgs e)
         {
             UpdateLineNumbers();
         }
 
+        /// <summary>Handles when the tab is focused</summary>
         private void QueryView_Focus(object sender, EventArgs e)
         {
             App.Save += this.QueryView_Save;
@@ -223,6 +239,7 @@ namespace Edrych.Views
             this.tbQuery.Focus();
         }
 
+        /// <summary>Handles when the focus leaves the tab</summary>
         private void QueryView_Leave(object sender, EventArgs e)
         {
             App.Save -= this.QueryView_Save;
@@ -235,6 +252,7 @@ namespace Edrych.Views
             App.IsQueryDisconnectEnabled = false;
         }
 
+        /// <summary>Handles when the query text is focused</summary>
         private void Query_Focus(object sender, EventArgs e)
         {
             App.IsCopyEnabled = true;
@@ -252,6 +270,7 @@ namespace Edrych.Views
             App.SelectAll += this.Query_SelectAll;
         }
 
+        /// <summary>Handles when the results are focused</summary>
         private void Results_Focus(object sender, EventArgs e)
         {
             App.IsCopyEnabled = true;
@@ -261,6 +280,7 @@ namespace Edrych.Views
             App.SelectAll += this.Results_SelectAll;
         }
 
+        /// <summary>Handles when the query text or results are unfocused</summary>
         private void QueryOrResults_Leave(object sender, EventArgs e)
         {
             App.IsCutEnabled = false;
@@ -280,6 +300,7 @@ namespace Edrych.Views
             App.SelectAll -= this.Results_SelectAll;
         }
 
+        /// <summary>Handles when the query connect button is hit</summary>
         private void QueryView_Connect(object sender, EventArgs e)
         {
             _queryViewModel.Connect();
@@ -287,6 +308,7 @@ namespace Edrych.Views
             App.IsQueryDisconnectEnabled = true;
         }
 
+        /// <summary>Handles when the query disconnect button is hit</summary>
         private void QueryView_Disconnect(object sender, EventArgs e)
         {
             _queryViewModel.Disconnect();
@@ -294,48 +316,57 @@ namespace Edrych.Views
             App.IsQueryDisconnectEnabled = false;
         }
 
+        /// <summary>Handles when the save button is hit</summary>
         private void QueryView_Save(object sender, EventArgs e)
         {
             _queryViewModel.SaveQuery(this.tbQuery.Text, false);
             this.ResetTabName();
         }
 
+        /// <summary>Handles when the save as button is hit</summary>
         private void QueryView_SaveAs(object sender, EventArgs e)
         {
             _queryViewModel.SaveQuery(this.tbQuery.Text, true);
             this.ResetTabName();
         }
 
+        /// <summary>Handles when the cut button is hit</summary>
         private void Query_Cut(object sender, EventArgs e)
         {
             this.tbQuery.Cut();
         }
 
+        /// <summary>Handles when the copy button is hit on the query text</summary>
         private void Query_Copy(object sender, EventArgs e)
         {
             this.tbQuery.Copy();
         }
 
+        /// <summary>Handles when the paste button is hit</summary>
         private void Query_Paste(object sender, EventArgs e)
         {
             this.tbQuery.Paste();
         }
 
+        /// <summary>Handles when the undo button is hit</summary>
         private void Query_Undo(object sender, EventArgs e)
         {
             this.tbQuery.Undo();
         }
 
+        /// <summary>Handles when the redo button is hit</summary>
         private void Query_Redo(object sender, EventArgs e)
         {
             this.tbQuery.Redo();
         }
 
+        /// <summary>Handles when the select all button is hit on the query text</summary>
         private void Query_SelectAll(object sender, EventArgs e)
         {
             this.tbQuery.SelectAll();
         }
 
+        /// <summary>Handles when the copy button is hit on the results</summary>
         private void Results_Copy(object sender, EventArgs e)
         {
             this.dgResults.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableAlwaysIncludeHeaderText;
@@ -343,11 +374,13 @@ namespace Edrych.Views
             Clipboard.SetDataObject(d);
         }
 
+        /// <summary>Handles when the select all button is hit on the results</summary>
         private void Results_SelectAll(object sender, EventArgs e)
         {
             this.dgResults.SelectAll();
         }
 
+        /// <summary>Handles when the tab is closing</summary>
         private void TabClosing(object sender, CloseEventArgs e)
         {
             TabControlExt tc = this.Parent as TabControlExt;
@@ -378,11 +411,13 @@ namespace Edrych.Views
             }
         }
 
+        /// <summary>Handles when a query begins execution</summary>
         private void BeginQuery(object sender, EventArgs e)
         {
             _bgWorker.RunWorkerAsync();
         }
 
+        /// <summary>Handles when a query ends execution</summary>
         private void EndQuery(object sender, EndQueryEventArgs e)
         {
             if (_bgWorker.IsBusy)
@@ -406,6 +441,7 @@ namespace Edrych.Views
 
         #region Private Methods - Async
 
+        /// <summary>Times the query execution by kicking off a parallel thread and waiting for the query to cancel it</summary>
         private void TimeQuery(object sender, DoWorkEventArgs e)
         {
             Stopwatch sw = Stopwatch.StartNew();
@@ -418,6 +454,7 @@ namespace Edrych.Views
             sw.Stop();
         }
 
+        /// <summary>Updates the UI timer with the results from TimeQuery</summary>
         private void UpdateTimer(object sender, ProgressChangedEventArgs e)
         {
             this.queryTimer.Text = e.UserState.ToString();

@@ -11,6 +11,7 @@ using Edrych.ViewModels;
 
 namespace Edrych
 {
+    /// <summary>Main window of the application</summary>
     public partial class MainWindow : Form
     {
         #region Private/Global Variables
@@ -22,17 +23,19 @@ namespace Edrych
 
         #region Constructor(s)
 
+        /// <summary>Initializes the windw</summary>
         public MainWindow()
         {
             InitializeComponent();
             InitializeMenus();
-            InitializeTreeView();
+            InitializeServerBrowser();
         }
 
         #endregion
 
         #region Public Properties
 
+        /// <summary>Gets the browser view model</summary>
         public ServerBrowserViewModel Browser
         {
             get { return _browserViewModel; }
@@ -42,6 +45,7 @@ namespace Edrych
 
         #region Public Methods
 
+        /// <summary>Disposes of the window</summary>
         public void Dispose()
         {
             if(_browserViewModel != null)
@@ -60,21 +64,25 @@ namespace Edrych
 
         #region Menu Item Handling - File Menu
 
+        /// <summary>Handles the new item being clicked</summary>
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.CreateQueryTab(false);
         }
 
+        /// <summary>Handles the open item being clicked</summary>
         private void openToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.CreateQueryTab(true);
         }
 
+        /// <summary>Handles the connect item being clicked</summary>
         private void connectMenuItem_Click(object sender, EventArgs e)
         {
             _browserViewModel.CreateConnection();
         }
 
+        /// <summary>Handles the disconnect item being clicked</summary>
         private void disconnectMenuItem_Click(object sender, EventArgs e)
         {
             if (this.treeViewAdv1.SelectedNode != null)
@@ -83,16 +91,19 @@ namespace Edrych
             }
         }
 
+        /// <summary>Handles the save item being clicked</summary>
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnSave(sender, e);
         }
 
+        /// <summary>Handles the save as item being clicked</summary>
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnSaveAs(sender, e);
         }
 
+        /// <summary>Handles the exit item being clicked</summary>
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -102,31 +113,37 @@ namespace Edrych
 
         #region Menu Item Handling - Edit Menu
 
+        /// <summary>Handles the cut item being clicked</summary>
         private void cutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnCut(sender, e);
         }
 
+        /// <summary>Handles the copy item being clicked</summary>
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnCopy(sender, e);
         }
 
+        /// <summary>Handles the paste item being clicked</summary>
         private void pasteToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnPaste(sender, e);
         }
 
+        /// <summary>Handles the undo item being clicked</summary>
         private void undoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnUndo(sender, e);
         }
 
+        /// <summary>Handles the redo item being clicked</summary>
         private void redoToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnRedo(sender, e);
         }
 
+        /// <summary>Handles the select all item being clicked</summary>
         private void selectAllToolStripMenuItem_Click(object sender, EventArgs e)
         {
             App.OnSelectAll(sender, e);
@@ -136,11 +153,13 @@ namespace Edrych
 
         #region Menu Item Handling - Query Menu
 
+        /// <summary>Handles the query connect item being clicked</summary>
         private void queryConnectMenuItem_Click(object sender, EventArgs e)
         {
             App.OnQueryConnect(sender, e);
         }
 
+        /// <summary>Handles the query disconnect item being clicked</summary>
         private void queryDisconnectMenuItem_Click(object sender, EventArgs e)
         {
             App.OnQueryDisconnect(sender, e);
@@ -150,6 +169,7 @@ namespace Edrych
 
         #region Menu Item Handling - Tools Menu
 
+        /// <summary>Handles the options item being clicked</summary>
         private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             OptionsDialog options = new OptionsDialog();
@@ -160,6 +180,7 @@ namespace Edrych
 
         #region Menu Item Handling - Help Menu
 
+        /// <summary>Handles the about item being clicked</summary>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
             AboutDialog about = new AboutDialog();
@@ -170,6 +191,7 @@ namespace Edrych
 
         #region Menu Item Handling - Tool Strip
 
+        /// <summary>Handles the database drop down changing selection</summary>
         private void databaseDropDown_SelectionChanged(object sender, EventArgs e)
         {
             if (App.LoadingDatabases)
@@ -178,6 +200,7 @@ namespace Edrych
                 _activeQuery.SetDatabase(this.databaseDropDown.SelectedItem as string);
         }
 
+        /// <summary>Handles the a key being pressed on the database drop down</summary>
         private void databaseDropDown_KeyUp(object sender, KeyEventArgs e)
         {
             if(e.KeyCode == Keys.Enter)
@@ -188,11 +211,13 @@ namespace Edrych
 
         #region Menu Item Handling - Tree Context Menu
 
+        /// <summary>Handles the context menu opening</summary>
         private void contextMenu_Opening(object sender, CancelEventArgs e)
         {
             this.contextRefresh.Enabled = this.treeViewAdv1.SelectedNode != null;
         }
 
+        /// <summary>Handles the context menu refresh item being clicked</summary>
         private void contextRefresh_Click(object sender, EventArgs e)
         {
             if(this.treeViewAdv1.SelectedNode != null)
@@ -204,8 +229,9 @@ namespace Edrych
 
         #endregion
 
-        #region Event Handlers
+        #region Private Methods - Event Handlers
 
+        /// <summary>Handles an <see cref="Edrych.App.PropertyChanged"/> event</summary>
         private void Property_Changed(object sender, PropertyChangedEventArgs e)
         {
             this.cutToolStripMenuItem.Enabled = App.IsCutEnabled;
@@ -222,6 +248,7 @@ namespace Edrych
             this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
         }
 
+        /// <summary>Handles the window closing</summary>
         private void Window_Closing(object sender, FormClosingEventArgs e)
         {
             List<QueryView> unsavedQueries = new List<QueryView>();
@@ -262,7 +289,8 @@ namespace Edrych
                 this._browserViewModel.Dispose();
             }
         }
-        
+
+        /// <summary>Handles the browser changing selections</summary>
         private void TreeSelection_Changed(object sender, EventArgs e)
         {
             bool isDisconnectEnabled = this.treeViewAdv1.SelectedNode != null;
@@ -274,6 +302,7 @@ namespace Edrych
             }
         }
 
+        /// <summary>Handles an <see cref="Edrych.App.ConnectionChanged"/> event</summary>
         private void QueryConnection_Changed(object sender, ConnectionChangedEventArgs e)
         {
             App.LoadingDatabases = true;
@@ -286,11 +315,13 @@ namespace Edrych
             App.LoadingDatabases = false;
         }
 
+        /// <summary>Handles an <see cref="Edrych.App.ActiveQueryChanged"/> event</summary>
         private void ActiveQuery_Changed(object sender, EventArgs e)
         {
             this._activeQuery = sender as QueryView;
         }
 
+        /// <summary>Handles an <see cref="Edrych.App.SwitchDatabases"/> event</summary>
         private void SwitchDatabases(object sender, EventArgs e)
         {
             this.databaseDropDown.Focus();
@@ -300,6 +331,8 @@ namespace Edrych
 
         #region Private Methods
 
+        /// <summary>Creates a new query tab</summary>
+        /// <param name="IsOpen">Whether or not the query is from an existing saved query</param>
         private void CreateQueryTab(bool IsOpen)
         {
             QueryView qp = new QueryView(_browserViewModel);
@@ -309,6 +342,7 @@ namespace Edrych
             this.tabControl1.ResizeTabs();
         }
 
+        /// <summary>Adds all event handlers and establishes state of the menus</summary>
         private void InitializeMenus()
         {
             App.PropertyChanged += this.Property_Changed;
@@ -327,7 +361,8 @@ namespace Edrych
             App.IsQueryDisconnectEnabled = false;
         }
 
-        private void InitializeTreeView()
+        /// <summary>Adds all the event handlers and states of the browser</summary>
+        private void InitializeServerBrowser()
         {
             _browserViewModel = new ServerBrowserViewModel();
             this.treeViewAdv1.Model = _browserViewModel.Tree;

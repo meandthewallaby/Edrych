@@ -10,34 +10,21 @@ using Edrych.DataAccess;
 
 namespace Edrych.Dialogs
 {
+    /// <summary>Dialog containing the tool's options</summary>
     public partial class OptionsDialog : Form
     {
         private bool _saved = false;
 
+        /// <summary>Creates the dialog</summary>
         public OptionsDialog()
         {
             InitializeComponent();
             PopulateConnectionType();
         }
 
-        private void btnOkay_Click(object sender, EventArgs e)
-        {
-            SaveOptions();
-            if(_saved)
-                this.Close();
-        }
+        #region Private Methods
 
-        private void btnCancel_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.Close();
-        }
-
-        private void btnApply_Click(object sender, EventArgs e)
-        {
-            SaveOptions();
-        }
-
+        /// <summary>Populates a drop down list with the available connection types</summary>
         private void PopulateConnectionType()
         {
             this.cbConnectionType.Items.Clear();
@@ -58,6 +45,7 @@ namespace Edrych.Dialogs
             }
         }
 
+        /// <summary>Saves the options selected</summary>
         private void SaveOptions()
         {
             ConnectionType type;
@@ -72,5 +60,32 @@ namespace Edrych.Dialogs
                 _saved = false;
             }
         }
+
+        #endregion
+
+        #region Private Methods - Event Handlers
+
+        /// <summary>Saves the settings and closes the window when the OK button is clicked</summary>
+        private void btnOkay_Click(object sender, EventArgs e)
+        {
+            SaveOptions();
+            if(_saved)
+                this.Close();
+        }
+
+        /// <summary>Cancels the changes and closes the window when the Cancel button is clicked</summary>
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.Close();
+        }
+
+        /// <summary>Apply the settings changes when the Apply button is clicked</summary>
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            SaveOptions();
+        }
+
+        #endregion
     }
 }

@@ -5,6 +5,7 @@ using Edrych.Properties;
 
 namespace Edrych.Helpers
 {
+    /// <summary>Extended TabControl class</summary>
     public class TabControlExt : TabControl
     {
         private const int CLOSE_ICON_PADDING = 4;
@@ -13,9 +14,13 @@ namespace Edrych.Helpers
         private const int MAX_TAB_WIDTH = 300;
         private const int TAB_HEIGHT = 24;
 
+        /// <summary>Delegate for the HeaderClose event</summary>
         public delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
+        /// <summary>Closing event</summary>
         public event OnHeaderCloseEventHandler Closing;
 
+        /// <summary>Override for the drawing of the control to include a Close Tab button</summary>
+        /// <param name="e"></param>
         protected override void OnDrawItem(DrawItemEventArgs e)
         {
             RectangleF tabTextArea = RectangleF.Empty;
@@ -45,6 +50,7 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Override for the OnMouseDown event to detect clicking on the Close Tab event</summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
             Point clickedPoint = new Point(e.X, e.Y);
@@ -66,6 +72,7 @@ namespace Edrych.Helpers
             }
         }
 
+        /// <summary>Resizes the tabs based on the min and max width, and the number of tabs currently open</summary>
         public void ResizeTabs()
         {
             if (this.TabCount > 0)
@@ -76,24 +83,19 @@ namespace Edrych.Helpers
         }
     }
 
+    /// <summary>Event Arguments from the Closing event</summary>
     public class CloseEventArgs:EventArgs
     {
         private int nTabIndex = -1;
+
+        /// <summary>Constructor to set the index of the tab being closed</summary>
+        /// <param name="nTabIndex">Index of the tab being closed</param>
         public CloseEventArgs(int nTabIndex)
         {
             this.nTabIndex = nTabIndex;
         }
         
-        public int TabIndex 
-        {
-            get
-            {
-                return this.nTabIndex;
-            }
-            set
-            {
-                this.nTabIndex = value;
-            }
-        }
+        /// <summary>Returns the index of the tab closing</summary>
+        public int TabIndex { get { return this.nTabIndex; } }
     }
 }
