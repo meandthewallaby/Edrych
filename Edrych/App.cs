@@ -78,20 +78,14 @@ namespace Edrych
         public static event ConnectionChangedEventHandler ConnectionChanged;
         /// <summary>Event to notify that the active query has changed</summary>
         public static event EventHandler ActiveQueryChanged;
-        /// <summary>Event to notify that the active database has changed</summary>
+        /// <summary>Event to notify that the user wants to switch databases</summary>
         public static event EventHandler SwitchDatabases;
+        /// <summary>Event to notify that the active database has changed</summary>
+        public static event ConnectionChangedEventHandler DatabaseChanged;
 
         #endregion
 
-        #region Private Methods
-
-        /// <summary>Trigger for the PropertyChanged event</summary>
-        /// <param name="Property">Property that changed</param>
-        private static void NotifyPropertyChanged(string Property)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(new App(), new PropertyChangedEventArgs(Property));
-        }
+        #region Public Methods
 
         /// <summary>Trigger for the Save event</summary>
         public static void OnSave(object sender, EventArgs e)
@@ -182,6 +176,25 @@ namespace Edrych
         {
             if (SwitchDatabases != null)
                 SwitchDatabases(sender, e);
+        }
+
+        /// <summary>Trigger for the DatabaseChanged event</summary>
+        public static void OnDatabaseChanged(object sender, ConnectionChangedEventArgs e)
+        {
+            if (DatabaseChanged != null)
+                DatabaseChanged(sender, e);
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>Trigger for the PropertyChanged event</summary>
+        /// <param name="Property">Property that changed</param>
+        private static void NotifyPropertyChanged(string Property)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(new App(), new PropertyChangedEventArgs(Property));
         }
 
         #endregion

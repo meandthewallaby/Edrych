@@ -237,7 +237,7 @@ namespace Edrych
 
         #region Private Methods - Event Handlers
 
-        /// <summary>Handles an <see cref="Edrych.App.PropertyChanged"/> event</summary>
+        /// <summary>Handles a <see cref="Edrych.App.PropertyChanged"/> event</summary>
         private void Property_Changed(object sender, PropertyChangedEventArgs e)
         {
             this.cutToolStripMenuItem.Enabled = App.IsCutEnabled;
@@ -308,7 +308,7 @@ namespace Edrych
             }
         }
 
-        /// <summary>Handles an <see cref="Edrych.App.ConnectionChanged"/> event</summary>
+        /// <summary>Handles a <see cref="Edrych.App.ConnectionChanged"/> event</summary>
         private void QueryConnection_Changed(object sender, ConnectionChangedEventArgs e)
         {
             App.LoadingDatabases = true;
@@ -327,10 +327,19 @@ namespace Edrych
             this._activeQuery = sender as QueryView;
         }
 
-        /// <summary>Handles an <see cref="Edrych.App.SwitchDatabases"/> event</summary>
+        /// <summary>Handles a <see cref="Edrych.App.SwitchDatabases"/> event</summary>
         private void SwitchDatabases(object sender, EventArgs e)
         {
             this.databaseDropDown.Focus();
+        }
+
+        /// <summary>Handles a <see cref="Edrych.App.DatabaseChanged"/> event</summary>
+        private void DatabaseChanged(object sender, ConnectionChangedEventArgs e)
+        {
+            if (e != null)
+            {
+                this.databaseDropDown.SelectedItem = e.SelectedDatabase;
+            }
         }
 
         #endregion
@@ -341,7 +350,7 @@ namespace Edrych
         /// <param name="IsOpen">Whether or not the query is from an existing saved query</param>
         private void CreateQueryTab(bool IsOpen)
         {
-            QueryView qp = new QueryView(_browserViewModel);
+            QueryView qp = new QueryView(ref _browserViewModel);
             this.tabControl1.TabPages.Insert(0, qp);
             qp.CreateQueryView(IsOpen);
             this.tabControl1.SelectedIndex = 0;
@@ -356,6 +365,7 @@ namespace Edrych
             App.ConnectionChanged += this.QueryConnection_Changed;
             App.ActiveQueryChanged += this.ActiveQuery_Changed;
             App.SwitchDatabases += this.SwitchDatabases;
+            App.DatabaseChanged += this.DatabaseChanged;
 
             App.IsCopyEnabled = false;
             App.IsPasteEnabled = false;

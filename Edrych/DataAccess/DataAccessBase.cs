@@ -86,9 +86,9 @@ namespace Edrych.DataAccess
         /// <param name="sqlQuery">Query to run</param>
         /// <param name="Browser">The browser viewmodel that's currently active in the window</param>
         /// <returns>ResultSet, containing returned data and messages</returns>
-        public ResultSet GetDataSet(string sqlQuery, ViewModels.ServerBrowserViewModel Browser)
+        public ResultSet GetDataSet(string sqlQuery, ref ViewModels.ServerBrowserViewModel Browser)
         {
-            DataAccessQuery daq = new DataAccessQuery(this, Browser);
+            DataAccessQuery daq = new DataAccessQuery(this, ref Browser);
             return daq.RunQuery(sqlQuery);
         }
 

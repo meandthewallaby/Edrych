@@ -20,6 +20,7 @@ namespace Edrych.ViewModels
         private BindingSource _dataBinding = new BindingSource();
         private string _messages = string.Empty;
         private List<Database> _databases;
+        private string _oldDatabase;
 
         private string _fileName = string.Empty;
         private string _safeFileName = "New Query";
@@ -33,7 +34,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Initializes the query with the reference to the browser tree</summary>
         /// <param name="Browser">ViewModel of the browser tree</param>
-        public QueryViewModel(ServerBrowserViewModel Browser)
+        public QueryViewModel(ref ServerBrowserViewModel Browser)
         {
             _dab = Browser.ActiveConnection;
             _browser = Browser;
@@ -282,6 +283,7 @@ namespace Edrych.ViewModels
             RunQueryCompleted += this.RunQuery_Completed;
             RunQueryDelegate dl = new RunQueryDelegate(RunQueryWorker);
             AsyncOperation async = AsyncOperationManager.CreateOperation(null);
+            _oldDatabase = this.Data.SelectedDatabase;
 
             OnBeginQuery();
             IAsyncResult ar = dl.BeginInvoke(Query, new AsyncCallback(RunQueryCallback), async);
@@ -301,7 +303,7 @@ namespace Edrych.ViewModels
 
             if (!string.IsNullOrEmpty(Query) && res == null)
             {
-                res = _dab.GetDataSet(Query, _browser);
+                res = _dab.GetDataSet(Query, ref _browser);
             }
 
             return res;
@@ -344,6 +346,11 @@ namespace Edrych.ViewModels
             {
                 _results = new ResultSet();
                 _results.Messages = e.Error.Message;
+            }
+
+            if (this.Data != null && this.Data.SelectedDatabase != _oldDatabase)
+            {
+                App.OnDatabaseChanged(this, new ConnectionChangedEventArgs(null, this.Data.SelectedDatabase));
             }
 
             _dataBinding.DataSource = _results.Data;

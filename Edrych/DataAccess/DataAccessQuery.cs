@@ -26,7 +26,7 @@ namespace Edrych.DataAccess
         /// <summary>Creates the query</summary>
         /// <param name="Dab">Data Access object to run the queries</param>
         /// <param name="Browser">Server tree from the active browser</param>
-        public DataAccessQuery(DataAccessBase Dab, ServerBrowserViewModel Browser)
+        public DataAccessQuery(DataAccessBase Dab, ref ServerBrowserViewModel Browser)
         {
             _dab = Dab;
             _browser = Browser;

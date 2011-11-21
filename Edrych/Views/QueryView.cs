@@ -27,10 +27,10 @@ namespace Edrych.Views
 
         /// <summary>Initializes the tab</summary>
         /// <param name="Browser">BrowserViewModel to use</param>
-        public QueryView(ServerBrowserViewModel Browser)
+        public QueryView(ref ServerBrowserViewModel Browser)
         {
             InitializeComponent();
-            _queryViewModel = new QueryViewModel(Browser);
+            _queryViewModel = new QueryViewModel(ref Browser);
             this.dgResults.DataSource = _queryViewModel.DataBinding;
             this.tbMessages.DataBindings.Add("Text", _queryViewModel, "Messages");
             this.Name = Guid.NewGuid().ToString();
