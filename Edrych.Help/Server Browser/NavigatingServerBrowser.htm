@@ -1,0 +1,42 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Navigating the Server Browser</Title>
+</HEAD>
+<style type="text/css">
+body
+{
+	font-family: Arial;
+}
+</style>
+<BODY>
+<h1>Navigating the Server Browser</h1>
+Each database server is laid out exactly the same way in the Server Browser. This provides a
+consistent experience for you to navigate through the databases. Your interaction with the
+Server Browser is entirely based on the current selected item. Edrych changes your context for 
+new queries and the like entirely based on the selected node.
+
+<h2>The Levels</h2>
+The Server Browser uses four levels: <b>Server</b>, <b>Database</b>, <b>Tables/Views</b>, and <b>Columns</b>. 
+The <b>Database</b> and <b>Tables/Views</b> are separated by a folder level, which groups <b>Tables</b>
+and <b>Views</b> separately.
+<br><br>
+<img src="../Images/BrowserFullTree.bmp">
+
+<h2>Context Menu</h2>
+You can right-click on a node in the tree to bring up the context menu. From here, you can take actions on a
+specific node in the tree. Currently, you can perform the following actions:
+<br><br>
+<img src="../Images/ContextMenu.bmp">
+
+<h3>New Query</h3>
+Clicking New Query on a node will open up a new query window connected to the server the node is under,
+using the parent database of the node (if you click on the server, it will use the default).
+
+<h3>Refresh</h3>
+Clicking the Refresh button on a node will cause it to collapse the node and refresh the children information
+of that node. This is greatly useful when using Edrych to alter the structures, and then seeing the results
+of your changes immediately.
+</BODY>
+</HTML>

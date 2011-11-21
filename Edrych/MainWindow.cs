@@ -180,6 +180,12 @@ namespace Edrych
 
         #region Menu Item Handling - Help Menu
 
+        /// <summary>Opens up the CHM help file</summary>
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Help.ShowHelp(this, "Resources/Edrych.chm");
+        }
+
         /// <summary>Handles the about item being clicked</summary>
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -369,5 +375,6 @@ namespace Edrych
         }
 
         #endregion
+
     }
 }

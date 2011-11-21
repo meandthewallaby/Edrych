@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<Title>Interserver Queries</Title>
+</HEAD>
+<style type="text/css">
+body
+{
+	font-family: Arial;
+}
+</style>
+<BODY>
+<h1>Interserver Queries</h1>
+The most powerful part of Edrych is the ability to query two different databases from the same
+query. While Edrych is fairly limited in its ability to run interserver queries, you can still
+do quite a lot with it to compare data between two places. As we soldier on, support should
+only improve.
+<h2>Syntax</h2>
+The syntax is fairly simple for interserver queries. Ostensibly it goes:
+<br><br>
+<code>
+insert into BaseTable (cols)<br>
+[servername].[databasename]<br>
+{<br>
+&nbsp;&nbsp;&nbsp;&nbsp;select<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cols<br>
+&nbsp;&nbsp;&nbsp;&nbsp;from<br> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table<br> 
+};
+</code>
+<h2>Notes</h2>
+Ensure that the base table you're inserting into is created!
+<br><br>
+Coming soon: Ability to join two tables without doing the insert.
+<br><br>
+Beware doing this for large tables--all the processing is within Edrych, so network and your local
+machine constraints will apply.
+</code>
+</BODY>
+</HTML>

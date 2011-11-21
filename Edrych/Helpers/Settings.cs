@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
@@ -154,6 +155,7 @@ namespace Edrych.Helpers
         /// <summary>Saves the recent connections to an XML file</summary>
         private void SaveRecentConnections()
         {
+            Dictionary<ConnectionType, int> numConnections = new Dictionary<ConnectionType, int>();
             XElement root = new XElement("Connections");
             foreach (DataAccessConnection conn in _recentConnections)
             {
@@ -166,7 +168,19 @@ namespace Edrych.Helpers
                 xmlConn.Add(CreateElement("Auth", conn.Auth.ToString()));
                 xmlConn.Add(CreateElement("Username", conn.Username));
                 xmlConn.Add(CreateElement("Password", conn.Password, true));
-                root.Add(xmlConn);
+                if (numConnections.ContainsKey(conn.Connection))
+                {
+                    if (numConnections[conn.Connection] < 5)
+                    {
+                        numConnections[conn.Connection]++;
+                        root.Add(xmlConn);
+                    }
+                }
+                else
+                {
+                    numConnections.Add(conn.Connection, 1);
+                    root.Add(xmlConn);
+                }
             }
 
             root.Save(SETTINGS_PATH + RECENT_CONNECTIONS_FILE);
