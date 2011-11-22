@@ -7,10 +7,10 @@ using Edrych.Properties;
 namespace Edrych.DataAccess
 {
     /// <summary>Factory that creates Data Access objects</summary>
-    public class DataAccessFactory
+    class DataAccessFactory
     {
         /// <summary>Gets the default connection type from the user's settings</summary>
-        public static ConnectionType DefaultType
+        internal static ConnectionType DefaultType
         {
             get 
             {
@@ -31,7 +31,7 @@ namespace Edrych.DataAccess
         /// <param name="Username">Username for basic authentication</param>
         /// <param name="Password">Password for basic authentication</param>
         /// <returns>DataAccessBase object for the specified connection type</returns>
-        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
+        internal static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
         {
             DataAccessBase dab = GetConnection(ConnectionType);
 
@@ -47,7 +47,7 @@ namespace Edrych.DataAccess
 
         /// <summary>Get a list of connection types along with their properties</summary>
         /// <returns>List of ConnectionSource objects representing the available connection types</returns>
-        public static List<ConnectionSource> GetSources()
+        internal static List<ConnectionSource> GetSources()
         {
             List<ConnectionSource> sources = new List<ConnectionSource>();
 
@@ -63,7 +63,7 @@ namespace Edrych.DataAccess
 
         /// <summary>Update a user's settings to change their default connection type</summary>
         /// <param name="ConnectionType">ConnectionType value to set as the default</param>
-        public static void SetDefaultType(ConnectionType ConnectionType)
+        internal static void SetDefaultType(ConnectionType ConnectionType)
         {
             Settings.Default.DefaultConnection = ConnectionType.ToString();
             Settings.Default.Save();

@@ -11,7 +11,7 @@ namespace Edrych.DataAccess
     {
         //TODO: Change up Connection String and SQL to fall in line w/ ODBC connections
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
-        internal override IDbConnection GetDbConnection()
+        protected override IDbConnection GetDbConnection()
         {
             OdbcConnection conn = new OdbcConnection(this.ConnectionString);
             conn.Open();
@@ -19,13 +19,13 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
-        internal override IDbCommand GetDbCommand()
+        protected override IDbCommand GetDbCommand()
         {
             return new OdbcCommand();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
-        internal override IDbDataParameter GetDbParameter(string Name, object Value)
+        protected override IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new OdbcParameter(Name, Value);
         }
@@ -100,7 +100,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
-        internal override string BuildConnectionString()
+        protected override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("Dsn=");

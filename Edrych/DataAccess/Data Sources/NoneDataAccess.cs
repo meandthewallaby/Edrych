@@ -9,19 +9,19 @@ namespace Edrych.DataAccess
     class NoneDataAccess : DataAccessBase
     {
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
-        internal override System.Data.IDbConnection GetDbConnection()
+        protected override System.Data.IDbConnection GetDbConnection()
         {
             throw new NotImplementedException();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
-        internal override System.Data.IDbCommand GetDbCommand()
+        protected override System.Data.IDbCommand GetDbCommand()
         {
             throw new NotImplementedException();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
-        internal override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
+        protected override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
         {
             throw new NotImplementedException();
         }
@@ -57,7 +57,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
-        internal override string BuildConnectionString()
+        protected override string BuildConnectionString()
         {
             throw new NotImplementedException();
         }

@@ -13,7 +13,7 @@ using Edrych.Properties;
 namespace Edrych.Views
 {
     /// <summary>UI class of the query/results tab</summary>
-    public partial class QueryView : TabPage
+    partial class QueryView : TabPage
     {
         #region Private/Global Variables
 
@@ -27,7 +27,7 @@ namespace Edrych.Views
 
         /// <summary>Initializes the tab</summary>
         /// <param name="Browser">BrowserViewModel to use</param>
-        public QueryView(ref ServerBrowserViewModel Browser)
+        internal QueryView(ref ServerBrowserViewModel Browser)
         {
             InitializeComponent();
             _queryViewModel = new QueryViewModel(ref Browser);
@@ -49,27 +49,27 @@ namespace Edrych.Views
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
 
         /// <summary>Returns the name of the tab</summary>
-        public string TabName
+        internal string TabName
         {
             get { return _queryViewModel.SafeFileName; }
         }
 
         /// <summary>Returns whether or not the tab is saved</summary>
-        public bool IsSaved
+        internal bool IsSaved
         {
             get { return _queryViewModel.IsSaved; }
         }
 
         #endregion
 
-        #region Public Methods
+        #region Internal Methods
 
         /// <summary>Creates the query</summary>
         /// <param name="OpenQuery">Whether or not to open an existing query</param>
-        public void CreateQueryView(bool OpenQuery)
+        internal void CreateQueryView(bool OpenQuery)
         {
             TabControlExt tc = this.Parent as TabControlExt;
             if (tc != null)
@@ -83,20 +83,20 @@ namespace Edrych.Views
 
         /// <summary>Sets the active database of the query</summary>
         /// <param name="DatabaseName">Name of the database</param>
-        public void SetDatabase(string DatabaseName)
+        internal void SetDatabase(string DatabaseName)
         {
             _queryViewModel.SetDatabase(DatabaseName);
         }
 
         /// <summary>Runs the selected query</summary>
-        public void RunQuery()
+        internal void RunQuery()
         {
             string query = (string.IsNullOrEmpty(tbQuery.SelectedText.Trim()) ? tbQuery.Text : tbQuery.SelectedText).Trim();
             _queryViewModel.RunQuery(query);
         }
 
         /// <summary>Cancels the running query</summary>
-        public void CancelQuery()
+        internal void CancelQuery()
         {
             _queryViewModel.CancelQuery();
         }

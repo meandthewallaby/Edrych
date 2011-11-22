@@ -54,7 +54,7 @@ namespace Edrych.DataAccess
         private string _activeDatabase;
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
-        internal override System.Data.IDbConnection GetDbConnection()
+        protected override System.Data.IDbConnection GetDbConnection()
         {
             TdConnection conn = new TdConnection(this.ConnectionString);
             conn.Open();
@@ -62,13 +62,13 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
-        internal override System.Data.IDbCommand GetDbCommand()
+        protected override System.Data.IDbCommand GetDbCommand()
         {
             return new TdCommand();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
-        internal override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
+        protected override System.Data.IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new TdParameter(Name, Value);
         }
@@ -155,7 +155,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
-        internal override string BuildConnectionString()
+        protected override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("Data Source=" + this.DataSource + ";");

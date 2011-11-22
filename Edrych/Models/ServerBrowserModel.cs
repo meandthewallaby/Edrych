@@ -9,7 +9,7 @@ using Edrych.ViewModels;
 namespace Edrych.Models
 {
     /// <summary>Model to house the server browser structure. Inherits the ITreeModel interace of TreeViewAdv.</summary>
-    public class ServerBrowserModel : ITreeModel
+    class ServerBrowserModel : ITreeModel
     {
         #region Private/Global Variables
 
@@ -22,7 +22,7 @@ namespace Edrych.Models
 
         /// <summary>Creates the instance of the model</summary>
         /// <param name="ViewModel">The ViewModel that initializes it</param>
-        public ServerBrowserModel(ServerBrowserViewModel ViewModel)
+        internal ServerBrowserModel(ServerBrowserViewModel ViewModel)
         {
             _cache = new Dictionary<string, List<BaseItem>>();
             _viewModel = ViewModel;
@@ -77,13 +77,13 @@ namespace Edrych.Models
 
         #endregion
 
-        #region Public Event Triggers
+        #region Internal Event Triggers
 
         /// <summary>Trigger for the NodesChanged event</summary>
         /// <param name="Tree">Path of the parent of the changed items</param>
         /// <param name="Indices">Indices (0-based) where to add the children changed</param>
         /// <param name="Children">Children objects to be changed under the Tree</param>
-        public void OnNodesChanged(TreePath Tree, int[] Indices, object[] Children)
+        internal void OnNodesChanged(TreePath Tree, int[] Indices, object[] Children)
         {
             if (NodesChanged != null && Children != null)
             {
@@ -99,7 +99,7 @@ namespace Edrych.Models
         /// <param name="Tree">Path of the parent of the inserted items</param>
         /// <param name="Indices">Indices (0-based) where to add the children inserted</param>
         /// <param name="Children">Children objects to be inserted under the Tree</param>
-        public void OnNodesInserted(TreePath Tree, int[] Indices, object[] Children)
+        internal void OnNodesInserted(TreePath Tree, int[] Indices, object[] Children)
         {
             if (NodesInserted != null && Children != null)
             {
@@ -115,7 +115,7 @@ namespace Edrych.Models
         /// <param name="Tree">Path of the parent of the removed items</param>
         /// <param name="Indices">Indices (0-based) where to add the children removed</param>
         /// <param name="Children">Children objects to be removed under the Tree</param>
-        public void OnNodesRemoved(TreePath Tree, int[] Indices, object[] Children)
+        internal void OnNodesRemoved(TreePath Tree, int[] Indices, object[] Children)
         {
             if (NodesRemoved != null && Children != null)
             {
@@ -129,7 +129,7 @@ namespace Edrych.Models
 
         /// <summary>Trigger for the StructureChanged event</summary>
         /// <param name="Tree">Path of the parent of the changed items</param>
-        public void OnStructureChanged(TreePath Tree)
+        internal void OnStructureChanged(TreePath Tree)
         {
             if (StructureChanged != null)
             {

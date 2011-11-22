@@ -10,7 +10,7 @@ namespace Edrych.DataAccess
     class SQLiteDataAccess : DataAccessBase
     {
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
-        internal override IDbConnection GetDbConnection()
+        protected override IDbConnection GetDbConnection()
         {
             SQLiteConnection conn = new SQLiteConnection(this.ConnectionString);
             conn.Open();
@@ -18,13 +18,13 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbCommand"/></summary>
-        internal override IDbCommand GetDbCommand()
+        protected override IDbCommand GetDbCommand()
         {
             return new SQLiteCommand();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbParameter"/></summary>
-        internal override IDbDataParameter GetDbParameter(string Name, object Value)
+        protected override IDbDataParameter GetDbParameter(string Name, object Value)
         {
             return new SQLiteParameter(Name, Value);
         }
@@ -90,7 +90,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
-        internal override string BuildConnectionString()
+        protected override string BuildConnectionString()
         {
             StringBuilder sb = new StringBuilder();
             sb.Append("Data Source=");

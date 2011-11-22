@@ -30,7 +30,7 @@ namespace Edrych.DataAccess
         /// <summary>Creates the query</summary>
         /// <param name="Dab">Data Access object to run the queries</param>
         /// <param name="Browser">Server tree from the active browser</param>
-        public DataAccessQuery(DataAccessBase Dab, ref ServerBrowserViewModel Browser)
+        internal DataAccessQuery(DataAccessBase Dab, ref ServerBrowserViewModel Browser)
         {
             _dab = Dab;
             _browser = Browser;
@@ -44,12 +44,12 @@ namespace Edrych.DataAccess
 
         #endregion
 
-        #region Public Methods
+        #region Internal Methods
 
         /// <summary>The main entry point to running a query. This determines whether the query is an External Query or an Internal Query</summary>
         /// <param name="Query">Query to run</param>
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
-        public ResultSet RunQuery(string Query)
+        internal ResultSet RunQuery(string Query)
         {
             ResultSet rs;
             if (IsExternalQuery(Query))
@@ -64,7 +64,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary>Cancels the current query</summary>
-        public void Cancel()
+        internal void Cancel()
         {
             lock (_sync)
             {

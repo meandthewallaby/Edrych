@@ -6,7 +6,7 @@ using Edrych.Properties;
 namespace Edrych.Helpers
 {
     /// <summary>Extended TabControl class</summary>
-    public class TabControlExt : TabControl
+    class TabControlExt : TabControl
     {
         private const int CLOSE_ICON_PADDING = 4;
         private const int CLOSE_ICON_SIZE = 16;
@@ -15,9 +15,9 @@ namespace Edrych.Helpers
         private const int TAB_HEIGHT = 24;
 
         /// <summary>Delegate for the HeaderClose event</summary>
-        public delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
+        internal delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
         /// <summary>Closing event</summary>
-        public event OnHeaderCloseEventHandler Closing;
+        internal event OnHeaderCloseEventHandler Closing;
 
         /// <summary>Override for the drawing of the control to include a Close Tab button</summary>
         /// <param name="e"></param>
@@ -73,7 +73,7 @@ namespace Edrych.Helpers
         }
 
         /// <summary>Resizes the tabs based on the min and max width, and the number of tabs currently open</summary>
-        public void ResizeTabs()
+        internal void ResizeTabs()
         {
             if (this.TabCount > 0)
             {
@@ -81,21 +81,5 @@ namespace Edrych.Helpers
                 this.ItemSize = new Size(itemWidth, TAB_HEIGHT);
             }
         }
-    }
-
-    /// <summary>Event Arguments from the Closing event</summary>
-    public class CloseEventArgs:EventArgs
-    {
-        private int nTabIndex = -1;
-
-        /// <summary>Constructor to set the index of the tab being closed</summary>
-        /// <param name="nTabIndex">Index of the tab being closed</param>
-        public CloseEventArgs(int nTabIndex)
-        {
-            this.nTabIndex = nTabIndex;
-        }
-        
-        /// <summary>Returns the index of the tab closing</summary>
-        public int TabIndex { get { return this.nTabIndex; } }
     }
 }

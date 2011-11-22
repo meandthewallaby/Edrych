@@ -8,10 +8,10 @@ using System.Windows.Forms;
 namespace Edrych.Helpers
 {
     /// <summary>Extended DataGridView object, which includes row numbers</summary>
-    public class DataGridViewExt : DataGridView
+    class DataGridViewExt : DataGridView
     {
         /// <summary>Empty constructor</summary>
-        public DataGridViewExt()
+        internal DataGridViewExt()
         {
         }
 

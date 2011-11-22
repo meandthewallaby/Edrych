@@ -10,7 +10,7 @@ using Edrych.Helpers;
 namespace Edrych.ViewModels
 {
     /// <summary>ViewModel for the query and results window</summary>
-    public class QueryViewModel : INotifyPropertyChanged, IDisposable
+    class QueryViewModel : INotifyPropertyChanged, IDisposable
     {
         #region Private/Global Variables
 
@@ -34,7 +34,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Initializes the query with the reference to the browser tree</summary>
         /// <param name="Browser">ViewModel of the browser tree</param>
-        public QueryViewModel(ref ServerBrowserViewModel Browser)
+        internal QueryViewModel(ref ServerBrowserViewModel Browser)
         {
             _dab = Browser.ActiveConnection;
             _browser = Browser;
@@ -42,60 +42,60 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
         
         /// <summary>Returns the query's data access object</summary>
-        public DataAccessBase Data
+        internal DataAccessBase Data
         {
             get { return _dab; }
         }
 
         /// <summary>Returns the query's results object</summary>
-        public ResultSet Results
+        internal ResultSet Results
         {
             get { return _results; }
         }
 
         /// <summary>Returns the binding source which is used to bind the results to the UI</summary>
-        public BindingSource DataBinding
+        internal BindingSource DataBinding
         {
             get { return _dataBinding; }
             set { _dataBinding = value; }
         }
 
         /// <summary>Returns the messages of the results. Used for binding to the UI</summary>
-        public string Messages
+        internal string Messages
         {
             get { return _messages; }
         }
 
         /// <summary>Returns the safe file name of the query</summary>
-        public string SafeFileName
+        internal string SafeFileName
         {
             get { return _safeFileName; }
         }
 
         /// <summary>Whether or not the query's been saved</summary>
-        public bool IsSaved
+        internal bool IsSaved
         {
             get { return _isSaved; }
             set { _isSaved = value; }
         }
 
         /// <summary>Returns the list of available databases in the connection</summary>
-        public List<Database> Databases
+        internal List<Database> Databases
         {
             get { return _databases; }
         }
 
         #endregion
 
-        #region Public Methods
+        #region Internal Methods
 
         /// <summary>Initialize the query</summary>
         /// <param name="OpenQuery">Whether or not to open an existing query</param>
         /// <returns>String representing the initial text of the query</returns>
-        public string InitQuery(bool OpenQuery)
+        internal string InitQuery(bool OpenQuery)
         {
             string queryText = string.Empty;
 
@@ -135,14 +135,14 @@ namespace Edrych.ViewModels
 
         /// <summary>Runs a query</summary>
         /// <param name="Query">Text of the query to run</param>
-        public void RunQuery(string Query)
+        internal void RunQuery(string Query)
         {
             App.IsStopQueryEnabled = true;
             this.RunQueryAsync(Query);
         }
 
         /// <summary>Cancels the running query</summary>
-        public void CancelQuery()
+        internal void CancelQuery()
         {
             _dab.Cancel();
         }
@@ -150,7 +150,7 @@ namespace Edrych.ViewModels
         /// <summary>Save the query</summary>
         /// <param name="Query">Text to save</param>
         /// <param name="IsSaveAs">Whether or not to save as</param>
-        public void SaveQuery(string Query, bool IsSaveAs)
+        internal void SaveQuery(string Query, bool IsSaveAs)
         {
             if(string.IsNullOrEmpty(this._fileName) || IsSaveAs)
             {
@@ -174,14 +174,14 @@ namespace Edrych.ViewModels
         }
 
         /// <summary>Connects the query to a data source</summary>
-        public void Connect()
+        internal void Connect()
         {
             this.Disconnect();
             this.InitQuery(false);
         }
 
         /// <summary>Disconnects the query from a data source</summary>
-        public void Disconnect()
+        internal void Disconnect()
         {
             if (this._dab != null)
             {
@@ -192,10 +192,14 @@ namespace Edrych.ViewModels
 
         /// <summary>Sets the active database of the query</summary>
         /// <param name="DatabaseName">Name of the database to select</param>
-        public void SetDatabase(string DatabaseName)
+        internal void SetDatabase(string DatabaseName)
         {
             this.Data.SetDatabase(DatabaseName);
         }
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>Disposes of the query</summary>
         public void Dispose()
@@ -210,12 +214,12 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region Public Events
+        #region Events
 
         /// <summary>Event to fire when the query begins</summary>
-        public event EventHandler BeginQuery;
+        internal event EventHandler BeginQuery;
         /// <summary>Event to fire when the query ends</summary>
-        public event EndQueryEventHandler EndQuery;
+        internal event EndQueryEventHandler EndQuery;
         /// <summary>INotifyPropertyChanged interface event to notify data bound properties of changes</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

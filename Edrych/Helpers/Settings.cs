@@ -14,7 +14,7 @@ using Edrych.DataAccess;
 namespace Edrych.Helpers
 {
     /// <summary>Class to contain the various application settings</summary>
-    public class Settings
+    class Settings
     {
         #region Constants
 
@@ -42,26 +42,26 @@ namespace Edrych.Helpers
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
 
         /// <summary>List of recent connections</summary>
-        public List<DataAccessConnection> RecentConnections
+        internal List<DataAccessConnection> RecentConnections
         {
             get { return _recentConnections; }
         }
 
         /// <summary>List of ODBC connections</summary>
-        public List<DataAccessConnection> OdbcConnections
+        internal List<DataAccessConnection> OdbcConnections
         {
             get { return _odbcConnections; }
         }
 
         #endregion
 
-        #region Public Methods
+        #region Internal Methods
 
         /// <summary>Public method to initiate settings to save</summary>
-        public void Save()
+        internal void Save()
         {
             SaveRecentConnections();
         }
@@ -105,35 +105,18 @@ namespace Edrych.Helpers
                         ConnectionType type;
                         AuthType auth;
 
-                        foreach (XElement element in conn.Elements())
-                        {
-                            switch (element.Name.ToString())
-                            {
-                                case "Type":
-                                    if (Enum.TryParse<ConnectionType>(element.Value, out type))
-                                        dac.Connection = type;
-                                    break;
-                                case "Source":
-                                    dac.DataSource = element.Value;
-                                    break;
-                                case "Auth":
-                                    if (Enum.TryParse<AuthType>(element.Value, out auth))
-                                        dac.Auth = auth;
-                                    break;
-                                case "Database":
-                                    dac.Database = element.Value;
-                                    break;
-                                case "Username":
-                                    dac.Username = element.Value;
-                                    break;
-                                case "Password":
-                                    if(!string.IsNullOrEmpty(element.Value))
-                                        dac.Password = ToInsecureString(DecryptString(element.Value));
-                                    break;
-                                default:
-                                    break;
-                            }
-                        }
+                        Enum.TryParse<ConnectionType>(conn.Descendants("Type").First().Value, out type);
+                        Enum.TryParse<AuthType>(conn.Descendants("Auth").First().Value, out auth);
+
+                        dac.Connection = type;
+                        dac.Auth = auth;
+                        dac.DataSource = conn.Descendants("Source").First().Value;
+                        dac.Database = conn.Descendants("Database").First().Value;
+                        dac.Username = conn.Descendants("Username").First().Value;
+                        string tempPass = conn.Descendants("Password").First().Value;
+                        if (!string.IsNullOrEmpty(tempPass))
+                            dac.Password = ToInsecureString(DecryptString(tempPass));
+
                         _recentConnections.Add(dac);
                     }
                 }

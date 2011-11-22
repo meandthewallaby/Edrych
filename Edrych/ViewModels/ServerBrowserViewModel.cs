@@ -10,7 +10,7 @@ using Edrych.Models;
 namespace Edrych.ViewModels
 {
     /// <summary>ViewModel that handles the browser tree model</summary>
-    public class ServerBrowserViewModel : IDisposable
+    class ServerBrowserViewModel : IDisposable
     {
         #region Private/Global Variables
 
@@ -22,7 +22,7 @@ namespace Edrych.ViewModels
         #region Constructor(s)
 
         /// <summary>Initializes the browser and opens a connection</summary>
-        public ServerBrowserViewModel()
+        internal ServerBrowserViewModel()
         {
             _tree = new ServerBrowserModel(this);
             CreateConnection();
@@ -30,26 +30,26 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
 
         /// <summary>Gets the active data access object</summary>
-        public DataAccessBase ActiveConnection
+        internal DataAccessBase ActiveConnection
         {
             get { return _activeConnection; }
         }
 
         /// <summary>Gets the model for the browser</summary>
-        public ServerBrowserModel Tree
+        internal ServerBrowserModel Tree
         {
             get { return _tree; }
         }
 
         #endregion
 
-        #region Public Methods - Called from View
+        #region Internal Methods - Called from View
 
         /// <summary>Creates a connection on the browser</summary>
-        public void CreateConnection()
+        internal void CreateConnection()
         {
             ConnectDialog cd = new ConnectDialog();
             cd.ShowDialog();
@@ -62,7 +62,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Refreshes the node in the tree</summary>
         /// <param name="SelectedNode">Node to refresh</param>
-        public void RefreshNode(TreeNodeAdv SelectedNode)
+        internal void RefreshNode(TreeNodeAdv SelectedNode)
         {
             if (SelectedNode != null)
             {
@@ -85,7 +85,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Removes a server from the tree</summary>
         /// <param name="SelectedNode">Node to remove</param>
-        public void RemoveConnection(TreeNodeAdv SelectedNode)
+        internal void RemoveConnection(TreeNodeAdv SelectedNode)
         {
             //Find the server
             ServerItem server = null;
@@ -122,7 +122,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Updates the active connection with the selected database</summary>
         /// <param name="Node">Node that drives the update</param>
-        public void UpdateActiveConnection(TreeNodeAdv Node)
+        internal void UpdateActiveConnection(TreeNodeAdv Node)
         {
             TreePath path = GetNodePath(Node);
             if (path.IsEmpty() == false)
@@ -143,21 +143,14 @@ namespace Edrych.ViewModels
             }
         }
 
-        /// <summary>Disposes of the item</summary>
-        public void Dispose()
-        {
-            if (_activeConnection != null)
-                _activeConnection.Dispose();
-        }
-
         #endregion
 
-        #region Public Methods - Called from Model
+        #region Internal Methods - Called from Model
 
         /// <summary>Grabs the children of the passed path</summary>
         /// <param name="treePath">Path to get the children of</param>
         /// <returns>IEnumerable collection with the child items</returns>
-        public IEnumerable GetChildren(TreePath treePath)
+        internal IEnumerable GetChildren(TreePath treePath)
         {
             List<BaseItem> items = new List<BaseItem>();
             if (treePath.IsEmpty())
@@ -220,9 +213,20 @@ namespace Edrych.ViewModels
         /// <summary>Determines whether or not a node is a leaf node</summary>
         /// <param name="treePath">Path to test</param>
         /// <returns>Boolean whether the node is a leaf</returns>
-        public bool IsLeaf(TreePath treePath)
+        internal bool IsLeaf(TreePath treePath)
         {
             return treePath.LastNode != null && ((BaseItem)treePath.LastNode).Type == ItemType.Column;
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>Disposes of the item</summary>
+        public void Dispose()
+        {
+            if (_activeConnection != null)
+                _activeConnection.Dispose();
         }
 
         #endregion

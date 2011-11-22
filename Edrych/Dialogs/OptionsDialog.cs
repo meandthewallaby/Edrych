@@ -11,12 +11,12 @@ using Edrych.DataAccess;
 namespace Edrych.Dialogs
 {
     /// <summary>Dialog containing the tool's options</summary>
-    public partial class OptionsDialog : Form
+    partial class OptionsDialog : Form
     {
         private bool _saved = false;
 
         /// <summary>Creates the dialog</summary>
-        public OptionsDialog()
+        internal OptionsDialog()
         {
             InitializeComponent();
             PopulateConnectionType();

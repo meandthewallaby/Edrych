@@ -7,7 +7,7 @@ using Edrych.Helpers;
 namespace Edrych.Dialogs
 {
     /// <summary>Dialog window that creates a connection</summary>
-    public partial class ConnectDialog : Form
+    partial class ConnectDialog : Form
     {
         #region Private/Global Variables
 
@@ -19,7 +19,7 @@ namespace Edrych.Dialogs
         #region Constructor(s)
         
         /// <summary>Creates the dialog</summary>
-        public ConnectDialog()
+        internal ConnectDialog()
         {
             InitializeComponent();
             _settings = new Settings();
@@ -28,10 +28,10 @@ namespace Edrych.Dialogs
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
 
         /// <summary>Data Access object that the dialog creates</summary>
-        public DataAccessBase DataAccess
+        internal DataAccessBase DataAccess
         {
             get { return _dataAccess; }
         }

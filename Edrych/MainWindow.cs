@@ -12,7 +12,7 @@ using Edrych.ViewModels;
 namespace Edrych
 {
     /// <summary>Main window of the application</summary>
-    public partial class MainWindow : Form
+    partial class MainWindow : Form
     {
         #region Private/Global Variables
 
@@ -24,7 +24,7 @@ namespace Edrych
         #region Constructor(s)
 
         /// <summary>Initializes the windw</summary>
-        public MainWindow()
+        internal MainWindow()
         {
             InitializeComponent();
             InitializeMenus();
@@ -33,20 +33,20 @@ namespace Edrych
 
         #endregion
 
-        #region Public Properties
+        #region Internal Properties
 
         /// <summary>Gets the browser view model</summary>
-        public ServerBrowserViewModel Browser
+        internal ServerBrowserViewModel Browser
         {
             get { return _browserViewModel; }
         }
 
         #endregion
 
-        #region Public Methods
+        #region Internal Methods
 
         /// <summary>Disposes of the window</summary>
-        public void Dispose()
+        internal void Dispose()
         {
             if(_browserViewModel != null)
                 _browserViewModel.Dispose();
@@ -266,7 +266,9 @@ namespace Edrych
             this.queryToolStripMenuItem.Visible = App.IsQueryMenuVisible;
             this.queryConnectMenuItem.Enabled = App.IsQueryConnectEnabled;
             this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
+            this.queryExecuteMenuItem.Enabled = App.IsQueryConnectEnabled;
             this.executeQueryButton.Enabled = App.IsQueryConnectEnabled;
+            this.queryStopMenuItem.Enabled = App.IsStopQueryEnabled;
             this.stopQueryButton.Enabled = App.IsStopQueryEnabled;
         }
 
