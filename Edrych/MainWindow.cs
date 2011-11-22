@@ -213,6 +213,20 @@ namespace Edrych
                 _activeQuery.Focus();
         }
 
+        /// <summary>Executes the active query</summary>
+        private void executeQueryButton_Click(object sender, EventArgs e)
+        {
+            if(this._activeQuery != null)
+                this._activeQuery.RunQuery();
+        }
+
+        /// <summary>Stops the active query</summary>
+        private void stopQueryButton_Click(object sender, EventArgs e)
+        {
+            if (this._activeQuery != null)
+                this._activeQuery.CancelQuery();
+        }
+
         #endregion
 
         #region Menu Item Handling - Tree Context Menu
@@ -252,6 +266,8 @@ namespace Edrych
             this.queryToolStripMenuItem.Visible = App.IsQueryMenuVisible;
             this.queryConnectMenuItem.Enabled = App.IsQueryConnectEnabled;
             this.queryDisconnectMenuItem.Enabled = App.IsQueryDisconnectEnabled;
+            this.executeQueryButton.Enabled = App.IsQueryConnectEnabled;
+            this.stopQueryButton.Enabled = App.IsStopQueryEnabled;
         }
 
         /// <summary>Handles the window closing</summary>

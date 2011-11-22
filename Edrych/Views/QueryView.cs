@@ -88,6 +88,19 @@ namespace Edrych.Views
             _queryViewModel.SetDatabase(DatabaseName);
         }
 
+        /// <summary>Runs the selected query</summary>
+        public void RunQuery()
+        {
+            string query = (string.IsNullOrEmpty(tbQuery.SelectedText.Trim()) ? tbQuery.Text : tbQuery.SelectedText).Trim();
+            _queryViewModel.RunQuery(query);
+        }
+
+        /// <summary>Cancels the running query</summary>
+        public void CancelQuery()
+        {
+            _queryViewModel.CancelQuery();
+        }
+
         #endregion
 
         #region Private Methods
@@ -203,8 +216,7 @@ namespace Edrych.Views
         {
             if (e.KeyCode == Keys.F5)
             {
-                string query = (string.IsNullOrEmpty(tbQuery.SelectedText.Trim()) ? tbQuery.Text : tbQuery.SelectedText).Trim();
-                _queryViewModel.RunQuery(query);
+                this.RunQuery();
             }
             else if ((e.Modifiers & ModifierKeys) == Keys.Control && e.KeyCode == Keys.R)
             {
@@ -228,7 +240,7 @@ namespace Edrych.Views
             App.Save += this.QueryView_Save;
             App.SaveAs += this.QueryView_SaveAs;
             App.QueryConnect += this.QueryView_Connect;
-            App.QueryDisonnect += this.QueryView_Disconnect;
+            App.QueryDisconnect += this.QueryView_Disconnect;
 
             App.IsQueryMenuVisible = true;
             App.IsQueryConnectEnabled = true;
@@ -245,7 +257,7 @@ namespace Edrych.Views
             App.Save -= this.QueryView_Save;
             App.SaveAs -= this.QueryView_SaveAs;
             App.QueryConnect -= this.QueryView_Connect;
-            App.QueryDisonnect -= this.QueryView_Disconnect;
+            App.QueryDisconnect -= this.QueryView_Disconnect;
 
             App.IsQueryMenuVisible = false;
             App.IsQueryConnectEnabled = false;
@@ -345,7 +357,7 @@ namespace Edrych.Views
         /// <summary>Handles when the paste button is hit</summary>
         private void Query_Paste(object sender, EventArgs e)
         {
-            this.tbQuery.Paste();
+            this.tbQuery.Paste(DataFormats.GetFormat(DataFormats.UnicodeText));
         }
 
         /// <summary>Handles when the undo button is hit</summary>
@@ -436,7 +448,7 @@ namespace Edrych.Views
 
             this.tbQuery.Focus();
         }
-
+        
         #endregion
 
         #region Private Methods - Async

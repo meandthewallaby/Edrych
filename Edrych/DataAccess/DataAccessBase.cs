@@ -12,6 +12,7 @@ namespace Edrych.DataAccess
         private IDbConnection _conn;
         private IDbCommand _comm;
         private IDbTransaction _tran;
+        private DataAccessQuery _daq = null;
 
         #endregion
 
@@ -76,8 +77,7 @@ namespace Edrych.DataAccess
         /// <summary>Closes the connection and rolls back any open transactions</summary>
         public void Close()
         {
-            if (this._tran != null)
-                _tran.Rollback();
+            this.RollbackTransaction();
             if (this._conn != null && this._conn.State == ConnectionState.Open)
                 _conn.Close();
         }
@@ -88,8 +88,23 @@ namespace Edrych.DataAccess
         /// <returns>ResultSet, containing returned data and messages</returns>
         public ResultSet GetDataSet(string sqlQuery, ref ViewModels.ServerBrowserViewModel Browser)
         {
-            DataAccessQuery daq = new DataAccessQuery(this, ref Browser);
-            return daq.RunQuery(sqlQuery);
+            _daq = new DataAccessQuery(this, ref Browser);
+            return _daq.RunQuery(sqlQuery);
+        }
+
+        /// <summary>Cancels the current query</summary>
+        public void Cancel()
+        {
+            lock (_comm)
+            {
+                if (_comm != null)
+                    _comm.Cancel();
+            }
+            lock (_daq)
+            {
+                if (_daq != null)
+                    _daq.Cancel();
+            }
         }
 
         /// <summary>Runs a query that returns rows to be read</summary>
@@ -140,11 +155,15 @@ namespace Edrych.DataAccess
             if (_tran != null)
             {
                 _tran.Commit();
+                _tran = null;
             }
-            if (_conn.State == ConnectionState.Open)
-            {
-                _conn.Close();
-            }
+        }
+
+        /// <summary>Rolls back the current transaction</summary>
+        public void RollbackTransaction()
+        {
+            if (_tran != null)
+                _tran.Rollback();
         }
 
         /// <summary>Adds a parameter to the command object</summary>
@@ -194,6 +213,10 @@ namespace Edrych.DataAccess
             {
                 _comm = GetDbCommand();
                 _comm.Connection = _conn;
+            }
+            else if (_tran != null)
+            {
+                _comm.Transaction = _tran;
             }
         }
 

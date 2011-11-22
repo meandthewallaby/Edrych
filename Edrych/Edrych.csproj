@@ -224,6 +224,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libs\Aga.Controls.dll" />
+    <None Include="Resources\stop.png" />
+    <None Include="Resources\execute.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

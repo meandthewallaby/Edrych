@@ -137,7 +137,14 @@ namespace Edrych.ViewModels
         /// <param name="Query">Text of the query to run</param>
         public void RunQuery(string Query)
         {
+            App.IsStopQueryEnabled = true;
             this.RunQueryAsync(Query);
+        }
+
+        /// <summary>Cancels the running query</summary>
+        public void CancelQuery()
+        {
+            _dab.Cancel();
         }
 
         /// <summary>Save the query</summary>
@@ -357,6 +364,7 @@ namespace Edrych.ViewModels
             _messages = _results.Messages;
             NotifyPropertyChanged("Messages");
             RunQueryCompleted -= this.RunQuery_Completed;
+            App.IsStopQueryEnabled = false;
             OnEndQuery(isError);
         }
 

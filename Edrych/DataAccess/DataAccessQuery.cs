@@ -17,7 +17,11 @@ namespace Edrych.DataAccess
         private const string BASE_PATTERN = @"\[([a-zA-Z0-9:\\\._\-]*?)\]\.\[([a-zA-Z0-9:\\\._\-]*?)\]\s?\{(.*?)\}";
 
         private DataAccessBase _dab;
+        private DataAccessBase _externalDab;
         private ServerBrowserViewModel _browser;
+
+        private readonly object _sync = new object();
+        private bool _cancelPending = false;
 
         #endregion
 
@@ -31,6 +35,12 @@ namespace Edrych.DataAccess
             _dab = Dab;
             _browser = Browser;
         }
+
+        #endregion
+
+        #region Private Properties
+
+        private bool CancelPending { get { lock (_sync) { return _cancelPending; } } }
 
         #endregion
 
@@ -51,6 +61,17 @@ namespace Edrych.DataAccess
                 rs = ProcessInternalQuery(_dab, Query);
             }
             return rs;
+        }
+
+        /// <summary>Cancels the current query</summary>
+        public void Cancel()
+        {
+            lock (_sync)
+            {
+                _cancelPending = true;
+                if(_externalDab != null)
+                    _externalDab.Cancel();
+            }
         }
 
         #endregion
@@ -84,15 +105,41 @@ namespace Edrych.DataAccess
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
         private ResultSet ProcessInternalQuery(DataAccessBase Dab, string Query)
         {
-            IDataReader reader = Dab.ExecuteReader(Query);
-            ResultSet rs = new ResultSet();
+            IDataReader reader = null;
 
-            rs.Messages = reader.RecordsAffected + " rows affected";
-            rs.Data.Load(reader);
+            try
+            {
+                if (_cancelPending)
+                {
+                    throw new Exception("Operation cancelled");
+                }
+                reader = Dab.ExecuteReader(Query);
+                ResultSet rs = new ResultSet();
 
-            reader.Close();
+                rs.Messages = reader.RecordsAffected + " rows affected";
+                rs.Data.Load(reader);
 
-            return rs;
+                return rs;
+            }
+            catch
+            {
+                CheckCancel();
+                throw;
+            }
+            finally
+            {
+                if (reader != null)
+                    reader.Close();
+            }
+        }
+
+        /// <summary>Throws an exception if the operation was cancelled.</summary>
+        private void CheckCancel()
+        {
+            if (_cancelPending)
+            {
+                throw new OperationCanceledException();
+            }
         }
 
         #endregion
@@ -104,6 +151,7 @@ namespace Edrych.DataAccess
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
         private ResultSet ProcessExternalQuery(string Query)
         {
+            CheckCancel();
             ResultSet rs = new ResultSet();
             string pattern = @"^insert\s+into\s+([a-zA-Z0-9\._\-#]+?)\s+(\(\s*([a-zA-Z0-9\,\s_\-]+?)\s*\)\s+)*?" + BASE_PATTERN + @"\s?;\s?$";
             Match mt = RunRegEx(pattern, Query);
@@ -134,7 +182,6 @@ namespace Edrych.DataAccess
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
         private ResultSet InsertExternalData(string server, string database, string externalQuery, string insertTable, string colList)
         {
-            DataAccessBase externalDab = null;
             ResultSet externalRs = null;
 
             try
@@ -145,12 +192,12 @@ namespace Edrych.DataAccess
                 if (_browser.Tree.Cache.ContainsKey("ROOT"))
                 {
                     ServerItem si = _browser.Tree.Cache["ROOT"].FirstOrDefault(s => s.Name == server) as ServerItem;
-                    externalDab = si.DataAccess;
-                    oldDb = externalDab.SelectedDatabase;
-                    externalDab.SetDatabase(database);
-                    if (externalDab.SelectedDatabase.ToUpper() != database.ToUpper())
+                    _externalDab = si.DataAccess;
+                    oldDb = _externalDab.SelectedDatabase;
+                    _externalDab.SetDatabase(database);
+                    if (_externalDab.SelectedDatabase.ToUpper() != database.ToUpper())
                     {
-                        externalDab.SetDatabase(oldDb);
+                        _externalDab.SetDatabase(oldDb);
                         throw new Exception("Could not set the database context for the extraserver query.");
                     }
                 }
@@ -160,7 +207,7 @@ namespace Edrych.DataAccess
                 }
 
                 //Grab the externalQuery from database on server
-                externalRs = ProcessInternalQuery(externalDab, externalQuery);
+                externalRs = ProcessInternalQuery(_externalDab, externalQuery);
                 if (externalRs.Data.Rows.Count == 0)
                 {
                     throw new Exception("No external data to insert!");
@@ -171,6 +218,11 @@ namespace Edrych.DataAccess
                 {
                     //TODO: Universal create table
                     throw new NotImplementedException();
+                }
+
+                if (_cancelPending)
+                {
+                    throw new Exception("Operation cancelled");
                 }
 
                 //Build the insert statement
@@ -195,6 +247,7 @@ namespace Edrych.DataAccess
                 int rowsAffected = 0;
                 foreach (DataRow row in externalRs.Data.Rows)
                 {
+                    CheckCancel();
                     _dab.ClearParameters();
                     foreach (string col in columns)
                     {
@@ -222,8 +275,8 @@ namespace Edrych.DataAccess
             {
                 if(externalRs != null)
                     externalRs.Dispose();
-                if(externalDab != null)
-                    externalDab.Dispose();
+                if (_externalDab != null)
+                    _externalDab.Dispose();
             }
         }
 
@@ -232,7 +285,9 @@ namespace Edrych.DataAccess
         /// <returns>Boolean representing whether the local table exists</returns>
         private bool InsertTableExists(string TableName)
         {
+            CheckCancel();
             IDataReader reader = null;
+
             try
             {
                 reader = _dab.ExecuteReader("select 1 from " + TableName);

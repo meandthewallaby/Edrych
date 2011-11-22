@@ -20,6 +20,7 @@ namespace Edrych
         private static bool _isQueryConnectEnabled;
         private static bool _isQueryDisconnectEnabled;
         private static bool _loadingDatabases;
+        private static bool _isStopQueryEnabled;
 
         #endregion
 
@@ -47,6 +48,7 @@ namespace Edrych
         public static bool IsQueryDisconnectEnabled { get { return _isQueryDisconnectEnabled; } set { if (value != _isQueryDisconnectEnabled) { _isQueryDisconnectEnabled = value; NotifyPropertyChanged("IsQueryDisconnectEnabled"); } } }
         /// <summary>Whether or not the app is loading databases.</summary>
         public static bool LoadingDatabases { get { return _loadingDatabases; } set { if (value != _loadingDatabases) { _loadingDatabases = value; } } }
+        public static bool IsStopQueryEnabled { get { return _isStopQueryEnabled; } set { if (value != _isStopQueryEnabled) { _isStopQueryEnabled = value; NotifyPropertyChanged("IsStopQueryEnabled"); } } }
 
         #endregion
 
@@ -73,7 +75,7 @@ namespace Edrych
         /// <summary>Event to notify of the query connect action being requested</summary>
         public static event EventHandler QueryConnect;
         /// <summary>Event to notify of the query disconnect action being requested</summary>
-        public static event EventHandler QueryDisonnect;
+        public static event EventHandler QueryDisconnect;
         /// <summary>Event to notify of the query connection being changed</summary>
         public static event ConnectionChangedEventHandler ConnectionChanged;
         /// <summary>Event to notify that the active query has changed</summary>
@@ -153,8 +155,8 @@ namespace Edrych
         /// <summary>Trigger for the QueryDisconnect event</summary>
         public static void OnQueryDisconnect(object sender, EventArgs e)
         {
-            if (QueryDisonnect != null)
-                QueryDisonnect(sender, e);
+            if (QueryDisconnect != null)
+                QueryDisconnect(sender, e);
         }
 
         /// <summary>Trigger for the ConnectionChanged event</summary>
