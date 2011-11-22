@@ -138,7 +138,7 @@ namespace Edrych.Views
         {
             int currLineChar = this.tbQuery.GetFirstCharIndexOfCurrentLine();
             int currLine = this.tbQuery.GetLineFromCharIndex(currLineChar);
-            if (currLine > 0 && this.tbQuery.Lines[currLine].Length == 0)
+            if (currLine > 0 && this.tbQuery.Lines.Count() > 0 && this.tbQuery.Lines[currLine].Length == 0)
             {
                 string beforeLine = this.tbQuery.Lines[currLine-1];
                 int counter = 0;
