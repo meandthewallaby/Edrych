@@ -42,26 +42,26 @@ namespace Edrych.Helpers
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
 
         /// <summary>List of recent connections</summary>
-        internal List<DataAccessConnection> RecentConnections
+        public List<DataAccessConnection> RecentConnections
         {
             get { return _recentConnections; }
         }
 
         /// <summary>List of ODBC connections</summary>
-        internal List<DataAccessConnection> OdbcConnections
+        public List<DataAccessConnection> OdbcConnections
         {
             get { return _odbcConnections; }
         }
 
         #endregion
 
-        #region Internal Methods
+        #region public Methods
 
         /// <summary>Public method to initiate settings to save</summary>
-        internal void Save()
+        public void Save()
         {
             SaveRecentConnections();
         }

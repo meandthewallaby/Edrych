@@ -27,161 +27,161 @@ namespace Edrych
         #region Public Properties
 
         /// <summary>Whether or not the cut option is enabled.</summary>
-        internal static bool IsCutEnabled { get { return _isCutEnabled; } set { if (value != _isCutEnabled) { _isCutEnabled = value; NotifyPropertyChanged("IsCutEnabled"); } } }
+        public static bool IsCutEnabled { get { return _isCutEnabled; } set { if (value != _isCutEnabled) { _isCutEnabled = value; NotifyPropertyChanged("IsCutEnabled"); } } }
         /// <summary>Whether or not the copy option is enabled.</summary>
-        internal static bool IsCopyEnabled { get { return _isCopyEnabled; } set { if (value != _isCopyEnabled) { _isCopyEnabled = value; NotifyPropertyChanged("IsCopyEnabled"); } } }
+        public static bool IsCopyEnabled { get { return _isCopyEnabled; } set { if (value != _isCopyEnabled) { _isCopyEnabled = value; NotifyPropertyChanged("IsCopyEnabled"); } } }
         /// <summary>Whether or not the paste option is enabled.</summary>
-        internal static bool IsPasteEnabled { get { return _isPasteEnabled; } set { if (value != _isPasteEnabled) { _isPasteEnabled = value; NotifyPropertyChanged("IsPasteEnabled"); } } }
+        public static bool IsPasteEnabled { get { return _isPasteEnabled; } set { if (value != _isPasteEnabled) { _isPasteEnabled = value; NotifyPropertyChanged("IsPasteEnabled"); } } }
         /// <summary>Whether or not the undo option is enabled.</summary>
-        internal static bool IsUndoEnabled { get { return _isUndoEnabled; } set { if (value != _isUndoEnabled) { _isUndoEnabled = value; NotifyPropertyChanged("IsUndoEnabled"); } } }
+        public static bool IsUndoEnabled { get { return _isUndoEnabled; } set { if (value != _isUndoEnabled) { _isUndoEnabled = value; NotifyPropertyChanged("IsUndoEnabled"); } } }
         /// <summary>Whether or not the redo option is enabled.</summary>
-        internal static bool IsRedoEnabled { get { return _isRedoEnabled; } set { if (value != _isRedoEnabled) { _isRedoEnabled = value; NotifyPropertyChanged("IsRedoEnabled"); } } }
+        public static bool IsRedoEnabled { get { return _isRedoEnabled; } set { if (value != _isRedoEnabled) { _isRedoEnabled = value; NotifyPropertyChanged("IsRedoEnabled"); } } }
         /// <summary>Whether or not the select all option is enabled.</summary>
-        internal static bool IsSelectAllEnabled { get { return _isSelectAllEnabled; } set { if (value != _isSelectAllEnabled) { _isSelectAllEnabled = value; NotifyPropertyChanged("IsSelectAllEnabled"); } } }
+        public static bool IsSelectAllEnabled { get { return _isSelectAllEnabled; } set { if (value != _isSelectAllEnabled) { _isSelectAllEnabled = value; NotifyPropertyChanged("IsSelectAllEnabled"); } } }
         /// <summary>Whether or not the database drop down menu is enabled.</summary>
-        internal static bool IsDatabaseDropDownEnabled { get { return _isDatabaseDropDownEnabled; } set { if (value != _isDatabaseDropDownEnabled) { _isDatabaseDropDownEnabled = value; NotifyPropertyChanged("IsDatabaseDropDownEnabled"); } } }
+        public static bool IsDatabaseDropDownEnabled { get { return _isDatabaseDropDownEnabled; } set { if (value != _isDatabaseDropDownEnabled) { _isDatabaseDropDownEnabled = value; NotifyPropertyChanged("IsDatabaseDropDownEnabled"); } } }
         /// <summary>Whether or not the query menu is visible.</summary>
-        internal static bool IsQueryMenuVisible { get { return _isQueryMenuVisible; } set { if (value != _isQueryMenuVisible) { _isQueryMenuVisible = value; NotifyPropertyChanged("IsQueryMenuVisible"); } } }
+        public static bool IsQueryMenuVisible { get { return _isQueryMenuVisible; } set { if (value != _isQueryMenuVisible) { _isQueryMenuVisible = value; NotifyPropertyChanged("IsQueryMenuVisible"); } } }
         /// <summary>Whether or not the query connect option is enabled.</summary>
-        internal static bool IsQueryConnectEnabled { get { return _isQueryConnectEnabled; } set { if (value != _isQueryConnectEnabled) { _isQueryConnectEnabled = value; NotifyPropertyChanged("IsQueryConnectEnabled"); } } }
+        public static bool IsQueryConnectEnabled { get { return _isQueryConnectEnabled; } set { if (value != _isQueryConnectEnabled) { _isQueryConnectEnabled = value; NotifyPropertyChanged("IsQueryConnectEnabled"); } } }
         /// <summary>Whether or not the query disconnect option is enabled.</summary>
-        internal static bool IsQueryDisconnectEnabled { get { return _isQueryDisconnectEnabled; } set { if (value != _isQueryDisconnectEnabled) { _isQueryDisconnectEnabled = value; NotifyPropertyChanged("IsQueryDisconnectEnabled"); } } }
+        public static bool IsQueryDisconnectEnabled { get { return _isQueryDisconnectEnabled; } set { if (value != _isQueryDisconnectEnabled) { _isQueryDisconnectEnabled = value; NotifyPropertyChanged("IsQueryDisconnectEnabled"); } } }
         /// <summary>Whether or not the app is loading databases.</summary>
-        internal static bool LoadingDatabases { get { return _loadingDatabases; } set { if (value != _loadingDatabases) { _loadingDatabases = value; } } }
-        internal static bool IsStopQueryEnabled { get { return _isStopQueryEnabled; } set { if (value != _isStopQueryEnabled) { _isStopQueryEnabled = value; NotifyPropertyChanged("IsStopQueryEnabled"); } } }
+        public static bool LoadingDatabases { get { return _loadingDatabases; } set { if (value != _loadingDatabases) { _loadingDatabases = value; } } }
+        public static bool IsStopQueryEnabled { get { return _isStopQueryEnabled; } set { if (value != _isStopQueryEnabled) { _isStopQueryEnabled = value; NotifyPropertyChanged("IsStopQueryEnabled"); } } }
 
         #endregion
 
         #region Public Events
 
         /// <summary>Event to notify of a property changing</summary>
-        internal static event PropertyChangedEventHandler PropertyChanged;
+        public static event PropertyChangedEventHandler PropertyChanged;
         /// <summary>Event to notify of the save action being requested</summary>
-        internal static event EventHandler Save;
+        public static event EventHandler Save;
         /// <summary>Event to notify of the save as action being requested</summary>
-        internal static event EventHandler SaveAs;
+        public static event EventHandler SaveAs;
         /// <summary>Event to notify of the cut action being requested</summary>
-        internal static event EventHandler Cut;
+        public static event EventHandler Cut;
         /// <summary>Event to notify of the copy action being requested</summary>
-        internal static event EventHandler Copy;
+        public static event EventHandler Copy;
         /// <summary>Event to notify of the paste action being requested</summary>
-        internal static event EventHandler Paste;
+        public static event EventHandler Paste;
         /// <summary>Event to notify of the undo action being requested</summary>
-        internal static event EventHandler Undo;
+        public static event EventHandler Undo;
         /// <summary>Event to notify of the redo action being requested</summary>
-        internal static event EventHandler Redo;
+        public static event EventHandler Redo;
         /// <summary>Event to notify of the select all action being requested</summary>
-        internal static event EventHandler SelectAll;
+        public static event EventHandler SelectAll;
         /// <summary>Event to notify of the query connect action being requested</summary>
-        internal static event EventHandler QueryConnect;
+        public static event EventHandler QueryConnect;
         /// <summary>Event to notify of the query disconnect action being requested</summary>
-        internal static event EventHandler QueryDisconnect;
+        public static event EventHandler QueryDisconnect;
         /// <summary>Event to notify of the query connection being changed</summary>
-        internal static event ConnectionChangedEventHandler ConnectionChanged;
+        public static event ConnectionChangedEventHandler ConnectionChanged;
         /// <summary>Event to notify that the active query has changed</summary>
-        internal static event EventHandler ActiveQueryChanged;
+        public static event EventHandler ActiveQueryChanged;
         /// <summary>Event to notify that the user wants to switch databases</summary>
-        internal static event EventHandler SwitchDatabases;
+        public static event EventHandler SwitchDatabases;
         /// <summary>Event to notify that the active database has changed</summary>
-        internal static event ConnectionChangedEventHandler DatabaseChanged;
+        public static event ConnectionChangedEventHandler DatabaseChanged;
 
         #endregion
 
         #region Public Methods
 
         /// <summary>Trigger for the Save event</summary>
-        internal static void OnSave(object sender, EventArgs e)
+        public static void OnSave(object sender, EventArgs e)
         {
             if (Save != null)
                 Save(sender, e);
         }
 
         /// <summary>Trigger for the SaveAs event</summary>
-        internal static void OnSaveAs(object sender, EventArgs e)
+        public static void OnSaveAs(object sender, EventArgs e)
         {
             if (SaveAs != null)
                 SaveAs(sender, e);
         }
 
         /// <summary>Trigger for the Cut event</summary>
-        internal static void OnCut(object sender, EventArgs e)
+        public static void OnCut(object sender, EventArgs e)
         {
             if (Cut != null)
                 Cut(sender, e);
         }
 
         /// <summary>Trigger for the Copy event</summary>
-        internal static void OnCopy(object sender, EventArgs e)
+        public static void OnCopy(object sender, EventArgs e)
         {
             if (Copy != null)
                 Copy(sender, e);
         }
 
         /// <summary>Trigger for the Paste event</summary>
-        internal static void OnPaste(object sender, EventArgs e)
+        public static void OnPaste(object sender, EventArgs e)
         {
             if (Paste != null)
                 Paste(sender, e);
         }
 
         /// <summary>Trigger for the Undo event</summary>
-        internal static void OnUndo(object sender, EventArgs e)
+        public static void OnUndo(object sender, EventArgs e)
         {
             if (Undo != null)
                 Undo(sender, e);
         }
 
         /// <summary>Trigger for the Redo event</summary>
-        internal static void OnRedo(object sender, EventArgs e)
+        public static void OnRedo(object sender, EventArgs e)
         {
             if (Redo != null)
                 Redo(sender, e);
         }
 
         /// <summary>Trigger for the SelectAll event</summary>
-        internal static void OnSelectAll(object sender, EventArgs e)
+        public static void OnSelectAll(object sender, EventArgs e)
         {
             if (SelectAll != null)
                 SelectAll(sender, e);
         }
 
         /// <summary>Trigger for the QueryConnect event</summary>
-        internal static void OnQueryConnect(object sender, EventArgs e)
+        public static void OnQueryConnect(object sender, EventArgs e)
         {
             if (QueryConnect != null)
                 QueryConnect(sender, e);
         }
 
         /// <summary>Trigger for the QueryDisconnect event</summary>
-        internal static void OnQueryDisconnect(object sender, EventArgs e)
+        public static void OnQueryDisconnect(object sender, EventArgs e)
         {
             if (QueryDisconnect != null)
                 QueryDisconnect(sender, e);
         }
 
         /// <summary>Trigger for the ConnectionChanged event</summary>
-        internal static void OnConnectionChanged(object sender, ConnectionChangedEventArgs e)
+        public static void OnConnectionChanged(object sender, ConnectionChangedEventArgs e)
         {
             if (ConnectionChanged != null)
                 ConnectionChanged(sender, e);
         }
 
         /// <summary>Trigger for the ActiveQueryChanged event</summary>
-        internal static void OnActiveQueryChanged(object sender, EventArgs e)
+        public static void OnActiveQueryChanged(object sender, EventArgs e)
         {
             if (ActiveQueryChanged != null)
                 ActiveQueryChanged(sender, e);
         }
 
         /// <summary>Trigger for the SwitchDatabases event</summary>
-        internal static void OnSwitchDatabases(object sender, EventArgs e)
+        public static void OnSwitchDatabases(object sender, EventArgs e)
         {
             if (SwitchDatabases != null)
                 SwitchDatabases(sender, e);
         }
 
         /// <summary>Trigger for the DatabaseChanged event</summary>
-        internal static void OnDatabaseChanged(object sender, ConnectionChangedEventArgs e)
+        public static void OnDatabaseChanged(object sender, ConnectionChangedEventArgs e)
         {
             if (DatabaseChanged != null)
                 DatabaseChanged(sender, e);

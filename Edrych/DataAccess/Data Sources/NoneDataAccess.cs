@@ -27,31 +27,31 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDatabases"/></summary>
-        internal override List<Database> GetDatabases()
+        public override List<Database> GetDatabases()
         {
             throw new NotImplementedException();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetTables"/></summary>
-        internal override List<TableView> GetTables()
+        public override List<TableView> GetTables()
         {
             throw new NotImplementedException();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetViews"/></summary>
-        internal override List<TableView> GetViews()
+        public override List<TableView> GetViews()
         {
             throw new NotImplementedException();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
-        internal override List<Column> GetColumns(string TableName)
+        public override List<Column> GetColumns(string TableName)
         {
             throw new NotImplementedException();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
-        internal override void SetDatabase(string DatabaseName)
+        public override void SetDatabase(string DatabaseName)
         {
             throw new NotImplementedException();
         }

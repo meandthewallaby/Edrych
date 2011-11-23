@@ -22,21 +22,21 @@ namespace Edrych.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class DataAccessResources {
+    public class DataAccessResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal DataAccessResources() {
+        public DataAccessResources() {
         }
         
         /// <summary>
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("Edrych.Properties.DataAccessResources", typeof(DataAccessResources).Assembly);
@@ -51,7 +51,7 @@ namespace Edrych.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -72,7 +72,7 @@ namespace Edrych.Properties {
         ///	TABLE_SCHEMA,
         ///	TABLE_NAME.
         /// </summary>
-        internal static string ANSI_FindTables {
+        public static string ANSI_FindTables {
             get {
                 return ResourceManager.GetString("ANSI_FindTables", resourceCulture);
             }
@@ -88,7 +88,7 @@ namespace Edrych.Properties {
         ///	TABLE_SCHEMA,
         ///	TABLE_NAME.
         /// </summary>
-        internal static string ANSI_FindViews {
+        public static string ANSI_FindViews {
             get {
                 return ResourceManager.GetString("ANSI_FindViews", resourceCulture);
             }
@@ -111,7 +111,7 @@ namespace Edrych.Properties {
         ///order by
         ///	COLNO.
         /// </summary>
-        internal static string DB2_FindColumns {
+        public static string DB2_FindColumns {
             get {
                 return ResourceManager.GetString("DB2_FindColumns", resourceCulture);
             }
@@ -126,7 +126,7 @@ namespace Edrych.Properties {
         ///order by 
         ///	1,2.
         /// </summary>
-        internal static string DB2_FindTables {
+        public static string DB2_FindTables {
             get {
                 return ResourceManager.GetString("DB2_FindTables", resourceCulture);
             }
@@ -135,7 +135,7 @@ namespace Edrych.Properties {
         /// <summary>
         ///   Looks up a localized string similar to select LTRIM(RTRIM(VIEWSCHEMA)) as SCHEMA, LTRIM(RTRIM(VIEWNAME)) as NAME from syscat.views order by 1,2.
         /// </summary>
-        internal static string DB2_FindViews {
+        public static string DB2_FindViews {
             get {
                 return ResourceManager.GetString("DB2_FindViews", resourceCulture);
             }
@@ -144,7 +144,7 @@ namespace Edrych.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Data Source=%TEMP%\Test.db3.
         /// </summary>
-        internal static string DefaultConnectionString {
+        public static string DefaultConnectionString {
             get {
                 return ResourceManager.GetString("DefaultConnectionString", resourceCulture);
             }
@@ -153,7 +153,7 @@ namespace Edrych.Properties {
         /// <summary>
         ///   Looks up a localized string similar to PRAGMA table_info(@TableName).
         /// </summary>
-        internal static string SQLite_FindColumns {
+        public static string SQLite_FindColumns {
             get {
                 return ResourceManager.GetString("SQLite_FindColumns", resourceCulture);
             }
@@ -164,7 +164,7 @@ namespace Edrych.Properties {
         ///WHERE type=&apos;table&apos;
         ///ORDER BY name;.
         /// </summary>
-        internal static string SQLite_FindTables {
+        public static string SQLite_FindTables {
             get {
                 return ResourceManager.GetString("SQLite_FindTables", resourceCulture);
             }
@@ -175,7 +175,7 @@ namespace Edrych.Properties {
         ///WHERE type=&apos;view&apos;
         ///ORDER BY name;.
         /// </summary>
-        internal static string SQLite_FindViews {
+        public static string SQLite_FindViews {
             get {
                 return ResourceManager.GetString("SQLite_FindViews", resourceCulture);
             }
@@ -201,7 +201,7 @@ namespace Edrych.Properties {
         ///order by
         ///  ORDINAL_POSITION.
         /// </summary>
-        internal static string SQLServer_FindColumns {
+        public static string SQLServer_FindColumns {
             get {
                 return ResourceManager.GetString("SQLServer_FindColumns", resourceCulture);
             }
@@ -215,7 +215,7 @@ namespace Edrych.Properties {
         ///order by
         ///	1.
         /// </summary>
-        internal static string SQLServer_FindDatabases {
+        public static string SQLServer_FindDatabases {
             get {
                 return ResourceManager.GetString("SQLServer_FindDatabases", resourceCulture);
             }
@@ -229,7 +229,7 @@ namespace Edrych.Properties {
         ///
         ///end.
         /// </summary>
-        internal static string SQLServer_SetDatabase {
+        public static string SQLServer_SetDatabase {
             get {
                 return ResourceManager.GetString("SQLServer_SetDatabase", resourceCulture);
             }
@@ -238,7 +238,7 @@ namespace Edrych.Properties {
         /// <summary>
         ///   Looks up a localized string similar to help column @DatabaseName.@TableName.*.
         /// </summary>
-        internal static string Teradata_FindColumns {
+        public static string Teradata_FindColumns {
             get {
                 return ResourceManager.GetString("Teradata_FindColumns", resourceCulture);
             }
@@ -253,7 +253,7 @@ namespace Edrych.Properties {
         ///	DBKind = &apos;D&apos;
         ///order by 1.
         /// </summary>
-        internal static string Teradata_FindDatabases {
+        public static string Teradata_FindDatabases {
             get {
                 return ResourceManager.GetString("Teradata_FindDatabases", resourceCulture);
             }
@@ -270,7 +270,7 @@ namespace Edrych.Properties {
         ///order by
         ///	TableName.
         /// </summary>
-        internal static string Teradata_FindTables {
+        public static string Teradata_FindTables {
             get {
                 return ResourceManager.GetString("Teradata_FindTables", resourceCulture);
             }
@@ -287,7 +287,7 @@ namespace Edrych.Properties {
         ///order by
         ///	TableName.
         /// </summary>
-        internal static string Teradata_FindViews {
+        public static string Teradata_FindViews {
             get {
                 return ResourceManager.GetString("Teradata_FindViews", resourceCulture);
             }

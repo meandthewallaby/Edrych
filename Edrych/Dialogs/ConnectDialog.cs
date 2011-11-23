@@ -19,7 +19,7 @@ namespace Edrych.Dialogs
         #region Constructor(s)
         
         /// <summary>Creates the dialog</summary>
-        internal ConnectDialog()
+        public ConnectDialog()
         {
             InitializeComponent();
             _settings = new Settings();
@@ -28,10 +28,10 @@ namespace Edrych.Dialogs
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
 
         /// <summary>Data Access object that the dialog creates</summary>
-        internal DataAccessBase DataAccess
+        public DataAccessBase DataAccess
         {
             get { return _dataAccess; }
         }

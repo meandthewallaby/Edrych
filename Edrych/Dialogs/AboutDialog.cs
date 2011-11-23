@@ -11,7 +11,7 @@ namespace Edrych.Dialogs
     /// <summary>Dialog window for the About information. This is entirely system generated.</summary>
     partial class AboutDialog : Form
     {
-        internal AboutDialog()
+        public AboutDialog()
         {
             InitializeComponent();
             this.Text = String.Format("About {0}", AssemblyTitle);
@@ -24,7 +24,7 @@ namespace Edrych.Dialogs
 
         #region Assembly Attribute Accessors
 
-        internal string AssemblyTitle
+        public string AssemblyTitle
         {
             get
             {
@@ -41,7 +41,7 @@ namespace Edrych.Dialogs
             }
         }
 
-        internal string AssemblyVersion
+        public string AssemblyVersion
         {
             get
             {
@@ -49,7 +49,7 @@ namespace Edrych.Dialogs
             }
         }
 
-        internal string AssemblyDescription
+        public string AssemblyDescription
         {
             get
             {
@@ -62,7 +62,7 @@ namespace Edrych.Dialogs
             }
         }
 
-        internal string AssemblyProduct
+        public string AssemblyProduct
         {
             get
             {
@@ -75,7 +75,7 @@ namespace Edrych.Dialogs
             }
         }
 
-        internal string AssemblyCopyright
+        public string AssemblyCopyright
         {
             get
             {
@@ -88,7 +88,7 @@ namespace Edrych.Dialogs
             }
         }
 
-        internal string AssemblyCompany
+        public string AssemblyCompany
         {
             get
             {

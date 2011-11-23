@@ -11,7 +11,7 @@ namespace Edrych.Helpers
     class DataGridViewExt : DataGridView
     {
         /// <summary>Empty constructor</summary>
-        internal DataGridViewExt()
+        public DataGridViewExt()
         {
         }
 

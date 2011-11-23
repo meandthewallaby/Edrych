@@ -24,7 +24,7 @@ namespace Edrych
         #region Constructor(s)
 
         /// <summary>Initializes the windw</summary>
-        internal MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
             InitializeMenus();
@@ -33,20 +33,20 @@ namespace Edrych
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
 
         /// <summary>Gets the browser view model</summary>
-        internal ServerBrowserViewModel Browser
+        public ServerBrowserViewModel Browser
         {
             get { return _browserViewModel; }
         }
 
         #endregion
 
-        #region Internal Methods
+        #region public Methods
 
         /// <summary>Disposes of the window</summary>
-        internal void Dispose()
+        public void Dispose()
         {
             if(_browserViewModel != null)
                 _browserViewModel.Dispose();

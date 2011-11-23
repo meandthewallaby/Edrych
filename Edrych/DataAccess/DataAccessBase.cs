@@ -18,40 +18,40 @@ namespace Edrych.DataAccess
 
         #region Constructor(s)
 
-        internal DataAccessBase()
+        public DataAccessBase()
         {
         }
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
 
         /// <summary>The type of connection to create</summary>
-        internal ConnectionType ConnectionType { get; set; }
+        public ConnectionType ConnectionType { get; set; }
         /// <summary>Connection string to use to connect to the server</summary>
-        internal string ConnectionString { get { return this.BuildConnectionString(); } }
+        public string ConnectionString { get { return this.BuildConnectionString(); } }
         /// <summary>Server to connect to</summary>
-        internal string DataSource { get; set; }
+        public string DataSource { get; set; }
         /// <summary>Database to connect to at first</summary>
-        internal string InitialCatalog { get; set; }
+        public string InitialCatalog { get; set; }
         /// <summary>Authentication mode used</summary>
-        internal AuthType Authentication { get; set; }
+        public AuthType Authentication { get; set; }
         /// <summary>Username for basic authentication</summary>
-        internal string Username { get; set; }
+        public string Username { get; set; }
         /// <summary>Password for basic authentication</summary>
-        internal string Password { get; set; }
+        public string Password { get; set; }
         /// <summary>Returns the active database</summary>
-        internal string SelectedDatabase { get { return this._conn.Database; } }
+        public string SelectedDatabase { get { return this._conn.Database; } }
         /// <summary>Returns whether or not the connection is actively connected</summary>
-        internal bool IsConnected { get { return _conn != null && _conn.State != ConnectionState.Closed && _conn.State != ConnectionState.Broken; } }
+        public bool IsConnected { get { return _conn != null && _conn.State != ConnectionState.Closed && _conn.State != ConnectionState.Broken; } }
 
         #endregion
 
-        #region Internal Methods
+        #region public Methods
 
         /// <summary>Test whether the specified database type has the .NET libraries available.</summary>
         /// <returns>Boolean representing whether the connection type is viable.</returns>
-        internal bool TestAvailability()
+        public bool TestAvailability()
         {
             bool isAvailable = false;
 
@@ -69,13 +69,13 @@ namespace Edrych.DataAccess
         }
 
         /// <summary>Opens the connection</summary>
-        internal void Open()
+        public void Open()
         {
             PrepareConnection();
         }
 
         /// <summary>Closes the connection and rolls back any open transactions</summary>
-        internal void Close()
+        public void Close()
         {
             this.RollbackTransaction();
             if (this._conn != null && this._conn.State == ConnectionState.Open)
@@ -86,14 +86,14 @@ namespace Edrych.DataAccess
         /// <param name="sqlQuery">Query to run</param>
         /// <param name="Browser">The browser viewmodel that's currently active in the window</param>
         /// <returns>ResultSet, containing returned data and messages</returns>
-        internal ResultSet GetDataSet(string sqlQuery, ref ViewModels.ServerBrowserViewModel Browser)
+        public ResultSet GetDataSet(string sqlQuery, ref ViewModels.ServerBrowserViewModel Browser)
         {
             _daq = new DataAccessQuery(this, ref Browser);
             return _daq.RunQuery(sqlQuery);
         }
 
         /// <summary>Cancels the current query</summary>
-        internal void Cancel()
+        public void Cancel()
         {
             lock (_comm)
             {
@@ -110,7 +110,7 @@ namespace Edrych.DataAccess
         /// <summary>Runs a query that returns rows to be read</summary>
         /// <param name="sqlQuery">Query to run</param>
         /// <returns>IDataReader object that reads the result of the query</returns>
-        internal IDataReader ExecuteReader(string sqlQuery)
+        public IDataReader ExecuteReader(string sqlQuery)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Edrych.DataAccess
         /// <summary>Runs a query that returns no rows (such as an insert, update, or delete)</summary>
         /// <param name="sqlQuery">Query to run</param>
         /// <returns>Integer representing the number of affected rows</returns>
-        internal int ExecuteNonQuery(string sqlQuery)
+        public int ExecuteNonQuery(string sqlQuery)
         {
             try
             {
@@ -143,14 +143,14 @@ namespace Edrych.DataAccess
         }
 
         /// <summary>Opens a transaction</summary>
-        internal void BeginTransaction()
+        public void BeginTransaction()
         {
             PrepareConnection();
             _tran = _conn.BeginTransaction();
         }
 
         /// <summary>Commits an open transaction</summary>
-        internal void CommitTransaction()
+        public void CommitTransaction()
         {
             if (_tran != null)
             {
@@ -160,7 +160,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary>Rolls back the current transaction</summary>
-        internal void RollbackTransaction()
+        public void RollbackTransaction()
         {
             if (_tran != null)
                 _tran.Rollback();
@@ -169,13 +169,13 @@ namespace Edrych.DataAccess
         /// <summary>Adds a parameter to the command object</summary>
         /// <param name="Name">Name of the parameter</param>
         /// <param name="Value">Object representing the value of the parameter</param>
-        internal void AddParameter(string Name, object Value)
+        public void AddParameter(string Name, object Value)
         {
             _comm.Parameters.Add(GetDbParameter(Name, Value));
         }
 
         /// <summary>Clears parameters from the command object</summary>
-        internal void ClearParameters()
+        public void ClearParameters()
         {
             _comm.Parameters.Clear();
         }
@@ -252,24 +252,24 @@ namespace Edrych.DataAccess
 
         /// <summary>Gets the databases on the server.</summary>
         /// <returns>List of Database objects representing the databases</returns>
-        internal abstract List<Database> GetDatabases();
+        public abstract List<Database> GetDatabases();
 
         /// <summary>Gets the tables in a database.</summary>
         /// <returns>List of TableView objects representing the tables in the selected database</returns>
-        internal abstract List<TableView> GetTables();
+        public abstract List<TableView> GetTables();
 
         /// <summary>Gets the views in a database.</summary>
         /// <returns>List of TableView objects representing the views in the selected database</returns>
-        internal abstract List<TableView> GetViews();
+        public abstract List<TableView> GetViews();
 
         /// <summary>Gets the columns in a table or view, along with data type and nullable info</summary>
         /// <param name="TableName">Table or View name to get column info about</param>
         /// <returns>List of Column objects</returns>
-        internal abstract List<Column> GetColumns(string TableName);
+        public abstract List<Column> GetColumns(string TableName);
 
         /// <summary>Sets the active database</summary>
         /// <param name="DatabaseName">Name of the database to set the active connection to</param>
-        internal abstract void SetDatabase(string DatabaseName);
+        public abstract void SetDatabase(string DatabaseName);
         
         #endregion
 

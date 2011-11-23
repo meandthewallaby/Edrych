@@ -22,7 +22,7 @@ namespace Edrych.ViewModels
         #region Constructor(s)
 
         /// <summary>Initializes the browser and opens a connection</summary>
-        internal ServerBrowserViewModel()
+        public ServerBrowserViewModel()
         {
             _tree = new ServerBrowserModel(this);
             CreateConnection();
@@ -30,26 +30,26 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
 
         /// <summary>Gets the active data access object</summary>
-        internal DataAccessBase ActiveConnection
+        public DataAccessBase ActiveConnection
         {
             get { return _activeConnection; }
         }
 
         /// <summary>Gets the model for the browser</summary>
-        internal ServerBrowserModel Tree
+        public ServerBrowserModel Tree
         {
             get { return _tree; }
         }
 
         #endregion
 
-        #region Internal Methods - Called from View
+        #region public Methods - Called from View
 
         /// <summary>Creates a connection on the browser</summary>
-        internal void CreateConnection()
+        public void CreateConnection()
         {
             ConnectDialog cd = new ConnectDialog();
             cd.ShowDialog();
@@ -62,7 +62,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Refreshes the node in the tree</summary>
         /// <param name="SelectedNode">Node to refresh</param>
-        internal void RefreshNode(TreeNodeAdv SelectedNode)
+        public void RefreshNode(TreeNodeAdv SelectedNode)
         {
             if (SelectedNode != null)
             {
@@ -85,7 +85,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Removes a server from the tree</summary>
         /// <param name="SelectedNode">Node to remove</param>
-        internal void RemoveConnection(TreeNodeAdv SelectedNode)
+        public void RemoveConnection(TreeNodeAdv SelectedNode)
         {
             //Find the server
             ServerItem server = null;
@@ -122,7 +122,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Updates the active connection with the selected database</summary>
         /// <param name="Node">Node that drives the update</param>
-        internal void UpdateActiveConnection(TreeNodeAdv Node)
+        public void UpdateActiveConnection(TreeNodeAdv Node)
         {
             TreePath path = GetNodePath(Node);
             if (path.IsEmpty() == false)
@@ -145,12 +145,12 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region Internal Methods - Called from Model
+        #region public Methods - Called from Model
 
         /// <summary>Grabs the children of the passed path</summary>
         /// <param name="treePath">Path to get the children of</param>
         /// <returns>IEnumerable collection with the child items</returns>
-        internal IEnumerable GetChildren(TreePath treePath)
+        public IEnumerable GetChildren(TreePath treePath)
         {
             List<BaseItem> items = new List<BaseItem>();
             if (treePath.IsEmpty())
@@ -213,7 +213,7 @@ namespace Edrych.ViewModels
         /// <summary>Determines whether or not a node is a leaf node</summary>
         /// <param name="treePath">Path to test</param>
         /// <returns>Boolean whether the node is a leaf</returns>
-        internal bool IsLeaf(TreePath treePath)
+        public bool IsLeaf(TreePath treePath)
         {
             return treePath.LastNode != null && ((BaseItem)treePath.LastNode).Type == ItemType.Column;
         }

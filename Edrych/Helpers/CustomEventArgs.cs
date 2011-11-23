@@ -15,12 +15,12 @@ namespace Edrych.Helpers
         /// <param name="error">Exception for the event</param>
         /// <param name="cancelled">Whether the action was cancelled</param>
         /// <param name="userState">User state of the event</param>
-        internal RunQueryCompletedEventArgs(Exception error, bool cancelled, object userState) : base (error, cancelled, userState)
+        public RunQueryCompletedEventArgs(Exception error, bool cancelled, object userState) : base (error, cancelled, userState)
         {
         }
 
         /// <summary>ResultSet the event fires with</summary>
-        internal ResultSet Results { get; set; }
+        public ResultSet Results { get; set; }
     }
 
     /// <summary>Delegate to handle the EndQuery event</summary>
@@ -31,13 +31,13 @@ namespace Edrych.Helpers
     {
         /// <summary>Builds the event args with the flag to indicate if there was an error or not.</summary>
         /// <param name="IsError">Whether the event errorred</param>
-        internal EndQueryEventArgs(bool IsError)
+        public EndQueryEventArgs(bool IsError)
         {
             this.HasError = IsError;
         }
 
         /// <summary>Boolean representing whether the event errorred.</summary>
-        internal bool HasError { get; set; }
+        public bool HasError { get; set; }
     }
 
     /// <summary>Delegate to handle the ConnectionChanged event</summary>
@@ -52,16 +52,16 @@ namespace Edrych.Helpers
         /// <summary>Builds the arguments</summary>
         /// <param name="DatabaseList">The list of available databases</param>
         /// <param name="SelectedDB">The name of the selected database</param>
-        internal ConnectionChangedEventArgs(List<Database> DatabaseList, string SelectedDB)
+        public ConnectionChangedEventArgs(List<Database> DatabaseList, string SelectedDB)
         {
             _databases = DatabaseList;
             _selectedDatabase = SelectedDB;
         }
 
         /// <summary>The list of available databases</summary>
-        internal List<Database> Databases { get { return _databases; } }
+        public List<Database> Databases { get { return _databases; } }
         /// <summary>The name of the selected database</summary>
-        internal string SelectedDatabase { get { return _selectedDatabase; } }
+        public string SelectedDatabase { get { return _selectedDatabase; } }
     }
 
     /// <summary>Event Arguments from the Closing event</summary>
@@ -71,12 +71,12 @@ namespace Edrych.Helpers
 
         /// <summary>Constructor to set the index of the tab being closed</summary>
         /// <param name="nTabIndex">Index of the tab being closed</param>
-        internal CloseEventArgs(int nTabIndex)
+        public CloseEventArgs(int nTabIndex)
         {
             this.nTabIndex = nTabIndex;
         }
 
         /// <summary>Returns the index of the tab closing</summary>
-        internal int TabIndex { get { return this.nTabIndex; } }
+        public int TabIndex { get { return this.nTabIndex; } }
     }
 }

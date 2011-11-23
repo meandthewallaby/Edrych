@@ -16,7 +16,7 @@ namespace Edrych.Dialogs
         private bool _saved = false;
 
         /// <summary>Creates the dialog</summary>
-        internal OptionsDialog()
+        public OptionsDialog()
         {
             InitializeComponent();
             PopulateConnectionType();

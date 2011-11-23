@@ -30,7 +30,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDatabases"/></summary>
-        internal override List<Database> GetDatabases()
+        public override List<Database> GetDatabases()
         {
             List<Database> databases = new List<Database>();
             Database db = new Database();
@@ -40,13 +40,13 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetTables"/></summary>
-        internal override List<TableView> GetTables()
+        public override List<TableView> GetTables()
         {
             return GetTablesOrViews(DataAccessResources.SQLite_FindTables);
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetViews"/></summary>
-        internal override List<TableView> GetViews()
+        public override List<TableView> GetViews()
         {
             return GetTablesOrViews(DataAccessResources.SQLite_FindViews);
         }
@@ -68,7 +68,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
-        internal override List<Column> GetColumns(string TableName)
+        public override List<Column> GetColumns(string TableName)
         {
             string sql = DataAccessResources.SQLite_FindColumns.Replace("@TableName", TableName);
             List<Column> cols = GetDbItems<Column>(sql,
@@ -84,7 +84,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
-        internal override void SetDatabase(string DatabaseName)
+        public override void SetDatabase(string DatabaseName)
         {
             
         }

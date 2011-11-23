@@ -15,9 +15,9 @@ namespace Edrych.Helpers
         private const int TAB_HEIGHT = 24;
 
         /// <summary>Delegate for the HeaderClose event</summary>
-        internal delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
+        public delegate void OnHeaderCloseEventHandler(object sender, CloseEventArgs e);
         /// <summary>Closing event</summary>
-        internal event OnHeaderCloseEventHandler Closing;
+        public event OnHeaderCloseEventHandler Closing;
 
         /// <summary>Override for the drawing of the control to include a Close Tab button</summary>
         /// <param name="e"></param>
@@ -73,7 +73,7 @@ namespace Edrych.Helpers
         }
 
         /// <summary>Resizes the tabs based on the min and max width, and the number of tabs currently open</summary>
-        internal void ResizeTabs()
+        public void ResizeTabs()
         {
             if (this.TabCount > 0)
             {

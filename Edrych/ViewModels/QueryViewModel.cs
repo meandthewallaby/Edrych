@@ -34,7 +34,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Initializes the query with the reference to the browser tree</summary>
         /// <param name="Browser">ViewModel of the browser tree</param>
-        internal QueryViewModel(ref ServerBrowserViewModel Browser)
+        public QueryViewModel(ref ServerBrowserViewModel Browser)
         {
             _dab = Browser.ActiveConnection;
             _browser = Browser;
@@ -42,60 +42,60 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
         
         /// <summary>Returns the query's data access object</summary>
-        internal DataAccessBase Data
+        public DataAccessBase Data
         {
             get { return _dab; }
         }
 
         /// <summary>Returns the query's results object</summary>
-        internal ResultSet Results
+        public ResultSet Results
         {
             get { return _results; }
         }
 
         /// <summary>Returns the binding source which is used to bind the results to the UI</summary>
-        internal BindingSource DataBinding
+        public BindingSource DataBinding
         {
             get { return _dataBinding; }
             set { _dataBinding = value; }
         }
 
         /// <summary>Returns the messages of the results. Used for binding to the UI</summary>
-        internal string Messages
+        public string Messages
         {
             get { return _messages; }
         }
 
         /// <summary>Returns the safe file name of the query</summary>
-        internal string SafeFileName
+        public string SafeFileName
         {
             get { return _safeFileName; }
         }
 
         /// <summary>Whether or not the query's been saved</summary>
-        internal bool IsSaved
+        public bool IsSaved
         {
             get { return _isSaved; }
             set { _isSaved = value; }
         }
 
         /// <summary>Returns the list of available databases in the connection</summary>
-        internal List<Database> Databases
+        public List<Database> Databases
         {
             get { return _databases; }
         }
 
         #endregion
 
-        #region Internal Methods
+        #region public Methods
 
         /// <summary>Initialize the query</summary>
         /// <param name="OpenQuery">Whether or not to open an existing query</param>
         /// <returns>String representing the initial text of the query</returns>
-        internal string InitQuery(bool OpenQuery)
+        public string InitQuery(bool OpenQuery)
         {
             string queryText = string.Empty;
 
@@ -135,14 +135,14 @@ namespace Edrych.ViewModels
 
         /// <summary>Runs a query</summary>
         /// <param name="Query">Text of the query to run</param>
-        internal void RunQuery(string Query)
+        public void RunQuery(string Query)
         {
             App.IsStopQueryEnabled = true;
             this.RunQueryAsync(Query);
         }
 
         /// <summary>Cancels the running query</summary>
-        internal void CancelQuery()
+        public void CancelQuery()
         {
             _dab.Cancel();
         }
@@ -150,7 +150,7 @@ namespace Edrych.ViewModels
         /// <summary>Save the query</summary>
         /// <param name="Query">Text to save</param>
         /// <param name="IsSaveAs">Whether or not to save as</param>
-        internal void SaveQuery(string Query, bool IsSaveAs)
+        public void SaveQuery(string Query, bool IsSaveAs)
         {
             if(string.IsNullOrEmpty(this._fileName) || IsSaveAs)
             {
@@ -174,14 +174,14 @@ namespace Edrych.ViewModels
         }
 
         /// <summary>Connects the query to a data source</summary>
-        internal void Connect()
+        public void Connect()
         {
             this.Disconnect();
             this.InitQuery(false);
         }
 
         /// <summary>Disconnects the query from a data source</summary>
-        internal void Disconnect()
+        public void Disconnect()
         {
             if (this._dab != null)
             {
@@ -192,7 +192,7 @@ namespace Edrych.ViewModels
 
         /// <summary>Sets the active database of the query</summary>
         /// <param name="DatabaseName">Name of the database to select</param>
-        internal void SetDatabase(string DatabaseName)
+        public void SetDatabase(string DatabaseName)
         {
             this.Data.SetDatabase(DatabaseName);
         }
@@ -217,9 +217,9 @@ namespace Edrych.ViewModels
         #region Events
 
         /// <summary>Event to fire when the query begins</summary>
-        internal event EventHandler BeginQuery;
+        public event EventHandler BeginQuery;
         /// <summary>Event to fire when the query ends</summary>
-        internal event EndQueryEventHandler EndQuery;
+        public event EndQueryEventHandler EndQuery;
         /// <summary>INotifyPropertyChanged interface event to notify data bound properties of changes</summary>
         public event PropertyChangedEventHandler PropertyChanged;
 

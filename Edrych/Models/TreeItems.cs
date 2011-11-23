@@ -30,7 +30,7 @@ namespace Edrych.Models
         /// <param name="Type">Type of item to build</param>
         /// <param name="Name">Name of the item</param>
         /// <param name="Parent">Parent of the item</param>
-        internal BaseItem(ItemType Type, string Name, BaseItem Parent)
+        public BaseItem(ItemType Type, string Name, BaseItem Parent)
         {
             _type = Type;
             _name = Name;
@@ -43,37 +43,37 @@ namespace Edrych.Models
         }
 
         /// <summary>Icon to represent the item in the tree</summary>
-        internal Image Icon
+        public Image Icon
         {
             get { return _icon; }
         }
 
         /// <summary>Name of the item</summary>
-        internal String Name
+        public String Name
         {
             get { return _name; }
         }
 
         /// <summary>Parent item of the item</summary>
-        internal BaseItem Parent
+        public BaseItem Parent
         {
             get { return _parent; }
         }
 
         /// <summary>Type of the item</summary>
-        internal ItemType Type
+        public ItemType Type
         {
             get { return _type; }
         }
 
         /// <summary>Pipe-delimited path of the item</summary>
-        internal string ItemPath
+        public string ItemPath
         {
             get { return _itemPath; }
         }
 
         /// <summary>Whether or not the item has been loaded in the tree</summary>
-        internal bool IsLoaded { get; set; }
+        public bool IsLoaded { get; set; }
 
         /// <summary>Sets the icon based on item type</summary>
         private void SetIcon()
@@ -119,20 +119,20 @@ namespace Edrych.Models
 
         /// <summary>Constructor</summary>
         /// <param name="Name">Name of the server</param>
-        internal ServerItem(string Name)
+        public ServerItem(string Name)
             : base(ItemType.Server, Name, null)
         {
         }
 
         /// <summary>Data Access object associated with the server</summary>
-        internal DataAccessBase DataAccess
+        public DataAccessBase DataAccess
         {
             get { return _dataAccess; }
             set { _dataAccess = value; }
         }
 
         /// <summary>Dispose of the item</summary>
-        internal void Dispose()
+        public void Dispose()
         {
             if (_dataAccess != null)
                 _dataAccess.Dispose();

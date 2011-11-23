@@ -27,7 +27,7 @@ namespace Edrych.Views
 
         /// <summary>Initializes the tab</summary>
         /// <param name="Browser">BrowserViewModel to use</param>
-        internal QueryView(ref ServerBrowserViewModel Browser)
+        public QueryView(ref ServerBrowserViewModel Browser)
         {
             InitializeComponent();
             _queryViewModel = new QueryViewModel(ref Browser);
@@ -49,27 +49,27 @@ namespace Edrych.Views
 
         #endregion
 
-        #region Internal Properties
+        #region public Properties
 
         /// <summary>Returns the name of the tab</summary>
-        internal string TabName
+        public string TabName
         {
             get { return _queryViewModel.SafeFileName; }
         }
 
         /// <summary>Returns whether or not the tab is saved</summary>
-        internal bool IsSaved
+        public bool IsSaved
         {
             get { return _queryViewModel.IsSaved; }
         }
 
         #endregion
 
-        #region Internal Methods
+        #region public Methods
 
         /// <summary>Creates the query</summary>
         /// <param name="OpenQuery">Whether or not to open an existing query</param>
-        internal void CreateQueryView(bool OpenQuery)
+        public void CreateQueryView(bool OpenQuery)
         {
             TabControlExt tc = this.Parent as TabControlExt;
             if (tc != null)
@@ -83,20 +83,20 @@ namespace Edrych.Views
 
         /// <summary>Sets the active database of the query</summary>
         /// <param name="DatabaseName">Name of the database</param>
-        internal void SetDatabase(string DatabaseName)
+        public void SetDatabase(string DatabaseName)
         {
             _queryViewModel.SetDatabase(DatabaseName);
         }
 
         /// <summary>Runs the selected query</summary>
-        internal void RunQuery()
+        public void RunQuery()
         {
             string query = (string.IsNullOrEmpty(tbQuery.SelectedText.Trim()) ? tbQuery.Text : tbQuery.SelectedText).Trim();
             _queryViewModel.RunQuery(query);
         }
 
         /// <summary>Cancels the running query</summary>
-        internal void CancelQuery()
+        public void CancelQuery()
         {
             _queryViewModel.CancelQuery();
         }

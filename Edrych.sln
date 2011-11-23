@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edrych", "Edrych\Edrych.csproj", "{18531307-345C-435C-ADED-74135F13A71A}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Edrych.Setup", "Edrych.Setup\Edrych.Setup.vdproj", "{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,12 @@ Global
 		{18531307-345C-435C-ADED-74135F13A71A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{18531307-345C-435C-ADED-74135F13A71A}.Release|x86.ActiveCfg = Release|x86
 		{18531307-345C-435C-ADED-74135F13A71A}.Release|x86.Build.0 = Release|x86
+		{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}.Debug|Any CPU.ActiveCfg = Debug
+		{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}.Debug|Mixed Platforms.ActiveCfg = Debug
+		{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}.Debug|x86.ActiveCfg = Debug
+		{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}.Release|Any CPU.ActiveCfg = Release
+		{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}.Release|Mixed Platforms.ActiveCfg = Release
+		{007ECDD7-E489-4EFE-A07D-42B1C7BDEBE4}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

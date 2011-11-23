@@ -30,7 +30,7 @@ namespace Edrych.DataAccess
         /// <summary>Creates the query</summary>
         /// <param name="Dab">Data Access object to run the queries</param>
         /// <param name="Browser">Server tree from the active browser</param>
-        internal DataAccessQuery(DataAccessBase Dab, ref ServerBrowserViewModel Browser)
+        public DataAccessQuery(DataAccessBase Dab, ref ServerBrowserViewModel Browser)
         {
             _dab = Dab;
             _browser = Browser;
@@ -44,12 +44,12 @@ namespace Edrych.DataAccess
 
         #endregion
 
-        #region Internal Methods
+        #region public Methods
 
-        /// <summary>The main entry point to running a query. This determines whether the query is an External Query or an Internal Query</summary>
+        /// <summary>The main entry point to running a query. This determines whether the query is an External Query or an public Query</summary>
         /// <param name="Query">Query to run</param>
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
-        internal ResultSet RunQuery(string Query)
+        public ResultSet RunQuery(string Query)
         {
             ResultSet rs;
             if (IsExternalQuery(Query))
@@ -64,7 +64,7 @@ namespace Edrych.DataAccess
         }
 
         /// <summary>Cancels the current query</summary>
-        internal void Cancel()
+        public void Cancel()
         {
             lock (_sync)
             {
@@ -90,7 +90,7 @@ namespace Edrych.DataAccess
             return reg.Match(input);
         }
 
-        /// <summary>Tests whether the given query is an external or internal query</summary>
+        /// <summary>Tests whether the given query is an external or public query</summary>
         /// <param name="Query">Query to parse</param>
         /// <returns>Boolean representing whether the given query is an external query</returns>
         private bool IsExternalQuery(string Query)
@@ -99,7 +99,7 @@ namespace Edrych.DataAccess
             return mt.Success;
         }
 
-        /// <summary>Processes an internal query, relative to the data access object</summary>
+        /// <summary>Processes an public query, relative to the data access object</summary>
         /// <param name="Dab">DataAccessBase object to execute the query against</param>
         /// <param name="Query">Query to run</param>
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>

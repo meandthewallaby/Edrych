@@ -10,7 +10,7 @@ namespace Edrych.DataAccess
     class DataAccessFactory
     {
         /// <summary>Gets the default connection type from the user's settings</summary>
-        internal static ConnectionType DefaultType
+        public static ConnectionType DefaultType
         {
             get 
             {
@@ -31,7 +31,7 @@ namespace Edrych.DataAccess
         /// <param name="Username">Username for basic authentication</param>
         /// <param name="Password">Password for basic authentication</param>
         /// <returns>DataAccessBase object for the specified connection type</returns>
-        internal static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
+        public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
         {
             DataAccessBase dab = GetConnection(ConnectionType);
 
@@ -47,7 +47,7 @@ namespace Edrych.DataAccess
 
         /// <summary>Get a list of connection types along with their properties</summary>
         /// <returns>List of ConnectionSource objects representing the available connection types</returns>
-        internal static List<ConnectionSource> GetSources()
+        public static List<ConnectionSource> GetSources()
         {
             List<ConnectionSource> sources = new List<ConnectionSource>();
 
@@ -63,7 +63,7 @@ namespace Edrych.DataAccess
 
         /// <summary>Update a user's settings to change their default connection type</summary>
         /// <param name="ConnectionType">ConnectionType value to set as the default</param>
-        internal static void SetDefaultType(ConnectionType ConnectionType)
+        public static void SetDefaultType(ConnectionType ConnectionType)
         {
             Settings.Default.DefaultConnection = ConnectionType.ToString();
             Settings.Default.Save();

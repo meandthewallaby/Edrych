@@ -1,4 +1,6 @@
 Edrych/bin/
 Edrych/obj/
 Edrych.suo
-.gitignore~
+Edrych.Setup/Edrych.Setup.suo
+Edrych.Setup/Debug/
+Edrych.Setup/Release/

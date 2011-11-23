@@ -8,7 +8,7 @@
     class DataAccessConnection
     {
         /// <summary>Base constructor that gives an empty DataAccessConnection</summary>
-        internal DataAccessConnection()
+        public DataAccessConnection()
         {
         }
 
@@ -19,7 +19,7 @@
         /// <param name="Auth">Authentication mode</param>
         /// <param name="Username">Username for basic authentication</param>
         /// <param name="Password">Password for basic authentication</param>
-        internal DataAccessConnection(ConnectionType Type, string DataSource, string Database, AuthType Auth, string Username, string Password)
+        public DataAccessConnection(ConnectionType Type, string DataSource, string Database, AuthType Auth, string Username, string Password)
         {
             this.Connection = Type;
             this.DataSource = DataSource;
@@ -30,17 +30,17 @@
         }
 
         /// <summary>Connection type</summary>
-        internal ConnectionType Connection { get; set; }
+        public ConnectionType Connection { get; set; }
         /// <summary>Server to connect to</summary>
-        internal string DataSource { get; set; }
+        public string DataSource { get; set; }
         /// <summary>Initial database</summary>
-        internal string Database { get; set; }
+        public string Database { get; set; }
         /// <summary>Authentication mode</summary>
-        internal AuthType Auth { get; set; }
+        public AuthType Auth { get; set; }
         /// <summary>Username for basic authentication</summary>
-        internal string Username { get; set; }
+        public string Username { get; set; }
         /// <summary>Password for basic authentication</summary>
-        internal string Password { get; set; }
+        public string Password { get; set; }
     }
 
     /// <summary>All queries return a result set, consisting of data and messages about the query</summary>
@@ -49,15 +49,15 @@
         private DataTable _dt;
 
         /// <summary>Constructor</summary>
-        internal ResultSet()
+        public ResultSet()
         {
             _dt = new DataTable();
         }
 
         /// <summary>DataTable that houses all the data</summary>
-        internal DataTable Data { get { return _dt; } }
+        public DataTable Data { get { return _dt; } }
         /// <summary>String of messages from the query execution</summary>
-        internal string Messages { get; set; }
+        public string Messages { get; set; }
 
         /// <summary>Disposes the data</summary>
         public void Dispose()
@@ -71,7 +71,7 @@
     class BaseDbItem
     {
         /// <summary>Name of the item</summary>
-        internal string Name { get; set; }
+        public string Name { get; set; }
     }
 
     /// <summary>Item for databases</summary>
@@ -84,28 +84,28 @@
     class Column : BaseDbItem
     {
         /// <summary>Data Type of the column</summary>
-        internal string DataType { get; set; }
+        public string DataType { get; set; }
         /// <summary>Whether the column accepts nulls</summary>
-        internal bool IsNullable { get; set; }
+        public bool IsNullable { get; set; }
     }
 
     /// <summary>Source info for a connection that the connect dialog builds</summary>
     class ConnectionSource : BaseDbItem
     {
         /// <summary>Type of connection</summary>
-        internal ConnectionType ConnType { get; set; }
+        public ConnectionType ConnType { get; set; }
         /// <summary>Whether the connection type is available to the user</summary>
-        internal bool IsAvailable { get; set; }
+        public bool IsAvailable { get; set; }
         /// <summary>Whether the connection type accepts a Database argument</summary>
-        internal bool AcceptsDatabase { get; set; }
+        public bool AcceptsDatabase { get; set; }
         /// <summary>Authentication mode</summary>
-        internal List<AuthType> AuthTypes { get; set; }
+        public List<AuthType> AuthTypes { get; set; }
         /// <summary>Whether the connection type accepts a username</summary>
-        internal bool AcceptsUsername { get; set; }
+        public bool AcceptsUsername { get; set; }
         /// <summary>Whether the connection type accepts a password</summary>
-        internal bool AcceptsPassword { get; set; }
+        public bool AcceptsPassword { get; set; }
         /// <summary>Whether the user can browse for a connection</summary>
-        internal bool AllowBrowse { get; set; }
+        public bool AllowBrowse { get; set; }
     }
 
     /// <summary>Enumeration of the different authentication modes available</summary>
