@@ -77,6 +77,9 @@
             this.queryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.queryConnectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.queryDisconnectMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.queryExecuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.queryStopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -91,10 +94,11 @@
             this.queryDisconnectToolStrip = new System.Windows.Forms.ToolStripButton();
             this.executeQueryButton = new System.Windows.Forms.ToolStripButton();
             this.stopQueryButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
+            this.outdentToolStrip = new System.Windows.Forms.ToolStripButton();
+            this.indentToolStrip = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
             this.databaseDropDown = new System.Windows.Forms.ToolStripComboBox();
-            this.queryExecuteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.queryStopMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripContainer1.SuspendLayout();
             this.toolStripContainer2.BottomToolStripPanel.SuspendLayout();
             this.toolStripContainer2.ContentPanel.SuspendLayout();
@@ -525,6 +529,7 @@
             this.queryToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.queryConnectMenuItem,
             this.queryDisconnectMenuItem,
+            this.toolStripSeparator10,
             this.queryExecuteMenuItem,
             this.queryStopMenuItem});
             this.queryToolStripMenuItem.Name = "queryToolStripMenuItem";
@@ -536,7 +541,7 @@
             // 
             this.queryConnectMenuItem.Image = global::Edrych.Properties.Resources.connect;
             this.queryConnectMenuItem.Name = "queryConnectMenuItem";
-            this.queryConnectMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.queryConnectMenuItem.Size = new System.Drawing.Size(133, 22);
             this.queryConnectMenuItem.Text = "Connect";
             this.queryConnectMenuItem.Click += new System.EventHandler(this.queryConnectMenuItem_Click);
             // 
@@ -544,9 +549,30 @@
             // 
             this.queryDisconnectMenuItem.Image = global::Edrych.Properties.Resources.disconnect;
             this.queryDisconnectMenuItem.Name = "queryDisconnectMenuItem";
-            this.queryDisconnectMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.queryDisconnectMenuItem.Size = new System.Drawing.Size(133, 22);
             this.queryDisconnectMenuItem.Text = "Disconnect";
             this.queryDisconnectMenuItem.Click += new System.EventHandler(this.queryDisconnectMenuItem_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(130, 6);
+            // 
+            // queryExecuteMenuItem
+            // 
+            this.queryExecuteMenuItem.Image = global::Edrych.Properties.Resources.execute;
+            this.queryExecuteMenuItem.Name = "queryExecuteMenuItem";
+            this.queryExecuteMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.queryExecuteMenuItem.Text = "Execute";
+            this.queryExecuteMenuItem.Click += new System.EventHandler(this.executeQueryButton_Click);
+            // 
+            // queryStopMenuItem
+            // 
+            this.queryStopMenuItem.Image = global::Edrych.Properties.Resources.stop;
+            this.queryStopMenuItem.Name = "queryStopMenuItem";
+            this.queryStopMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.queryStopMenuItem.Text = "Stop";
+            this.queryStopMenuItem.Click += new System.EventHandler(this.stopQueryButton_Click);
             // 
             // toolsToolStripMenuItem
             // 
@@ -559,7 +585,7 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(116, 22);
             this.optionsToolStripMenuItem.Text = "&Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
@@ -604,11 +630,14 @@
             this.queryDisconnectToolStrip,
             this.executeQueryButton,
             this.stopQueryButton,
+            this.toolStripSeparator11,
+            this.outdentToolStrip,
+            this.indentToolStrip,
             this.toolStripSeparator8,
             this.databaseDropDown});
             this.toolStrip1.Location = new System.Drawing.Point(3, 24);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(285, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(337, 25);
             this.toolStrip1.TabIndex = 1;
             // 
             // newToolStrip
@@ -684,6 +713,35 @@
             this.stopQueryButton.Text = "Stop Query";
             this.stopQueryButton.Click += new System.EventHandler(this.stopQueryButton_Click);
             // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(6, 25);
+            // 
+            // outdentToolStrip
+            // 
+            this.outdentToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.outdentToolStrip.Enabled = false;
+            this.outdentToolStrip.Image = global::Edrych.Properties.Resources.outdent;
+            this.outdentToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.outdentToolStrip.Name = "outdentToolStrip";
+            this.outdentToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.outdentToolStrip.Text = "Outdent";
+            this.outdentToolStrip.ToolTipText = "Outdent Line";
+            this.outdentToolStrip.Click += new System.EventHandler(this.outdentToolStrip_Click);
+            // 
+            // indentToolStrip
+            // 
+            this.indentToolStrip.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.indentToolStrip.Enabled = false;
+            this.indentToolStrip.Image = global::Edrych.Properties.Resources.indent;
+            this.indentToolStrip.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.indentToolStrip.Name = "indentToolStrip";
+            this.indentToolStrip.Size = new System.Drawing.Size(23, 22);
+            this.indentToolStrip.Text = "Indent";
+            this.indentToolStrip.ToolTipText = "Indent Line";
+            this.indentToolStrip.Click += new System.EventHandler(this.indentToolStrip_Click);
+            // 
             // toolStripSeparator8
             // 
             this.toolStripSeparator8.Name = "toolStripSeparator8";
@@ -698,22 +756,6 @@
             this.databaseDropDown.Sorted = true;
             this.databaseDropDown.SelectedIndexChanged += new System.EventHandler(this.databaseDropDown_SelectionChanged);
             this.databaseDropDown.KeyUp += new System.Windows.Forms.KeyEventHandler(this.databaseDropDown_KeyUp);
-            // 
-            // queryExecuteMenuItem
-            // 
-            this.queryExecuteMenuItem.Image = global::Edrych.Properties.Resources.execute;
-            this.queryExecuteMenuItem.Name = "queryExecuteMenuItem";
-            this.queryExecuteMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.queryExecuteMenuItem.Text = "Execute";
-            this.queryExecuteMenuItem.Click += new System.EventHandler(this.executeQueryButton_Click);
-            // 
-            // queryStopMenuItem
-            // 
-            this.queryStopMenuItem.Image = global::Edrych.Properties.Resources.stop;
-            this.queryStopMenuItem.Name = "queryStopMenuItem";
-            this.queryStopMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.queryStopMenuItem.Text = "Stop";
-            this.queryStopMenuItem.Click += new System.EventHandler(this.stopQueryButton_Click);
             // 
             // MainWindow
             // 
@@ -819,6 +861,10 @@
         private System.Windows.Forms.ToolStripButton stopQueryButton;
         private System.Windows.Forms.ToolStripMenuItem queryExecuteMenuItem;
         private System.Windows.Forms.ToolStripMenuItem queryStopMenuItem;
+        private System.Windows.Forms.ToolStripButton outdentToolStrip;
+        private System.Windows.Forms.ToolStripButton indentToolStrip;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
     }
 }
 

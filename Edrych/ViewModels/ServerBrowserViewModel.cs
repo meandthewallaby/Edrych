@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
 using Aga.Controls.Tree;
 using Edrych.DataAccess;
 using Edrych.Dialogs;
@@ -55,8 +56,15 @@ namespace Edrych.ViewModels
             cd.ShowDialog();
             if (cd.DataAccess != null)
             {
-                this.AddServer(cd.DataAccess);
-                this._activeConnection = cd.DataAccess;
+                if (!this._tree.Cache.ContainsKey("ROOT") || this._tree.Cache["ROOT"].FirstOrDefault(d => d.Name == cd.DataAccess.DataSource) == null)
+                {
+                    this.AddServer(cd.DataAccess);
+                    this._activeConnection = cd.DataAccess;
+                }
+                else
+                {
+                    MessageBox.Show("This server is already added!");
+                }
             }
         }
 

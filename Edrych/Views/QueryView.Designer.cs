@@ -96,7 +96,8 @@ namespace Edrych.Views
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
             this.tbQuery.TextChanged += new System.EventHandler(this.QueryView_QueryChanged);
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
-            this.tbQuery.KeyUp += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
+            this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);
+            this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
             this.tbQuery.Leave += new System.EventHandler(this.QueryOrResults_Leave);
             // 
             // tbLines

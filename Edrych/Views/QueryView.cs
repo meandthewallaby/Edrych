@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using Edrych.Helpers;
@@ -99,6 +100,102 @@ namespace Edrych.Views
         public void CancelQuery()
         {
             _queryViewModel.CancelQuery();
+        }
+
+        /// <summary>Indents the selected lines</summary>
+        public void IndentLines(bool ButtonPress)
+        {
+            int firstLineChar = this.tbQuery.GetFirstCharIndexOfCurrentLine();
+            int firstLine = this.tbQuery.GetLineFromCharIndex(firstLineChar);
+            if (ButtonPress && string.IsNullOrEmpty(this.tbQuery.SelectedText))
+            {
+                this.tbQuery.Select(firstLineChar, this.tbQuery.Lines[firstLine].Length);
+            }
+
+            if (!string.IsNullOrEmpty(tbQuery.SelectedText))
+            {
+                int numLines = this.tbQuery.SelectedText.Where(c => c == '\n').Count(); //0-based number of lines (e.g.-1 line would return a value of 0)
+                int lastLine = firstLine + numLines;
+                int selectLength = this.tbQuery.SelectionLength + (this.tbQuery.SelectionStart - firstLineChar);
+                this.tbQuery.SuspendLayout();
+                StringBuilder replacement = new StringBuilder();
+
+                for (int i = firstLine; i <= lastLine; i++)
+                {
+                    replacement.AppendLine("\t" + this.tbQuery.Lines[i]);
+                }
+
+                replacement.Remove(replacement.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+
+                string replacer = replacement.ToString();
+                this.tbQuery.Text = this.tbQuery.Text.Remove(firstLineChar, selectLength).Insert(firstLineChar, replacer);
+                this.tbQuery.Select(firstLineChar, replacer.Length);
+
+                this.tbQuery.ResumeLayout();
+            }
+        }
+
+        /// <summary>Outdents the selected lines</summary>
+        public void OutdentLines(bool ButtonPress)
+        {
+            int firstLineChar = this.tbQuery.GetFirstCharIndexOfCurrentLine();
+            int firstLine = this.tbQuery.GetLineFromCharIndex(firstLineChar);
+            if (ButtonPress && string.IsNullOrEmpty(this.tbQuery.SelectedText))
+            {
+                this.tbQuery.Select(firstLineChar, this.tbQuery.Lines[firstLine].Length);
+            }
+
+            if (!string.IsNullOrEmpty(tbQuery.SelectedText))
+            {
+                //Flesh this part out
+                int[] tabs = this.tbQuery.SelectionTabs;
+
+                int numLines = this.tbQuery.SelectedText.Where(c => c == '\n').Count(); //0-based number of lines (e.g.-1 line would return a value of 0)
+                int lastLine = firstLine + numLines;
+                int selectLength = this.tbQuery.SelectionLength + (this.tbQuery.SelectionStart - firstLineChar);
+                this.tbQuery.SuspendLayout();
+                StringBuilder replacement = new StringBuilder();
+
+                for (int i = firstLine; i <= lastLine; i++)
+                {
+                    int line = this.tbQuery.GetFirstCharIndexFromLine(i);
+                    if (this.tbQuery.Text[line] == '\t')
+                    {
+                        replacement.AppendLine(this.tbQuery.Lines[i].Substring(1));
+                    }
+                    else if (char.IsWhiteSpace(this.tbQuery.Text[line]))
+                    {
+                        var afterTabs = this.tbQuery.Lines[i].SkipWhile(c => char.IsWhiteSpace(c));
+                        Point targetPoint = this.tbQuery.GetPositionFromCharIndex(line + (this.tbQuery.Lines[i].Length - afterTabs.Count()));
+                        int target = targetPoint.X;
+
+                        int pos = (
+                            from n in tabs
+                            where target >= n
+                            orderby Math.Abs(n - target)
+                            select n
+                            ).FirstOrDefault();
+                        if (target > pos && afterTabs.Count() > this.tbQuery.Lines[i].Length)
+                        {
+                            int removeStart = this.tbQuery.GetCharIndexFromPosition(new Point(pos, targetPoint.Y));
+                            int removeEnd = this.tbQuery.GetCharIndexFromPosition(targetPoint);
+                            replacement.AppendLine(this.tbQuery.Lines[i].Remove(removeStart, removeEnd - removeStart));
+                        }
+                    }
+                    else
+                    {
+                        replacement.AppendLine(this.tbQuery.Lines[i]);
+                    }
+                }
+
+                replacement.Remove(replacement.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+
+                string replacer = replacement.ToString();
+                this.tbQuery.Text = this.tbQuery.Text.Remove(firstLineChar, selectLength).Insert(firstLineChar, replacer);
+                this.tbQuery.Select(firstLineChar, replacer.Length);
+
+                this.tbQuery.ResumeLayout();
+            }
         }
 
         #endregion
@@ -211,10 +308,16 @@ namespace Edrych.Views
             }
         }
 
+        private void QueryView_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if(e.KeyChar == '\t' && !string.IsNullOrEmpty(this.tbQuery.SelectedText))
+                e.Handled = true;
+        }
+
         /// <summary>Handles when the keyboard is pressed</summary>
         private void QueryView_KeyUp(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.F5)
+            if (e.Modifiers == Keys.None && e.KeyCode == Keys.F5)
             {
                 this.RunQuery();
             }
@@ -225,6 +328,14 @@ namespace Edrych.Views
             else if ((e.Modifiers & ModifierKeys) == Keys.Control && e.KeyCode == Keys.U)
             {
                 App.OnSwitchDatabases(this, new EventArgs());
+            }
+            else if (e.Modifiers == Keys.None && e.KeyCode == Keys.Tab)
+            {
+                IndentLines(false);
+            }
+            else if ((e.Modifiers & ModifierKeys) == Keys.Shift && e.KeyCode == Keys.Tab)
+            {
+                OutdentLines(false);
             }
         }
 

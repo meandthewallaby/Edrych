@@ -446,7 +446,7 @@
                 {
                 "Name" = "8:.NET Framework"
                 "Message" = "8:[VSDNETMSG]"
-                "FrameworkVersion" = "8:.NETFramework,Version=v4.0,Profile=Client"
+                "FrameworkVersion" = "8:.NETFramework,Version=v4.0"
                 "AllowLaterVersions" = "11:FALSE"
                 "InstallUrl" = "8:http://go.microsoft.com/fwlink/?LinkId=131000"
                 }
@@ -1089,7 +1089,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:Edrych"
         "ProductCode" = "8:{9BFC0FAB-13FA-4BEB-8E42-13C531FE599E}"
-        "PackageCode" = "8:{6A07DCEF-9DE0-4B73-B845-7C3574B06E9D}"
+        "PackageCode" = "8:{9A7FFA6F-11B4-43FE-A481-C081B8943FD8}"
         "UpgradeCode" = "8:{A9B100BD-9352-4932-B966-935B70CF95EA}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

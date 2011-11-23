@@ -227,6 +227,20 @@ namespace Edrych
                 this._activeQuery.CancelQuery();
         }
 
+        /// <summary>Handles when the outdent button is clicked</summary>
+        private void outdentToolStrip_Click(object sender, EventArgs e)
+        {
+            if (this._activeQuery != null)
+                this._activeQuery.OutdentLines(true);
+        }
+
+        /// <summary>Handles when the indent button is clicked</summary>
+        private void indentToolStrip_Click(object sender, EventArgs e)
+        {
+            if (this._activeQuery != null)
+                this._activeQuery.IndentLines(true);
+        }
+
         #endregion
 
         #region Menu Item Handling - Tree Context Menu
@@ -270,6 +284,8 @@ namespace Edrych
             this.executeQueryButton.Enabled = App.IsQueryConnectEnabled;
             this.queryStopMenuItem.Enabled = App.IsStopQueryEnabled;
             this.stopQueryButton.Enabled = App.IsStopQueryEnabled;
+            this.indentToolStrip.Enabled = App.IsQueryConnectEnabled;
+            this.outdentToolStrip.Enabled = App.IsQueryConnectEnabled;
         }
 
         /// <summary>Handles the window closing</summary>
