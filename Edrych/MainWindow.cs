@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Aga.Controls.Tree;
 using Edrych.Dialogs;
 using Edrych.Helpers;
 using Edrych.Views;
@@ -18,6 +20,7 @@ namespace Edrych
 
         private ServerBrowserViewModel _browserViewModel;
         private QueryView _activeQuery;
+        private bool _treeMouseDown = false;
 
         #endregion
 
@@ -43,10 +46,10 @@ namespace Edrych
 
         #endregion
 
-        #region public Methods
+        #region Public Methods
 
         /// <summary>Disposes of the window</summary>
-        public void Dispose()
+        public void Disposal()
         {
             if(_browserViewModel != null)
                 _browserViewModel.Dispose();
@@ -373,6 +376,22 @@ namespace Edrych
             if (e != null)
             {
                 this.databaseDropDown.SelectedItem = e.SelectedDatabase;
+            }
+        }
+
+        #endregion
+
+        #region Private Methods - Drag & Drop
+
+        private void TreeView_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button != System.Windows.Forms.MouseButtons.Left) return;
+
+            TreeViewAdv tree = sender as TreeViewAdv;
+            TreeNodeAdv node = tree.GetNodeAt(e.Location);
+            if (node != null)
+            {
+                tree.DoDragDrop(this._browserViewModel.GetNodeName(node), DragDropEffects.Copy | DragDropEffects.Move);
             }
         }
 

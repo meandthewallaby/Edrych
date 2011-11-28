@@ -24,7 +24,7 @@ namespace Edrych
             finally
             {
                 if (main != null)
-                    main.Dispose();
+                    main.Disposal();
             }
         }
     }

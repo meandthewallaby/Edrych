@@ -199,6 +199,7 @@
             // 
             // treeViewAdv1
             // 
+            this.treeViewAdv1.AllowDrop = true;
             this.treeViewAdv1.AsyncExpanding = true;
             this.treeViewAdv1.BackColor = System.Drawing.SystemColors.Window;
             this.treeViewAdv1.ContextMenuStrip = this.treeContextMenu;
@@ -217,6 +218,7 @@
             this.treeViewAdv1.Size = new System.Drawing.Size(232, 428);
             this.treeViewAdv1.TabIndex = 0;
             this.treeViewAdv1.Text = "treeViewAdv1";
+            this.treeViewAdv1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.TreeView_MouseDown);
             // 
             // treeContextMenu
             // 

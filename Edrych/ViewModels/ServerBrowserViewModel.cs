@@ -47,7 +47,7 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region public Methods - Called from View
+        #region Public Methods - Called from View
 
         /// <summary>Creates a connection on the browser</summary>
         public void CreateConnection()
@@ -121,7 +121,7 @@ namespace Edrych.ViewModels
                 _tree.Cache["ROOT"].Remove(server as BaseItem);
                 List<BaseItem> serverChildren = _tree.Cache.ContainsKey(server.ItemPath) ? serverChildren = _tree.Cache[server.ItemPath] : new List<BaseItem>();
                 RemoveCachedItems(_tree.Cache.Keys.Where(k => k.StartsWith(server.ItemPath)).ToList());
-                server.Dispose();
+                server.Disposal();
 
                 //Finally, fire the event off
                 _tree.OnNodesRemoved(TreePath.Empty, new int[] { index }, new object[] { server });
@@ -151,9 +151,17 @@ namespace Edrych.ViewModels
             }
         }
 
+        /// <summary>Grabs the name of the selected node</summary>
+        /// <param name="Node">Node that's selected</param>
+        /// <returns>Name of the given node</returns>
+        public string GetNodeName(TreeNodeAdv Node)
+        {
+            return ((BaseItem)Node.Tag).Name;
+        }
+
         #endregion
 
-        #region public Methods - Called from Model
+        #region Public Methods - Called from Model
 
         /// <summary>Grabs the children of the passed path</summary>
         /// <param name="treePath">Path to get the children of</param>
@@ -201,8 +209,7 @@ namespace Edrych.ViewModels
                                 break;
                             case ItemType.Table:
                             case ItemType.View:
-                                if (database != null)
-                                    items = GetColumns(parent, server, database.Name);
+                                items = GetTableViewChildren(parent);
                                 break;
                             default:
                                 break;
@@ -265,11 +272,21 @@ namespace Edrych.ViewModels
         {
             List<BaseItem> items = new List<BaseItem>();
 
-            BaseItem tables = new BaseItem(ItemType.Folder, "Tables", parent);
-            BaseItem views = new BaseItem(ItemType.Folder, "Views", parent);
+            items.Add(new BaseItem(ItemType.Folder, "Tables", parent));
+            items.Add(new BaseItem(ItemType.Folder, "Views", parent));
 
-            items.Add(tables);
-            items.Add(views);
+            return items;
+        }
+
+        /// <summary>Gets the folders under a table or view</summary>
+        /// <param name="parent">Table or view to get the children of</param>
+        /// <returns>List of folders</returns>
+        private List<BaseItem> GetTableViewChildren(BaseItem parent)
+        {
+            List<BaseItem> items = new List<BaseItem>();
+
+            items.Add(new BaseItem(ItemType.Folder, "Columns", parent));
+            items.Add(new BaseItem(ItemType.Folder, "Keys", parent));
 
             return items;
         }
@@ -282,30 +299,27 @@ namespace Edrych.ViewModels
         private List<BaseItem> GetFolderChildren(BaseItem parent, ServerItem server, string DatabaseName)
         {
             List<BaseItem> items = new List<BaseItem>();
-            ItemType type = ItemType.Table;
-            List<TableView> tableViews = null;
 
             string oldDatabase = server.DataAccess.SelectedDatabase;
             server.DataAccess.SetDatabase(DatabaseName);
-            if (parent.Name == "Tables")
-            {
-                tableViews = server.DataAccess.GetTables();
-                type = ItemType.Table;
-            }
-            else if (parent.Name == "Views")
-            {
-                tableViews = server.DataAccess.GetViews();
-                type = ItemType.View;
-            }
-            server.DataAccess.SetDatabase(oldDatabase);
 
-            if (tableViews != null)
+            switch (parent.Name)
             {
-                foreach (TableView table in tableViews)
-                {
-                    items.Add(new BaseItem(type, table.Name, parent));
-                }
+                case "Tables":
+                    items = GetTableViews(ItemType.Table, parent, server.DataAccess.GetTables());
+                    break;
+                case "Views":
+                    items = GetTableViews(ItemType.View, parent, server.DataAccess.GetViews());
+                    break;
+                case "Columns":
+                    items = GetColumns(parent, server.DataAccess.GetColumns(parent.Parent.Name));
+                    break;
+                case "Keys":
+                    items = GetKeys(parent, server.DataAccess.GetKeys(parent.Parent.Name));
+                    break;
             }
+
+            server.DataAccess.SetDatabase(oldDatabase);
 
             return items;
         }
@@ -315,16 +329,44 @@ namespace Edrych.ViewModels
         /// <param name="server">Server item the tables are under</param>
         /// <param name="DatabaseName">Name of the database to look in</param>
         /// <returns>List of column items</returns>
-        private List<BaseItem> GetColumns(BaseItem parent, ServerItem server, string DatabaseName)
+        private List<BaseItem> GetTableViews(ItemType type, BaseItem parent, List<TableView> tableViews)
         {
             List<BaseItem> items = new List<BaseItem>();
-            string oldDatabase = server.DataAccess.SelectedDatabase;
-            server.DataAccess.SetDatabase(DatabaseName);
-            foreach (Column col in server.DataAccess.GetColumns(parent.Name))
+            foreach (TableView table in tableViews)
             {
-                items.Add(new BaseItem(ItemType.Column, col.Name + " (" + col.DataType + ", " + (col.IsNullable ? "null" : "not null") + ")", parent));
+                items.Add(new BaseItem(type, table.Name, parent));
             }
-            server.DataAccess.SetDatabase(oldDatabase);
+            return items;
+        }
+
+        /// <summary>Gets the columns in a table or view</summary>
+        /// <param name="parent">Table or view that was expanded</param>
+        /// <param name="server">Server item the tables are under</param>
+        /// <param name="DatabaseName">Name of the database to look in</param>
+        /// <returns>List of column items</returns>
+        private List<BaseItem> GetColumns(BaseItem parent, List<Column> columns)
+        {
+            List<BaseItem> items = new List<BaseItem>();
+            foreach (Column col in columns)
+            {
+                items.Add(new ColumnKeyItem(col.Name + " (" + col.DataType + ", " + (col.IsNullable ? "null" : "not null") + ")", parent, col.Key));
+            }
+
+            return items;
+        }
+
+        /// <summary>Gets the keys in a table or view</summary>
+        /// <param name="parent">Table or view that was expanded</param>
+        /// <param name="server">Server item the tables are under</param>
+        /// <param name="DatabaseName">Name of the database to look in</param>
+        /// <returns>List of column items</returns>
+        private List<BaseItem> GetKeys(BaseItem parent, List<Key> keys)
+        {
+            List<BaseItem> items = new List<BaseItem>();
+            foreach (Key key in keys)
+            {
+                items.Add(new ColumnKeyItem(key.Name, parent, key.Type));
+            }
 
             return items;
         }
@@ -362,7 +404,7 @@ namespace Edrych.ViewModels
                 foreach (BaseItem oldItem in _tree.Cache[key])
                 {
                     if (oldItem.Type == ItemType.Server)
-                        ((ServerItem)oldItem).Dispose();
+                        ((ServerItem)oldItem).Disposal();
                     else
                         oldItem.Dispose();
                 }

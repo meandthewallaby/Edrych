@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SQLite;
+using System.Linq;
 using System.Text;
 using Edrych.Properties;
 
@@ -78,9 +79,33 @@ namespace Edrych.DataAccess
                     col.Name = reader["name"].ToString();
                     col.DataType = reader["type"].ToString();
                     col.IsNullable = reader["notnull"].ToString() == "0";
+                    col.Key = int.Parse(reader["pk"].ToString()) > 0 ? KeyType.Primary : KeyType.None;
                     return col;
                 });
+            List<string> fks = GetDbItems<string>(DataAccessResources.SQLite_FindForeignKeys.Replace("@TableName", TableName),
+                (reader) =>
+                {
+                    return reader["from"].ToString();
+                });
+
+            foreach(Column col in cols.Where(c => c.Key != KeyType.Primary && fks.Contains(c.Name)))
+            {
+                col.Key = KeyType.Foreign;
+            }
+
             return cols;
+        }
+
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetKeys"/></summary>
+        public override List<Key> GetKeys(string TableName)
+        {
+            List<Key> keys = new List<Key>();
+            List<Column> cols = this.GetColumns(TableName);
+            foreach (Column col in cols.Where(c => c.Key != KeyType.None).OrderByDescending(c => c.Key.ToString()).ThenBy(c => c.Name))
+            {
+                keys.Add(new Key() { Name = col.Name, Type = col.Key });
+            }
+            return keys;
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>

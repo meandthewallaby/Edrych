@@ -82,7 +82,6 @@
   <ItemGroup>
     <Compile Include="DataAccess\Data Sources\DB2DataAccess.cs" />
     <Compile Include="DataAccess\Data Sources\NoneDataAccess.cs" />
-    <Compile Include="DataAccess\Data Sources\ODBCServerDataAccess.cs" />
     <Compile Include="DataAccess\Data Sources\SQLiteDataAccess.cs" />
     <Compile Include="DataAccess\Data Sources\SQLServerDataAccess.cs" />
     <Compile Include="DataAccess\Data Sources\TeradataDataAccess.cs" />
@@ -224,6 +223,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libs\Aga.Controls.dll" />
+    <None Include="Resources\primary_key.png" />
+    <None Include="Resources\foreign_key.png" />
     <None Include="Resources\outdent.png" />
     <None Include="Resources\indent.png" />
     <None Include="Resources\stop.png" />

@@ -36,7 +36,14 @@ namespace Edrych.ViewModels
         /// <param name="Browser">ViewModel of the browser tree</param>
         public QueryViewModel(ref ServerBrowserViewModel Browser)
         {
-            _dab = Browser.ActiveConnection;
+            _dab = DataAccessFactory.GetDataAccess(
+                Browser.ActiveConnection.ConnectionType,
+                Browser.ActiveConnection.DataSource,
+                Browser.ActiveConnection.SelectedDatabase,
+                Browser.ActiveConnection.Authentication,
+                Browser.ActiveConnection.Username,
+                Browser.ActiveConnection.Password
+                );
             _browser = Browser;
         }
 

@@ -20,7 +20,7 @@ namespace Edrych.Models
     /// <summary>Base class for database items</summary>
     class BaseItem : IDisposable
     {
-        private Image _icon;
+        protected Image _icon;
         private String _name;
         private BaseItem _parent;
         private ItemType _type;
@@ -76,7 +76,7 @@ namespace Edrych.Models
         public bool IsLoaded { get; set; }
 
         /// <summary>Sets the icon based on item type</summary>
-        private void SetIcon()
+        protected virtual void SetIcon()
         {
             switch(this._type)
             {
@@ -132,11 +132,43 @@ namespace Edrych.Models
         }
 
         /// <summary>Dispose of the item</summary>
-        public void Dispose()
+        public void Disposal()
         {
             if (_dataAccess != null)
                 _dataAccess.Dispose();
             base.Dispose();
+        }
+    }
+
+    /// <summary>Item representing a column</summary>
+    class ColumnKeyItem : BaseItem
+    {
+        KeyType _key = KeyType.None;
+
+        /// <summary>Constructor</summary>
+        /// <param name="Name">Name of the column</param>
+        /// <param name="Parent">Parent item of the column</param>
+        public ColumnKeyItem(string Name, BaseItem Parent, KeyType Key)
+            : base(ItemType.Column, Name, Parent)
+        {
+            _key = Key;
+            SetIcon();
+        }
+
+        protected override void SetIcon()
+        {
+            switch (_key)
+            {
+                case KeyType.Primary:
+                    _icon = Resources.primary_key;
+                    break;
+                case KeyType.Foreign:
+                    _icon = Resources.foreign_key;
+                    break;
+                default:
+                    _icon = Resources.column;
+                    break;
+            }
         }
     }
 }

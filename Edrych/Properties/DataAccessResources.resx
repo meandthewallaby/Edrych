@@ -157,23 +157,38 @@ ORDER BY name;</value>
   </data>
   <data name="SQLServer_FindColumns" xml:space="preserve">
     <value>select
-  COLUMN_NAME as name,
-  DATA_TYPE 
-    + ISNULL('(' + cast(character_maximum_length as varchar) + ')', '')
-    + case 
-      when DATA_TYPE in ('decimal', 'numeric') then
-        ISNULL('(' + cast(NUMERIC_PRECISION as varchar) + ', ' + CAST(NUMERIC_SCALE as varchar) + ')', '')
-      else ''
-      end
-  as type,
-  IS_NULLABLE
+	c.COLUMN_NAME as name,
+	c.DATA_TYPE 
+		+ ISNULL('(' + cast(c.character_maximum_length as varchar) + ')', '')
+		+ case 
+			when c.DATA_TYPE in ('decimal', 'numeric') then
+				ISNULL('(' + cast(c.NUMERIC_PRECISION as varchar) + ', ' + CAST(c.NUMERIC_SCALE as varchar) + ')', '')
+			else ''
+		end
+	as type,
+	c.IS_NULLABLE,
+	sum(case when tc.CONSTRAINT_TYPE = 'PRIMARY KEY' and kcu.COLUMN_NAME is not null then 1 else 0 end) as PKCount,
+	sum(case when tc.CONSTRAINT_TYPE = 'FOREIGN KEY' and kcu.COLUMN_NAME is not null then 1 else 0 end) as FKCount
 from
-  INFORMATION_SCHEMA.COLUMNS c
+	INFORMATION_SCHEMA.COLUMNS c
+	left join INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc on
+		tc.TABLE_SCHEMA = c.TABLE_SCHEMA
+		and tc.TABLE_NAME = c.TABLE_NAME
+	left join INFORMATION_SCHEMA.KEY_COLUMN_USAGE kcu on
+		tc.TABLE_SCHEMA = kcu.TABLE_SCHEMA
+		and tc.TABLE_NAME = kcu.TABLE_NAME
+		and tc.CONSTRAINT_NAME = kcu.CONSTRAINT_NAME
+		and c.COLUMN_NAME = kcu.COLUMN_NAME
 where
-  TABLE_NAME = @TableName
-  and TABLE_SCHEMA = @SchemaName
-order by
-  ORDINAL_POSITION</value>
+	c.TABLE_SCHEMA = @SchemaName
+	and c.TABLE_NAME = @TableName
+group by
+	c.COLUMN_NAME,
+	c.DATA_TYPE,
+	c.CHARACTER_MAXIMUM_LENGTH,
+	c.NUMERIC_PRECISION,
+	c.NUMERIC_SCALE,
+	c.IS_NULLABLE</value>
   </data>
   <data name="SQLServer_FindDatabases" xml:space="preserve">
     <value>select
@@ -193,32 +208,64 @@ end</value>
   </data>
   <data name="DB2_FindColumns" xml:space="preserve">
     <value>select
-	LTRIM(RTRIM(COLNAME)) as COLNAME,
+	LTRIM(RTRIM(c.COLNAME)) as COLNAME,
 	NULLS,
 	case
 		when TYPENAME = 'DECIMAL' then CONCAT(LTRIM(RTRIM(TYPENAME)), CONCAT(' (',CONCAT(LENGTH, CONCAT(', ', CONCAT(SCALE, ')')))))
 		when TYPENAME like '%CHAR%' then CONCAT(LTRIM(RTRIM(TYPENAME)), CONCAT(' (',CONCAT(LENGTH, ')')))
 		else LTRIM(RTRIM(TYPENAME))
-	end as COLTYPE
-from
-	syscat.columns
+	end as COLTYPE,
+	case when KEYSEQ is not null then 1 else 0 end as IsPrimaryKey,
+	count(k.COLNAME) as FKCount
+from 
+	syscat.columns c
+	left join syscat.tabconst tc on
+		c.TABSCHEMA = tc.TABSCHEMA
+		and c.TABNAME = tc.TABNAME
+		and tc.TYPE = 'F'
+	left join syscat.keycoluse k on
+		tc.CONSTNAME = k.CONSTNAME
+		and tc.TABSCHEMA = k.TABSCHEMA
+		and tc.TABNAME = k.TABNAME
+		and c.COLNAME = k.COLNAME
 where
-	TABSCHEMA = @SchemaName
-	and TABNAME = @TableName
+	c.tabschema = @SchemaName
+	and c.tabname = @TableName
+group by
+	c.COLNO,
+	c.KEYSEQ,
+	c.COLNAME,
+	c.TYPENAME,
+	c.LENGTH,
+	c.SCALE,
+	c.NULLS
 order by
 	COLNO</value>
   </data>
   <data name="DB2_FindTables" xml:space="preserve">
-    <value>select 
+    <value>select
 	LTRIM(RTRIM(TABSCHEMA)) as SCHEMA, 
 	LTRIM(RTRIM(TABNAME)) as NAME
 from 
-	syscat.tables 
-order by 
-	1,2</value>
+	syscat.tables
+where
+	type = 'T'
+	and ownertype = 'U'
+	and card &gt;= 0
+order by tabschema, tabname</value>
   </data>
   <data name="DB2_FindViews" xml:space="preserve">
-    <value>select LTRIM(RTRIM(VIEWSCHEMA)) as SCHEMA, LTRIM(RTRIM(VIEWNAME)) as NAME from syscat.views order by 1,2</value>
+    <value>select
+	LTRIM(RTRIM(VIEWSCHEMA)) as SCHEMA, 
+	LTRIM(RTRIM(VIEWNAME)) as NAME
+from 
+	syscat.views
+where
+	ownertype = 'U'
+	and viewschema not like 'SYS%'
+order by
+	viewschema,
+	viewname</value>
   </data>
   <data name="Teradata_FindColumns" xml:space="preserve">
     <value>help column @DatabaseName.@TableName.*</value>
@@ -253,5 +300,25 @@ where
 	and TableKind = 'V'
 order by
 	TableName</value>
+  </data>
+  <data name="ODBC_SetDatabase" xml:space="preserve">
+    <value>if exists (select 1 from sys.databases d where d.name = ?)
+begin
+
+use @DatabaseReplaceName
+
+end</value>
+  </data>
+  <data name="SQLite_FindForeignKeys" xml:space="preserve">
+    <value>pragma foreign_key_list(@TableName)</value>
+  </data>
+  <data name="Teradata_FindForeignKeys" xml:space="preserve">
+    <value>select
+	ChildKeyColumn
+from
+	dbc.all_ri_children
+where
+	ChildDB = @DatabaseName
+	and ChildTable = @TableName</value>
   </data>
 </root>

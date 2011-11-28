@@ -66,7 +66,7 @@ namespace Edrych.Views
 
         #endregion
 
-        #region public Methods
+        #region Public Methods
 
         /// <summary>Creates the query</summary>
         /// <param name="OpenQuery">Whether or not to open an existing query</param>
@@ -128,7 +128,8 @@ namespace Edrych.Views
                 replacement.Remove(replacement.Length - Environment.NewLine.Length, Environment.NewLine.Length);
 
                 string replacer = replacement.ToString();
-                this.tbQuery.Text = this.tbQuery.Text.Remove(firstLineChar, selectLength).Insert(firstLineChar, replacer);
+                this.tbQuery.Select(firstLineChar, selectLength);
+                this.tbQuery.SelectedText = replacer;
                 this.tbQuery.Select(firstLineChar, replacer.Length);
 
                 this.tbQuery.ResumeLayout();
@@ -175,7 +176,7 @@ namespace Edrych.Views
                             orderby Math.Abs(n - target)
                             select n
                             ).FirstOrDefault();
-                        if (target > pos && afterTabs.Count() > this.tbQuery.Lines[i].Length)
+                        if (target > pos && afterTabs.Count() < this.tbQuery.Lines[i].Length)
                         {
                             int removeStart = this.tbQuery.GetCharIndexFromPosition(new Point(pos, targetPoint.Y));
                             int removeEnd = this.tbQuery.GetCharIndexFromPosition(targetPoint);
@@ -188,10 +189,12 @@ namespace Edrych.Views
                     }
                 }
 
-                replacement.Remove(replacement.Length - Environment.NewLine.Length, Environment.NewLine.Length);
+                if (replacement.Length >= Environment.NewLine.Length)
+                    replacement.Remove(replacement.Length - Environment.NewLine.Length, Environment.NewLine.Length);
 
                 string replacer = replacement.ToString();
-                this.tbQuery.Text = this.tbQuery.Text.Remove(firstLineChar, selectLength).Insert(firstLineChar, replacer);
+                this.tbQuery.Select(firstLineChar, selectLength);
+                this.tbQuery.SelectedText = replacer;
                 this.tbQuery.Select(firstLineChar, replacer.Length);
 
                 this.tbQuery.ResumeLayout();
@@ -308,6 +311,7 @@ namespace Edrych.Views
             }
         }
 
+        /// <summary>Intercepts the tab command</summary>
         private void QueryView_KeyPress(object sender, KeyPressEventArgs e)
         {
             if(e.KeyChar == '\t' && !string.IsNullOrEmpty(this.tbQuery.SelectedText))
@@ -557,6 +561,26 @@ namespace Edrych.Views
                 this.tcResults.SelectTab("tpResults");
             }
 
+            this.rowsReturnedLabel.Text = this.dgResults.RowCount.ToString() + " rows returned";
+
+            this.tbQuery.Focus();
+        }
+
+        /// <summary>Handles when an object is dragged onto the query</summary>
+        private void Query_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.Text))
+                e.Effect = DragDropEffects.Copy;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+
+        /// <summary>Handles when an object is dropped onto the query</summary>
+        private void Query_DragDrop(object sender, DragEventArgs e)
+        {
+            string dropped = e.Data.GetData(DataFormats.Text) as string;
+            this.tbQuery.SelectedText = dropped;
+            this.tbQuery.Select();
             this.tbQuery.Focus();
         }
         

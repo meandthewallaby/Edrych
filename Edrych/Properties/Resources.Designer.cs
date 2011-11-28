@@ -109,6 +109,13 @@ namespace Edrych.Properties {
             }
         }
         
+        public static System.Drawing.Bitmap foreign_key {
+            get {
+                object obj = ResourceManager.GetObject("foreign_key", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         public static System.Drawing.Bitmap inactiveClose {
             get {
                 object obj = ResourceManager.GetObject("inactiveClose", resourceCulture);
@@ -140,6 +147,13 @@ namespace Edrych.Properties {
         public static System.Drawing.Bitmap outdent {
             get {
                 object obj = ResourceManager.GetObject("outdent", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        public static System.Drawing.Bitmap primary_key {
+            get {
+                object obj = ResourceManager.GetObject("primary_key", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

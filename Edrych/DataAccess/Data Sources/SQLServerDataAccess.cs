@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Text;
 using Edrych.Properties;
 
@@ -95,10 +96,23 @@ namespace Edrych.DataAccess
                     col.Name = reader["name"].ToString();
                     col.DataType = reader["type"].ToString();
                     col.IsNullable = reader["IS_NULLABLE"].ToString() == "YES";
+                    col.Key = (int)reader["PKCount"] > 0 ? KeyType.Primary : (int)reader["FKCount"] > 0 ? KeyType.Foreign : KeyType.None;
                     return col;
                 });
             this.ClearParameters();
             return cols;
+        }
+
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetKeys"/></summary>
+        public override List<Key> GetKeys(string TableName)
+        {
+            List<Key> keys = new List<Key>();
+            List<Column> cols = this.GetColumns(TableName);
+            foreach (Column col in cols.Where(c => c.Key != KeyType.None).OrderByDescending(c => c.Key.ToString()).ThenBy(c => c.Name))
+            {
+                keys.Add(new Key() { Name = col.Name, Type = col.Key });
+            }
+            return keys;
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>

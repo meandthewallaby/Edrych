@@ -142,10 +142,35 @@ namespace Edrych.DataAccess
                         col.DataType = dataType;
                     }
                     col.IsNullable = reader["Nullable"].ToString() == "Y";
+                    col.Key = reader["Primary?"].ToString().Trim() == "P" ? KeyType.Primary : KeyType.None;
 
                     return col;
                 });
+            sql = DataAccessResources.Teradata_FindForeignKeys.Replace("@DatabaseName", "'" + _activeDatabase + "'").Replace("@TableName", "'" + TableName + "'");
+            List<string> fks = GetDbItems<string>(sql,
+                (reader) =>
+                {
+                    return reader["ChildKeyColumn"].ToString().Trim();
+                });
+
+            foreach (Column col in columns.Where(c => c.Key != KeyType.Primary && fks.Contains(c.Name)))
+            {
+                col.Key = KeyType.Foreign;
+            }
+
             return columns;
+        }
+
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetKeys"/></summary>
+        public override List<Key> GetKeys(string TableName)
+        {
+            List<Key> keys = new List<Key>();
+            List<Column> cols = this.GetColumns(TableName);
+            foreach(Column col in cols.Where(c => c.Key != KeyType.None).OrderByDescending(c => c.Key.ToString()).ThenBy(c => c.Name))
+            {
+                keys.Add(new Key() { Name = col.Name, Type = col.Key });
+            }
+            return keys;
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>

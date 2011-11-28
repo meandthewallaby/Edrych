@@ -30,7 +30,7 @@ namespace Edrych.Models
 
         #endregion
 
-        #region public Properties
+        #region Public Properties
 
         /// <summary>List of items in the tree</summary>
         public Dictionary<string, List<BaseItem>> Cache
@@ -77,7 +77,7 @@ namespace Edrych.Models
 
         #endregion
 
-        #region public Event Triggers
+        #region Public Event Triggers
 
         /// <summary>Trigger for the NodesChanged event</summary>
         /// <param name="Tree">Path of the parent of the changed items</param>

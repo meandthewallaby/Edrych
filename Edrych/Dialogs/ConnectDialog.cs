@@ -69,14 +69,7 @@ namespace Edrych.Dialogs
 
             if (source != null)
             {
-                if (source.ConnType == ConnectionType.ODBC)
-                {
-                    AddOdbcConnections();
-                }
-                else
-                {
-                    AddRecentConnections();
-                }
+                AddRecentConnections();
 
                 if (source.AllowBrowse)
                 {
@@ -91,18 +84,6 @@ namespace Edrych.Dialogs
             if (_settings.RecentConnections != null)
             {
                 foreach (DataAccessConnection conn in _settings.RecentConnections.Where(r => r.Connection == this.SelectedConnectionType))
-                {
-                    this.cbDataSource.Items.Add(conn.DataSource);
-                }
-            }
-        }
-
-        /// <summary>Adds ODBC connections to the data source drop down</summary>
-        private void AddOdbcConnections()
-        {
-            if (_settings.OdbcConnections != null)
-            {
-                foreach (DataAccessConnection conn in _settings.OdbcConnections)
                 {
                     this.cbDataSource.Items.Add(conn.DataSource);
                 }
@@ -245,10 +226,6 @@ namespace Edrych.Dialogs
                     this.cbDataSource.Items.Insert(0, fileName);
                     this.cbDataSource.Text = fileName;
                 }
-            }
-            else if (this.SelectedConnectionType == ConnectionType.ODBC)
-            {
-                ApplySavedConnection(_settings.OdbcConnections.FirstOrDefault(c => c.DataSource == this.cbDataSource.Text));
             }
             else
             {

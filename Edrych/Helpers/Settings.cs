@@ -83,7 +83,6 @@ namespace Edrych.Helpers
         private void LoadSettings()
         {
             GetRecentConnections();
-            GetOdbcConnections();
         }
 
         /// <summary>Loads the recent connections from an XML file</summary>
@@ -125,14 +124,6 @@ namespace Edrych.Helpers
             {
                 _recentConnections.Clear();
             }
-        }
-
-        /// <summary>Loads user and system DSN entries into the ODBC connections list</summary>
-        private void GetOdbcConnections()
-        {
-            _odbcConnections = new List<DataAccessConnection>();
-            GetOdbcFromRegistry(Registry.CurrentUser);
-            GetOdbcFromRegistry(Registry.LocalMachine);
         }
 
         /// <summary>Saves the recent connections to an XML file</summary>
@@ -204,30 +195,6 @@ namespace Edrych.Helpers
 
         #region Private Methods - Registry
 
-        /// <summary>Loads the ODBC DSN entries from the registry given the starting key</summary>
-        /// <param name="key">Registry key representing the top level registry to look into</param>
-        private void GetOdbcFromRegistry(RegistryKey key)
-        {
-            try
-            {
-                RegistryKey reg = key.OpenSubKey("SOFTWARE").OpenSubKey("ODBC").OpenSubKey("ODBC.INI");
-                foreach (string dsn in reg.GetSubKeyNames().Where(k => k != "ODBC Data Sources"))
-                {
-                    RegistryKey dsnKey = reg.OpenSubKey(dsn);
-                    DataAccessConnection dac = new DataAccessConnection();
-                    dac.Connection = ConnectionType.ODBC;
-                    dac.DataSource = dsn;
-                    dac.Auth = GetAuthTypeOfDsn(dsnKey);
-                    dac.Username = GetUsernameOfDsn(dsnKey);
-                    dac.Password = GetPasswordOfDsn(dsn);
-                    _odbcConnections.Add(dac);
-                }
-            }
-            catch
-            {
-            }
-        }
-
         /// <summary>Looks in the registry entry for a DSN to find the saved authentication mode</summary>
         /// <param name="key">Registry key for the DSN connection</param>
         /// <returns></returns>
@@ -262,20 +229,6 @@ namespace Edrych.Helpers
             {
                 return null;
             }
-        }
-
-        /// <summary>Looks in recent connections to see if the selected ODBC has a saved password</summary>
-        /// <param name="DataSource">Name of the DSN</param>
-        /// <returns>String representing the saved password</returns>
-        private string GetPasswordOfDsn(string DataSource)
-        {
-            DataAccessConnection dac = _recentConnections.FirstOrDefault(c => c.Connection == ConnectionType.ODBC && c.DataSource == DataSource);
-            string pass = null;
-            if (dac != null)
-            {
-                pass = dac.Password;
-            }
-            return pass;
         }
 
         #endregion

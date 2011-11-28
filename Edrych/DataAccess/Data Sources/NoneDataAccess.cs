@@ -50,6 +50,12 @@ namespace Edrych.DataAccess
             throw new NotImplementedException();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetKeys"/></summary>
+        public override List<Key> GetKeys(string TableName)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
         public override void SetDatabase(string DatabaseName)
         {

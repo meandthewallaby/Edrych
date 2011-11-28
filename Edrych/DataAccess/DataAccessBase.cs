@@ -267,6 +267,11 @@ namespace Edrych.DataAccess
         /// <returns>List of Column objects</returns>
         public abstract List<Column> GetColumns(string TableName);
 
+        /// <summary>Gets the keys in a table or view</summary>
+        /// <param name="TableName">Table or View name to get key info about</param>
+        /// <returns>List of Key objects</returns>
+        public abstract List<Key> GetKeys(string TableName);
+
         /// <summary>Sets the active database</summary>
         /// <param name="DatabaseName">Name of the database to set the active connection to</param>
         public abstract void SetDatabase(string DatabaseName);

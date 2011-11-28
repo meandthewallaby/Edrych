@@ -34,7 +34,7 @@ namespace Edrych.DataAccess
         public static DataAccessBase GetDataAccess(ConnectionType ConnectionType, string DataSource, string InitialCatalog, AuthType Auth, string Username, string Password)
         {
             DataAccessBase dab = GetConnection(ConnectionType);
-
+            dab.ConnectionType = ConnectionType;
             dab.DataSource = DataSource;
             dab.InitialCatalog = InitialCatalog;
             dab.Authentication = Auth;
@@ -79,7 +79,6 @@ namespace Edrych.DataAccess
             source.ConnType = ConnectionType;
             switch (ConnectionType)
             {
-                case ConnectionType.ODBC:
                 case ConnectionType.SQL_Server:
                     source.AuthTypes = new List<AuthType>() { AuthType.Integrated, AuthType.Basic };
                     source.AcceptsDatabase = false;
@@ -137,9 +136,6 @@ namespace Edrych.DataAccess
                     break;
                 case ConnectionType.DB2:
                     dab = new DB2DataAccess();
-                    break;
-                case ConnectionType.ODBC:
-                    dab = new ODBCServerDataAccess();
                     break;
                 case ConnectionType.SQLite:
                     dab = new SQLiteDataAccess();

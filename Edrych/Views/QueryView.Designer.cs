@@ -47,6 +47,7 @@ namespace Edrych.Views
             this.tpMessages = new System.Windows.Forms.TabPage();
             this.tbMessages = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.rowsReturnedLabel = new System.Windows.Forms.Label();
             this.connectionLabel = new System.Windows.Forms.Label();
             this.queryTimer = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -83,6 +84,7 @@ namespace Edrych.Views
             // tbQuery
             // 
             this.tbQuery.AcceptsTab = true;
+            this.tbQuery.AllowDrop = true;
             this.tbQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -96,8 +98,8 @@ namespace Edrych.Views
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
             this.tbQuery.TextChanged += new System.EventHandler(this.QueryView_QueryChanged);
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
-            this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);
             this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
+            this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);
             this.tbQuery.Leave += new System.EventHandler(this.QueryOrResults_Leave);
             // 
             // tbLines
@@ -207,12 +209,23 @@ namespace Edrych.Views
             // 
             this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.Controls.Add(this.rowsReturnedLabel);
             this.panel1.Controls.Add(this.connectionLabel);
             this.panel1.Controls.Add(this.queryTimer);
             this.panel1.Location = new System.Drawing.Point(0, 277);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(862, 26);
             this.panel1.TabIndex = 1;
+            // 
+            // rowsReturnedLabel
+            // 
+            this.rowsReturnedLabel.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.rowsReturnedLabel.Location = new System.Drawing.Point(501, 0);
+            this.rowsReturnedLabel.Name = "rowsReturnedLabel";
+            this.rowsReturnedLabel.Size = new System.Drawing.Size(314, 24);
+            this.rowsReturnedLabel.TabIndex = 2;
+            this.rowsReturnedLabel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // connectionLabel
             // 
@@ -222,7 +235,7 @@ namespace Edrych.Views
             this.connectionLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.connectionLabel.Location = new System.Drawing.Point(3, 4);
             this.connectionLabel.Name = "connectionLabel";
-            this.connectionLabel.Size = new System.Drawing.Size(792, 20);
+            this.connectionLabel.Size = new System.Drawing.Size(492, 20);
             this.connectionLabel.TabIndex = 1;
             this.connectionLabel.Text = "      Disconnected";
             this.connectionLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -271,6 +284,7 @@ namespace Edrych.Views
         private System.Windows.Forms.TabPage tpMessages;
         private System.Windows.Forms.TextBox tbMessages;
         private System.Windows.Forms.Label connectionLabel;
+        private System.Windows.Forms.Label rowsReturnedLabel;
 
     }
 }

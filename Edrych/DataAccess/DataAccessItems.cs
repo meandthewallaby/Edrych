@@ -46,16 +46,20 @@
     /// <summary>All queries return a result set, consisting of data and messages about the query</summary>
     class ResultSet : IDisposable
     {
+        private DataSet _ds;
         private DataTable _dt;
 
         /// <summary>Constructor</summary>
         public ResultSet()
         {
+            _ds = new DataSet();
+            _ds.EnforceConstraints = false;
             _dt = new DataTable();
+            _ds.Tables.Add(_dt);
         }
 
         /// <summary>DataTable that houses all the data</summary>
-        public DataTable Data { get { return _dt; } }
+        public DataTable Data { get { return _ds.Tables[0]; } }
         /// <summary>String of messages from the query execution</summary>
         public string Messages { get; set; }
 
@@ -87,6 +91,22 @@
         public string DataType { get; set; }
         /// <summary>Whether the column accepts nulls</summary>
         public bool IsNullable { get; set; }
+        /// <summary>Type of key the column is</summary>
+        public KeyType Key { get; set; }
+    }
+
+    /// <summary>Item for keys</summary>
+    class Key : BaseDbItem
+    {
+        /// <summary>What type of key this item is</summary>
+        public KeyType Type { get; set; }
+    }
+
+    /// <summary>Item for indices</summary>
+    class Index : BaseDbItem
+    {
+        /// <summary>Whether or not the index is clustered</summary>
+        public bool IsClustered { get; set; }
     }
 
     /// <summary>Source info for a connection that the connect dialog builds</summary>
@@ -121,9 +141,16 @@
     {
         None,
         DB2,
-        ODBC,
         SQLite,
         SQL_Server,
         Teradata
+    }
+
+    /// <summary>Enumeration of the different key types supported</summary>
+    enum KeyType
+    {
+        None,
+        Foreign,
+        Primary
     }
 }

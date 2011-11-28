@@ -53,6 +53,9 @@ namespace Edrych.Helpers
         /// <summary>Override for the OnMouseDown event to detect clicking on the Close Tab event</summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
+            if (e.Button == System.Windows.Forms.MouseButtons.Right)
+                return;
+
             Point clickedPoint = new Point(e.X, e.Y);
             RectangleF tabRect = RectangleF.Empty;
 
@@ -62,7 +65,8 @@ namespace Edrych.Helpers
 
                 RectangleF closeIcon = new RectangleF(tabRect.X + tabRect.Width - 20, tabRect.Y + 4, 16, 16);
 
-                if (closeIcon.Contains((PointF)clickedPoint))
+                if ((e.Button == System.Windows.Forms.MouseButtons.Left && closeIcon.Contains((PointF)clickedPoint))
+                    || (e.Button == System.Windows.Forms.MouseButtons.Middle && tabRect.Contains((PointF)clickedPoint)))
                 {
                     if (Closing != null)
                     {
