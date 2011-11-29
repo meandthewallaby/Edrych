@@ -349,12 +349,15 @@ namespace Edrych
         private void QueryConnection_Changed(object sender, ConnectionChangedEventArgs e)
         {
             App.LoadingDatabases = true;
+            string selectedDb = string.Empty;
             this.databaseDropDown.Items.Clear();
             foreach (DataAccess.Database db in e.Databases.OrderBy(d => d.Name))
             {
-                this.databaseDropDown.Items.Add(db.Name);
+                this.databaseDropDown.Items.Add(db.Name.Trim());
+                if (db.Name.Trim().ToUpper() == e.SelectedDatabase.ToUpper())
+                    selectedDb = db.Name.Trim();
             }
-            this.databaseDropDown.SelectedItem = e.SelectedDatabase;
+            this.databaseDropDown.SelectedItem = selectedDb;
             App.LoadingDatabases = false;
         }
 

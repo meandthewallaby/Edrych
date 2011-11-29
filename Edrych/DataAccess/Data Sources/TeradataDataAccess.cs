@@ -51,8 +51,6 @@ namespace Edrych.DataAccess
             {"UT", "UDT Type"}
         };
 
-        private string _activeDatabase;
-
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetDbConnection"/></summary>
         protected override System.Data.IDbConnection GetDbConnection()
         {
@@ -104,7 +102,7 @@ namespace Edrych.DataAccess
         private List<TableView> GetTablesOrViews(string Sql)
         {
             this.ClearParameters();
-            this.AddParameter("@DatabaseName", _activeDatabase);
+            this.AddParameter("@DatabaseName", this.SelectedDatabase);
             List<TableView> tableViews = GetDbItems<TableView>(Sql,
                 (reader) =>
                 {
@@ -119,7 +117,7 @@ namespace Edrych.DataAccess
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetColumns"/></summary>
         public override List<Column> GetColumns(string TableName)
         {
-            string sql = DataAccessResources.Teradata_FindColumns.Replace("@DatabaseName", _activeDatabase).Replace("@TableName", TableName);
+            string sql = DataAccessResources.Teradata_FindColumns.Replace("@DatabaseName", this.SelectedDatabase).Replace("@TableName", TableName);
             List<Column> columns = GetDbItems<Column>(sql,
                 (reader) =>
                 {
@@ -146,7 +144,7 @@ namespace Edrych.DataAccess
 
                     return col;
                 });
-            sql = DataAccessResources.Teradata_FindForeignKeys.Replace("@DatabaseName", "'" + _activeDatabase + "'").Replace("@TableName", "'" + TableName + "'");
+            sql = DataAccessResources.Teradata_FindForeignKeys.Replace("@DatabaseName", "'" + this.SelectedDatabase + "'").Replace("@TableName", "'" + TableName + "'");
             List<string> fks = GetDbItems<string>(sql,
                 (reader) =>
                 {
@@ -171,12 +169,6 @@ namespace Edrych.DataAccess
                 keys.Add(new Key() { Name = col.Name, Type = col.Key });
             }
             return keys;
-        }
-
-        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
-        public override void SetDatabase(string DatabaseName)
-        {
-            _activeDatabase = DatabaseName;
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>

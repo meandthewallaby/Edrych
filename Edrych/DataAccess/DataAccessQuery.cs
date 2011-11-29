@@ -117,7 +117,7 @@ namespace Edrych.DataAccess
                 ResultSet rs = new ResultSet();
 
                 rs.Messages = reader.RecordsAffected + " rows affected";
-                rs.Data.Load(reader);
+                LoadResult(rs.Data, reader);
 
                 return rs;
             }
@@ -140,6 +140,36 @@ namespace Edrych.DataAccess
             {
                 throw new OperationCanceledException();
             }
+        }
+
+        private void LoadResult(DataTable dt, IDataReader reader)
+        {
+            DataTable schema = reader.GetSchemaTable();
+            foreach (DataRow row in schema.Rows)
+            {
+                Type t = (Type)row["DataType"];
+                if (t == typeof(byte[]))
+                {
+                    t = typeof(string);
+                }
+                DataColumn col = new DataColumn(row["ColumnName"].ToString(), t);
+                dt.Columns.Add(col);
+            }
+
+            dt.BeginLoadData();
+            while (reader.Read())
+            {
+                object[] vals = new object[dt.Columns.Count];
+                foreach (DataColumn col in dt.Columns)
+                {
+                    if (reader[col.Ordinal].GetType() == typeof(byte[]))
+                        vals[col.Ordinal] = BitConverter.ToString((byte[])reader[col.Ordinal]);
+                    else
+                        vals[col.Ordinal] = reader[col.Ordinal];
+                }
+                dt.LoadDataRow(vals, false);
+            }
+            dt.EndLoadData();
         }
 
         #endregion

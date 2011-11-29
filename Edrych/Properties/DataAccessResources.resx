@@ -155,7 +155,7 @@ ORDER BY name;</value>
 WHERE type='view'
 ORDER BY name;</value>
   </data>
-  <data name="SQLServer_FindColumns" xml:space="preserve">
+  <data name="ANSI_FindColumns" xml:space="preserve">
     <value>select
 	c.COLUMN_NAME as name,
 	c.DATA_TYPE 
@@ -275,8 +275,6 @@ order by
 	DatabaseName
 from
 	DBC.DatabasesX
-WHERE
-	DBKind = 'D'
 order by 1</value>
   </data>
   <data name="Teradata_FindTables" xml:space="preserve">
@@ -320,5 +318,44 @@ from
 where
 	ChildDB = @DatabaseName
 	and ChildTable = @TableName</value>
+  </data>
+  <data name="ANSI_FindKeys" xml:space="preserve">
+    <value>select
+	tc.CONSTRAINT_NAME,
+	case 
+		when CONSTRAINT_TYPE = 'PRIMARY KEY' then 1
+		when CONSTRAINT_TYPE = 'FOREIGN KEY' then 2
+		else 0
+	end as KeyType
+from
+	INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+where
+	tc.TABLE_SCHEMA = @SchemaName
+	and tc.TABLE_NAME = @TableName
+	and tc.CONSTRAINT_TYPE in ('PRIMARY KEY', 'FOREIGN KEY')
+order by
+	KeyType,
+	CONSTRAINT_NAME</value>
+  </data>
+  <data name="DB2_FindKeys" xml:space="preserve">
+    <value>select
+	CONSTNAME,
+	case
+		when TYPE = 'P' then 1
+		when TYPE = 'F' then 2
+		else 0
+	end as KeyType
+from
+	syscat.tabconst tc
+where
+	tc.type in ('P', 'F')
+	and tc.TABSCHEMA = @SchemaName
+	and tc.TABNAME = @TableName
+order by
+	KeyType,
+	CONSTNAME</value>
+  </data>
+  <data name="Teradata_SetDatabase" xml:space="preserve">
+    <value>set session database @DatabaseName</value>
   </data>
 </root>

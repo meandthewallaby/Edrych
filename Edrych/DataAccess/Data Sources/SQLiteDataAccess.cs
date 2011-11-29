@@ -108,12 +108,6 @@ namespace Edrych.DataAccess
             return keys;
         }
 
-        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
-        public override void SetDatabase(string DatabaseName)
-        {
-            
-        }
-
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
         protected override string BuildConnectionString()
         {

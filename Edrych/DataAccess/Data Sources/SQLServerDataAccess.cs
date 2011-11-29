@@ -75,21 +75,8 @@ namespace Edrych.DataAccess
         public override List<Column> GetColumns(string TableName)
         {
             this.ClearParameters();
-            int dotIndex = TableName.IndexOf(".");
-            string schema = "dbo";
-            string table;
-            if (dotIndex > 0)
-            {
-                schema = TableName.Substring(0, TableName.IndexOf("."));
-                table = TableName.Substring(TableName.IndexOf(".") + 1);
-            }
-            else
-            {
-                table = TableName;
-            }
-            this.AddParameter("@SchemaName", schema);
-            this.AddParameter("@TableName", table);
-            List<Column> cols = GetDbItems<Column>(DataAccessResources.SQLServer_FindColumns,
+            this.AddTableParams(TableName);
+            List<Column> cols = GetDbItems<Column>(DataAccessResources.ANSI_FindColumns,
                 (reader) =>
                 {
                     Column col = new Column();
@@ -106,23 +93,18 @@ namespace Edrych.DataAccess
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.GetKeys"/></summary>
         public override List<Key> GetKeys(string TableName)
         {
-            List<Key> keys = new List<Key>();
-            List<Column> cols = this.GetColumns(TableName);
-            foreach (Column col in cols.Where(c => c.Key != KeyType.None).OrderByDescending(c => c.Key.ToString()).ThenBy(c => c.Name))
-            {
-                keys.Add(new Key() { Name = col.Name, Type = col.Key });
-            }
+            this.ClearParameters();
+            this.AddTableParams(TableName);
+            List<Key> keys = GetDbItems<Key>(DataAccessResources.ANSI_FindKeys,
+                (reader) =>
+                {
+                    Key myKey = new Key();
+                    myKey.Name = reader["CONSTRAINT_NAME"].ToString();
+                    int myType = (int)reader["KeyType"];
+                    myKey.Type = myType == 1 ? KeyType.Primary : myType == 2 ? KeyType.Foreign : KeyType.None;
+                    return myKey;
+                });
             return keys;
-        }
-
-        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
-        public override void SetDatabase(string DatabaseName)
-        {
-            string sql = DataAccessResources.SQLServer_SetDatabase.Replace("@DatabaseReplaceName", DatabaseName);
-            this.ClearParameters();
-            this.AddParameter("@DatabaseName", DatabaseName);
-            this.ExecuteNonQuery(sql);
-            this.ClearParameters();
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
@@ -132,6 +114,12 @@ namespace Edrych.DataAccess
             sb.Append("Data Source=");
             sb.Append(this.DataSource);
             sb.Append(";");
+            if (!string.IsNullOrEmpty(this.InitialCatalog))
+            {
+                sb.Append("Initial Catalog=");
+                sb.Append(this.InitialCatalog);
+                sb.Append(";");
+            }
             switch (this.Authentication)
             {
                 case AuthType.Integrated:
@@ -142,6 +130,24 @@ namespace Edrych.DataAccess
                     break;
             }
             return sb.ToString();
+        }
+
+        private void AddTableParams(string TableName)
+        {
+            int dotIndex = TableName.IndexOf(".");
+            string schema = "dbo";
+            string table;
+            if (dotIndex > 0)
+            {
+                schema = TableName.Substring(0, TableName.IndexOf("."));
+                table = TableName.Substring(TableName.IndexOf(".") + 1);
+            }
+            else
+            {
+                table = TableName;
+            }
+            this.AddParameter("@SchemaName", schema);
+            this.AddParameter("@TableName", table);
         }
     }
 }

@@ -184,6 +184,13 @@ namespace Edrych.DataAccess
 
         #region Public Methods
 
+        /// <summary>Sets the active database</summary>
+        /// <param name="DatabaseName">Name of the database to set the active connection to</param>
+        public void SetDatabase(string DatabaseName)
+        {
+            this._conn.ChangeDatabase(DatabaseName);
+        }
+
         /// <summary>Closes and disposes of all connection objects</summary>
         public void Dispose()
         {
@@ -271,11 +278,7 @@ namespace Edrych.DataAccess
         /// <param name="TableName">Table or View name to get key info about</param>
         /// <returns>List of Key objects</returns>
         public abstract List<Key> GetKeys(string TableName);
-
-        /// <summary>Sets the active database</summary>
-        /// <param name="DatabaseName">Name of the database to set the active connection to</param>
-        public abstract void SetDatabase(string DatabaseName);
-        
+                
         #endregion
 
         #region Protected Methods

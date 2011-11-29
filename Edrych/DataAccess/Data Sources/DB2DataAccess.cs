@@ -70,12 +70,8 @@ namespace Edrych.DataAccess
         public override List<Column> GetColumns(string TableName)
         {
             List<Column> cols = new List<Column>();
-            int dotIndex = TableName.IndexOf('.');
-            if (dotIndex > 0 && dotIndex < TableName.Length - 1)
+            if (AddTableParameters(TableName))
             {
-                this.ClearParameters();
-                this.AddParameter("@SchemaName", TableName.Substring(0, dotIndex));
-                this.AddParameter("@TableName", TableName.Substring(dotIndex + 1));
                 cols = GetDbItems<Column>(DataAccessResources.DB2_FindColumns,
                     (reader) =>
                     {
@@ -96,18 +92,19 @@ namespace Edrych.DataAccess
         public override List<Key> GetKeys(string TableName)
         {
             List<Key> keys = new List<Key>();
-            List<Column> cols = this.GetColumns(TableName);
-            foreach (Column col in cols.Where(c => c.Key != KeyType.None).OrderByDescending(c => c.Key.ToString()).ThenBy(c => c.Name))
+            if (AddTableParameters(TableName))
             {
-                keys.Add(new Key() { Name = col.Name, Type = col.Key });
+                keys = GetDbItems<Key>(DataAccessResources.DB2_FindKeys,
+                    (reader) =>
+                    {
+                        Key myKey = new Key();
+                        myKey.Name = reader["CONSTNAME"].ToString();
+                        int myType = (int)reader["KeyType"];
+                        myKey.Type = myType == 1 ? KeyType.Primary : myType == 2 ? KeyType.Foreign : KeyType.None;
+                        return myKey;
+                    });
             }
             return keys;
-        }
-
-        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.SetDatabase"/></summary>
-        public override void SetDatabase(string DatabaseName)
-        {
-            
         }
 
         /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildConnectionString"/></summary>
@@ -119,6 +116,20 @@ namespace Edrych.DataAccess
             sb.Append("UID=" + this.Username + ";");
             sb.Append("PWD=" + this.Password + ";");
             return sb.ToString();
+        }
+
+        private bool AddTableParameters(string TableName)
+        {
+            bool ret = false;
+            int dotIndex = TableName.IndexOf('.');
+            if (dotIndex > 0 && dotIndex < TableName.Length - 1)
+            {
+                this.ClearParameters();
+                this.AddParameter("@SchemaName", TableName.Substring(0, dotIndex));
+                this.AddParameter("@TableName", TableName.Substring(dotIndex + 1));
+                ret = true;
+            }
+            return ret;
         }
     }
 }

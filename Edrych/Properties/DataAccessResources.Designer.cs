@@ -62,6 +62,51 @@ namespace Edrych.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to select
+        ///	c.COLUMN_NAME as name,
+        ///	c.DATA_TYPE 
+        ///		+ ISNULL(&apos;(&apos; + cast(c.character_maximum_length as varchar) + &apos;)&apos;, &apos;&apos;)
+        ///		+ case 
+        ///			when c.DATA_TYPE in (&apos;decimal&apos;, &apos;numeric&apos;) then
+        ///				ISNULL(&apos;(&apos; + cast(c.NUMERIC_PRECISION as varchar) + &apos;, &apos; + CAST(c.NUMERIC_SCALE as varchar) + &apos;)&apos;, &apos;&apos;)
+        ///			else &apos;&apos;
+        ///		end
+        ///	as type,
+        ///	c.IS_NULLABLE,
+        ///	sum(case when tc.CONSTRAINT_TYPE = &apos;PRIMARY KEY&apos; and kcu.COLUMN_NAME is not null then 1 else 0 end) as PKCount,
+        ///	sum(case when tc.CONSTRAINT_TYPE = &apos;FOREIGN KEY&apos; and kcu.C [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ANSI_FindColumns {
+            get {
+                return ResourceManager.GetString("ANSI_FindColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	tc.CONSTRAINT_NAME,
+        ///	case 
+        ///		when CONSTRAINT_TYPE = &apos;PRIMARY KEY&apos; then 1
+        ///		when CONSTRAINT_TYPE = &apos;FOREIGN KEY&apos; then 2
+        ///		else 0
+        ///	end as KeyType
+        ///from
+        ///	INFORMATION_SCHEMA.TABLE_CONSTRAINTS tc
+        ///where
+        ///	tc.TABLE_SCHEMA = @SchemaName
+        ///	and tc.TABLE_NAME = @TableName
+        ///	and tc.CONSTRAINT_TYPE in (&apos;PRIMARY KEY&apos;, &apos;FOREIGN KEY&apos;)
+        ///order by
+        ///	KeyType,
+        ///	CONSTRAINT_NAME.
+        /// </summary>
+        internal static string ANSI_FindKeys {
+            get {
+                return ResourceManager.GetString("ANSI_FindKeys", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
         ///	TABLE_SCHEMA,
         ///	TABLE_NAME
         ///from
@@ -113,6 +158,30 @@ namespace Edrych.Properties {
         internal static string DB2_FindColumns {
             get {
                 return ResourceManager.GetString("DB2_FindColumns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to select
+        ///	CONSTNAME,
+        ///	case
+        ///		when TYPE = &apos;P&apos; then 1
+        ///		when TYPE = &apos;F&apos; then 2
+        ///		else 0
+        ///	end as KeyType
+        ///from
+        ///	syscat.tabconst tc
+        ///where
+        ///	tc.type in (&apos;P&apos;, &apos;F&apos;)
+        ///	and tc.TABSCHEMA = @SchemaName
+        ///	and tc.TABNAME = @TableName
+        ///order by
+        ///	KeyType,
+        ///	CONSTNAME.
+        /// </summary>
+        internal static string DB2_FindKeys {
+            get {
+                return ResourceManager.GetString("DB2_FindKeys", resourceCulture);
             }
         }
         
@@ -218,27 +287,6 @@ namespace Edrych.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to select
-        ///	c.COLUMN_NAME as name,
-        ///	c.DATA_TYPE 
-        ///		+ ISNULL(&apos;(&apos; + cast(c.character_maximum_length as varchar) + &apos;)&apos;, &apos;&apos;)
-        ///		+ case 
-        ///			when c.DATA_TYPE in (&apos;decimal&apos;, &apos;numeric&apos;) then
-        ///				ISNULL(&apos;(&apos; + cast(c.NUMERIC_PRECISION as varchar) + &apos;, &apos; + CAST(c.NUMERIC_SCALE as varchar) + &apos;)&apos;, &apos;&apos;)
-        ///			else &apos;&apos;
-        ///		end
-        ///	as type,
-        ///	c.IS_NULLABLE,
-        ///	sum(case when tc.CONSTRAINT_TYPE = &apos;PRIMARY KEY&apos; and kcu.COLUMN_NAME is not null then 1 else 0 end) as PKCount,
-        ///	sum(case when tc.CONSTRAINT_TYPE = &apos;FOREIGN KEY&apos; and kcu.C [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string SQLServer_FindColumns {
-            get {
-                return ResourceManager.GetString("SQLServer_FindColumns", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to select
         ///	name
         ///from
         ///	sys.databases
@@ -279,8 +327,6 @@ namespace Edrych.Properties {
         ///	DatabaseName
         ///from
         ///	DBC.DatabasesX
-        ///WHERE
-        ///	DBKind = &apos;D&apos;
         ///order by 1.
         /// </summary>
         internal static string Teradata_FindDatabases {
@@ -335,6 +381,15 @@ namespace Edrych.Properties {
         internal static string Teradata_FindViews {
             get {
                 return ResourceManager.GetString("Teradata_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to set session database @DatabaseName.
+        /// </summary>
+        internal static string Teradata_SetDatabase {
+            get {
+                return ResourceManager.GetString("Teradata_SetDatabase", resourceCulture);
             }
         }
     }
