@@ -140,6 +140,68 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to absolute
+        ///action
+        ///allocate
+        ///are
+        ///assertion
+        ///bit
+        ///bit_length
+        ///both
+        ///cascaded
+        ///case
+        ///cast
+        ///catalog
+        ///char
+        ///char_length
+        ///character
+        ///character_length
+        ///coalesce
+        ///collate
+        ///collation
+        ///column
+        ///connection
+        ///constraints
+        ///corresponding
+        ///cross
+        ///current_date
+        ///current_time
+        ///current_timestamp
+        ///current_user
+        ///date
+        ///day
+        ///dec
+        ///decimal
+        ///deferrable
+        ///deferred
+        ///describe
+        ///descriptor
+        ///diagnostics
+        ///disconnect
+        ///domain
+        ///end-exec
+        ///exception
+        ///extract
+        ///false
+        ///first
+        ///float
+        ///found
+        ///full
+        ///get
+        ///global
+        ///go
+        ///hour
+        ///immediate
+        ///indicator
+        ///initially [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string ANSI_Keywords {
+            get {
+                return ResourceManager.GetString("ANSI_Keywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select
         ///	LTRIM(RTRIM(c.COLNAME)) as COLNAME,
         ///	NULLS,
@@ -223,6 +285,77 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ABS
+        ///ACTIVATE
+        ///ADD
+        ///AFTER
+        ///ALIAS
+        ///ALL
+        ///ALLOCATE
+        ///ALLOW
+        ///ALTER
+        ///AND
+        ///ANY
+        ///ARE
+        ///ARRAY
+        ///AS
+        ///ASENSITIVE
+        ///ASSOCIATE
+        ///ASUTIME
+        ///ASYMMETRIC
+        ///AT
+        ///ATOMIC
+        ///ATTRIBUTES
+        ///AUDIT
+        ///AUTHORIZATION
+        ///AUX
+        ///AUXILIARY
+        ///AVG
+        ///BEFORE
+        ///BEGIN
+        ///BETWEEN
+        ///BIGINT
+        ///BINARY
+        ///BLOB
+        ///BOOLEAN
+        ///BOTH
+        ///BUFFERPOOL
+        ///BY
+        ///CACHE
+        ///CALL
+        ///CALLED
+        ///CAPTURE
+        ///CARDINALITY
+        ///CASCADED
+        ///CASE
+        ///CAST
+        ///CCSID
+        ///CEIL
+        ///CEILING
+        ///CHAR
+        ///CHAR_LENGTH
+        ///CHARACTER
+        ///CHARACTER_LENGTH
+        ///CHECK
+        ///CLOB
+        ///CLOSE
+        ///CLUSTER
+        ///COALESCE
+        ///COLLATE
+        ///COLLECT
+        ///COLLECTION
+        ///COLLID
+        ///COLUMN
+        ///COMMENT
+        ///COMMIT [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DB2_Keywords {
+            get {
+                return ResourceManager.GetString("DB2_Keywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data Source=%TEMP%\Test.db3.
         /// </summary>
         internal static string DefaultConnectionString {
@@ -286,6 +419,79 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ABORT
+        ///ACTION
+        ///ADD
+        ///AFTER
+        ///ALL
+        ///ALTER
+        ///ANALYZE
+        ///AND
+        ///AS
+        ///ASC
+        ///ATTACH
+        ///AUTOINCREMENT
+        ///BEFORE
+        ///BEGIN
+        ///BETWEEN
+        ///BY
+        ///CASCADE
+        ///CASE
+        ///CAST
+        ///CHECK
+        ///COLLATE
+        ///COLUMN
+        ///COMMIT
+        ///CONFLICT
+        ///CONSTRAINT
+        ///CREATE
+        ///CROSS
+        ///CURRENT_DATE
+        ///CURRENT_TIME
+        ///CURRENT_TIMESTAMP
+        ///DATABASE
+        ///DEFAULT
+        ///DEFERRABLE
+        ///DEFERRED
+        ///DELETE
+        ///DESC
+        ///DETACH
+        ///DISTINCT
+        ///DROP
+        ///EACH
+        ///ELSE
+        ///END
+        ///ESCAPE
+        ///EXCEPT
+        ///EXCLUSIVE
+        ///EXISTS
+        ///EXPLAIN
+        ///FAIL
+        ///FOR
+        ///FOREIGN
+        ///FROM
+        ///FULL
+        ///GLOB
+        ///GROUP
+        ///HAVING
+        ///IF
+        ///IGNORE
+        ///IMMEDIATE
+        ///IN
+        ///INDEX
+        ///INDEXED
+        ///INITIALLY
+        ///INNER
+        ///INSERT
+        /// [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SQLite_Keywords {
+            get {
+                return ResourceManager.GetString("SQLite_Keywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select
         ///	name
         ///from
@@ -300,6 +506,75 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ADD
+        ///EXISTS
+        ///PRECISION
+        ///ALL
+        ///EXIT
+        ///PRIMARY
+        ///ALTER
+        ///EXTERNAL
+        ///PRINT
+        ///AND
+        ///FETCH
+        ///PROC
+        ///ANY
+        ///FILE
+        ///PROCEDURE
+        ///AS
+        ///FILLFACTOR
+        ///PUBLIC
+        ///ASC
+        ///FOR
+        ///RAISERROR
+        ///AUTHORIZATION
+        ///FOREIGN
+        ///READ
+        ///BACKUP
+        ///FREETEXT
+        ///READTEXT
+        ///BEGIN
+        ///FREETEXTTABLE
+        ///RECONFIGURE
+        ///BETWEEN
+        ///FROM
+        ///REFERENCES
+        ///BREAK
+        ///FULL
+        ///REPLICATION
+        ///BROWSE
+        ///FUNCTION
+        ///RESTORE
+        ///BULK
+        ///GOTO
+        ///RESTRICT
+        ///BY
+        ///GRANT
+        ///RETURN
+        ///CASCADE
+        ///GROUP
+        ///REVERT
+        ///CASE
+        ///HAVING
+        ///REVOKE
+        ///CHECK
+        ///HOLDLOCK
+        ///RIGHT
+        ///CHECKPOINT
+        ///IDENTITY
+        ///ROLLBACK
+        ///CLOSE
+        ///IDENTITY_INSERT
+        ///ROWCOUNT
+        ///CLUSTERED [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SQLServer_Keywords {
+            get {
+                return ResourceManager.GetString("SQLServer_Keywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to if exists (select 1 from sys.databases d where d.name = @DatabaseName)
         ///begin
         ///
@@ -310,6 +585,15 @@ namespace Edrych.Properties {
         internal static string SQLServer_SetDatabase {
             get {
                 return ResourceManager.GetString("SQLServer_SetDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        internal static string SQLServerKeywords {
+            get {
+                return ResourceManager.GetString("SQLServerKeywords", resourceCulture);
             }
         }
         
@@ -381,6 +665,81 @@ namespace Edrych.Properties {
         internal static string Teradata_FindViews {
             get {
                 return ResourceManager.GetString("Teradata_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ABORT
+        ///ABORTSESSION
+        ///ABS
+        ///ABSOLUTE
+        ///ACCESS_LOCK
+        ///ACCOUNT
+        ///ACOS
+        ///ACOSH
+        ///ACTION
+        ///ADD
+        ///ADD_MONTHS
+        ///ADMIN
+        ///AFTER
+        ///AGGREGATE
+        ///ALIAS
+        ///ALL
+        ///ALLOCATE
+        ///ALTER
+        ///AMP
+        ///AND
+        ///ANSIDATE
+        ///ANY
+        ///ARE
+        ///ARRAY
+        ///AS
+        ///ASC
+        ///ASIN
+        ///ASINH
+        ///ASSERTION
+        ///AT
+        ///ATAN
+        ///ATAN2
+        ///ATANH
+        ///ATOMIC
+        ///AUTHORIZATION
+        ///AVE
+        ///AVERAGE
+        ///AVG
+        ///BEFORE
+        ///BEGIN
+        ///BETWEEN
+        ///BINARY
+        ///BIT
+        ///BLOB
+        ///BOOLEAN
+        ///BOTH
+        ///BREADTH
+        ///BT
+        ///BUT
+        ///BY
+        ///BYTE
+        ///BYTEINT
+        ///BYTES
+        ///CALL
+        ///CASCADE
+        ///CASCADED
+        ///CASE
+        ///CASE_N
+        ///CASESPECIFIC
+        ///CAST
+        ///CATALOG
+        ///CD
+        ///CHAR
+        ///CHAR_LENGTH
+        ///CHAR2HEXINT
+        ///CHARACTER
+        ///CHARACTER [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string Teradata_Keywords {
+            get {
+                return ResourceManager.GetString("Teradata_Keywords", resourceCulture);
             }
         }
         

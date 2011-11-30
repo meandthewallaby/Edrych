@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using Edrych.Properties;
 
 namespace Edrych.DataAccess
 {
@@ -13,6 +14,7 @@ namespace Edrych.DataAccess
         private IDbCommand _comm;
         private IDbTransaction _tran;
         private DataAccessQuery _daq = null;
+        private List<string> _keywords = null;
 
         #endregion
 
@@ -44,6 +46,8 @@ namespace Edrych.DataAccess
         public string SelectedDatabase { get { return this._conn.Database; } }
         /// <summary>Returns whether or not the connection is actively connected</summary>
         public bool IsConnected { get { return _conn != null && _conn.State != ConnectionState.Closed && _conn.State != ConnectionState.Broken; } }
+        /// <summary>Returns the list of keywords for this data access layer</summary>
+        public List<string> Keywords { get { return _keywords; } }
 
         #endregion
 
@@ -179,6 +183,20 @@ namespace Edrych.DataAccess
         {
             _comm.Parameters.Clear();
         }
+
+        /// <summary>Gets single line comment</summary>
+        /// <returns>String representing the single line comment syntax</returns>
+        public virtual string GetComment()
+        {
+            return @"\-\-";
+        }
+
+        /// <summary>Gets the delimiters for a multiline comment</summary>
+        /// <returns>String array representing the beginning and ending delimiters</returns>
+        public virtual string[] GetMultilineComment()
+        {
+            return new string[] { @"\/\*", @"\*\/" };
+        }
     
         #endregion
 
@@ -252,10 +270,10 @@ namespace Edrych.DataAccess
         /// <summary>Builds the connection string necessary for connection to the database</summary>
         /// <returns>String representing the connection string</returns>
         protected abstract string BuildConnectionString();
-
+        
         #endregion
 
-        #region Abstract Methods - Internal
+        #region Virtual/Abstract Methods - Public
 
         /// <summary>Gets the databases on the server.</summary>
         /// <returns>List of Database objects representing the databases</returns>
@@ -278,6 +296,13 @@ namespace Edrych.DataAccess
         /// <param name="TableName">Table or View name to get key info about</param>
         /// <returns>List of Key objects</returns>
         public abstract List<Key> GetKeys(string TableName);
+
+        /// <summary>Builds the keyword list</summary>
+        public virtual void BuildKeywords()
+        {
+            //ANSI keywords loaded from http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.blocks/html/blocks/blocks295.htm
+            LoadKeywords(DataAccessResources.ANSI_Keywords);
+        }
                 
         #endregion
 
@@ -305,6 +330,17 @@ namespace Edrych.DataAccess
             reader.Close();
 
             return collection;
+        }
+
+        /// <summary>Gets the list of ANSI SQL keywords</summary>
+        /// <returns>List of keywords in ANSI SQL</returns>
+        protected void LoadKeywords(string WordList)
+        {
+            _keywords = new List<string>();
+            foreach (string word in WordList.Split('\n'))
+            {
+                _keywords.Add(word.Trim());
+            }
         }
 
         #endregion

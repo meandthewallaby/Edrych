@@ -132,6 +132,15 @@ namespace Edrych.DataAccess
             return sb.ToString();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildKeywords"/></summary>
+        public override void BuildKeywords()
+        {
+            //SQL Server keywords loaded from http://msdn.microsoft.com/en-us/library/ms189822.aspx
+            LoadKeywords(DataAccessResources.SQLServer_Keywords);
+        }
+
+        /// <summary>Adds the schema and table name parameters to the command</summary>
+        /// <param name="TableName">Schema.Table name</param>
         private void AddTableParams(string TableName)
         {
             int dotIndex = TableName.IndexOf(".");

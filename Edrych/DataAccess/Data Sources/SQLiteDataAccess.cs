@@ -123,5 +123,12 @@ namespace Edrych.DataAccess
             }
             return sb.ToString();
         }
+
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildKeywords"/></summary>
+        public override void BuildKeywords()
+        {
+            //Keywords loaded from http://www.sqlite.org/lang_keywords.html
+            LoadKeywords(DataAccessResources.SQLite_Keywords);
+        }
     }
 }

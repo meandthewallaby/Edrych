@@ -112,6 +112,9 @@
     <Compile Include="Helpers\DataGridViewExt.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Helpers\SyntaxRichTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\TabControlExt.cs">
       <SubType>Component</SubType>
@@ -223,6 +226,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Libs\Aga.Controls.dll" />
+    <None Include="Resources\SQLServerKeywords.txt" />
     <None Include="Resources\primary_key.png" />
     <None Include="Resources\foreign_key.png" />
     <None Include="Resources\outdent.png" />

@@ -35,7 +35,7 @@ namespace Edrych.Views
             this.dgResults.DataSource = _queryViewModel.DataBinding;
             this.tbMessages.DataBindings.Add("Text", _queryViewModel, "Messages");
             this.Name = Guid.NewGuid().ToString();
-
+            
             _queryViewModel.BeginQuery += this.BeginQuery;
             _queryViewModel.EndQuery += this.EndQuery;
 
@@ -274,6 +274,16 @@ namespace Edrych.Views
 
                 this.connectionLabel.Image = Resources.connect;
                 this.connectionLabel.Text = "        Connected to " + _queryViewModel.Data.DataSource;
+
+                //Auto-complete info
+                this.tbQuery.NormalColor = Color.Black;
+                this.tbQuery.CommentColor = Color.Green;
+                this.tbQuery.KeywordColor = Color.Blue;
+
+                this.tbQuery.Comment = _queryViewModel.Data.GetComment();
+                this.tbQuery.MultilineComment = _queryViewModel.Data.GetMultilineComment();
+                this.tbQuery.Keywords = _queryViewModel.Data.Keywords;
+                this.tbQuery.InitializeSyntax();
             }
             else
             {
@@ -289,7 +299,7 @@ namespace Edrych.Views
         #region Private Methods - Event Handlers
 
         /// <summary>Handles when the query text is changed</summary>
-        private void QueryView_QueryChanged(object sender, EventArgs e)
+        private void QueryView_QueryChanged(object sender, InvalidateEventArgs e)
         {
             int newLines = this.tbQuery.Lines.Count();
 

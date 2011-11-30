@@ -44,6 +44,7 @@ namespace Edrych.ViewModels
                 Browser.ActiveConnection.Username,
                 Browser.ActiveConnection.Password
                 );
+            _dab.BuildKeywords();
             _browser = Browser;
         }
 

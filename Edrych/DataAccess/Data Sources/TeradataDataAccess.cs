@@ -180,5 +180,12 @@ namespace Edrych.DataAccess
             sb.Append("Password=" + this.Password + ";");
             return sb.ToString();
         }
+
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildKeywords"/></summary>
+        public override void BuildKeywords()
+        {
+            //Keywords loaded from http://www.teradataforum.com/l030103a.htm
+            LoadKeywords(DataAccessResources.Teradata_Keywords);
+        }
     }
 }

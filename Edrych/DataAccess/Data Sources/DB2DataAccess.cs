@@ -118,6 +118,13 @@ namespace Edrych.DataAccess
             return sb.ToString();
         }
 
+        /// <summary><see cref="Edrych.DataAccess.DataAccessBase.BuildKeywords"/></summary>
+        public override void BuildKeywords()
+        {
+            //Keywords loaded from http://publib.boulder.ibm.com/infocenter/db2luw/v9/index.jsp?topic=%2Fcom.ibm.db2.udb.admin.doc%2Fdoc%2Fr0001095.htm
+            LoadKeywords(DataAccessResources.DB2_Keywords);
+        }
+
         private bool AddTableParameters(string TableName)
         {
             bool ret = false;

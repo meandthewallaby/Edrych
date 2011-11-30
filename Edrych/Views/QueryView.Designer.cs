@@ -39,7 +39,7 @@ namespace Edrych.Views
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QueryView));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tbQuery = new System.Windows.Forms.RichTextBox();
+            this.tbQuery = new SyntaxRichTextBox();
             this.tbLines = new System.Windows.Forms.RichTextBox();
             this.tcResults = new System.Windows.Forms.TabControl();
             this.tpResults = new System.Windows.Forms.TabPage();
@@ -96,7 +96,7 @@ namespace Edrych.Views
             this.tbQuery.TabIndex = 0;
             this.tbQuery.Text = "";
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
-            this.tbQuery.TextChanged += new System.EventHandler(this.QueryView_QueryChanged);
+            this.tbQuery.Invalidated += this.QueryView_QueryChanged;
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
             this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
             this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);
@@ -275,7 +275,7 @@ namespace Edrych.Views
 
         private System.Windows.Forms.SplitContainer splitContainer1;
         private DataGridViewExt dgResults;
-        private System.Windows.Forms.RichTextBox tbQuery;
+        private SyntaxRichTextBox tbQuery;
         private System.Windows.Forms.RichTextBox tbLines;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Label queryTimer;
