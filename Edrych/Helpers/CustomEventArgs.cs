@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using Edrych.DataAccess;
 
 namespace Edrych.Helpers
@@ -21,6 +22,38 @@ namespace Edrych.Helpers
 
         /// <summary>ResultSet the event fires with</summary>
         public ResultSet Results { get; set; }
+    }
+
+    /// <summary>Delegate to handle when the query creates its schema</summary>
+    delegate void RunQuerySchemaCreatedEventHandler (object sender, RunQuerySchemaCreatedEventArgs e);
+
+    /// <summary>Event arguments carrying a schema table</summary>
+    class RunQuerySchemaCreatedEventArgs : EventArgs
+    {
+        private DataTable _data;
+
+        public RunQuerySchemaCreatedEventArgs(DataTable SchemaTable) : base()
+        {
+            _data = SchemaTable;
+        }
+
+        public DataTable Data { get { return _data; } }
+    }
+
+    /// <summary>Delegate to handle a row being read</summary>
+    delegate void RunQueryRowCreatedEventHandler(object sender, RunQueryRowCreatedEventArgs e);
+
+    /// <summary>Event arguments carrying a data row</summary>
+    class RunQueryRowCreatedEventArgs : EventArgs
+    {
+        private object[] _row;
+
+        public RunQueryRowCreatedEventArgs(object[] row) : base()
+        {
+            _row = row;
+        }
+
+        public object[] Row { get { return _row; } }
     }
 
     /// <summary>Delegate to handle the EndQuery event</summary>

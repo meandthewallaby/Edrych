@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.Data;
 
     /// <summary>Object to use to track recent connections and build a connection from the Connect Dialog</summary>
@@ -44,7 +45,7 @@
     }
 
     /// <summary>All queries return a result set, consisting of data and messages about the query</summary>
-    class ResultSet : IDisposable
+    class ResultSet : INotifyPropertyChanged, IDisposable
     {
         private DataSet _ds;
         private DataTable _dt;
@@ -63,11 +64,25 @@
         /// <summary>String of messages from the query execution</summary>
         public string Messages { get; set; }
 
+        public void SetData(DataTable NewTable)
+        {
+            if (_ds.Tables.Count == 1)
+                _ds.Tables.RemoveAt(0);
+            _ds.Tables.Add(NewTable);
+        }
+
         /// <summary>Disposes the data</summary>
         public void Dispose()
         {
             if (_dt != null)
                 _dt.Dispose();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        public void OnPropertyChanged(string PropertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
         }
     }
 

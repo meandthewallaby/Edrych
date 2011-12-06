@@ -16,8 +16,11 @@ namespace Edrych.Helpers
         #region Private/Global Variables
 
         private Regex _keywordRegex;
+        private Regex _stringRegex;
         private Regex _commentRegex;
         private Regex _multilineCommentRegex;
+
+        private int _numLines = 0;
 
         [DllImport("user32.dll")]
         private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
@@ -27,10 +30,12 @@ namespace Edrych.Helpers
 
         #region Public Properties
 
-        /// <summary>Color of a language keyword</summary>
-        public Color KeywordColor { get; set; }
         /// <summary>Color of normal text</summary>
         public Color NormalColor { get; set; }
+        /// <summary>Color of a language keyword</summary>
+        public Color KeywordColor { get; set; }
+        /// <summary>Color of string text</summary>
+        public Color StringColor { get; set; }
         /// <summary>Color of a language comment</summary>
         public Color CommentColor { get; set; }
         /// <summary>Comment pattern</summary>
@@ -50,6 +55,7 @@ namespace Edrych.Helpers
             string keywordPattern = SetKeywords();
             string multilinePattern = GetMultilinePattern();
             _keywordRegex = new Regex(keywordPattern, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+            _stringRegex = new Regex(@"'(\n|.)*?'|'(\n|.)*?$(?!')", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             _commentRegex = new Regex(this.Comment + @".*?(\n|$)", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
             _multilineCommentRegex = new Regex(multilinePattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
         }
@@ -75,6 +81,13 @@ namespace Edrych.Helpers
         {
             BeginUpdate();
 
+            if (this.Lines.Count() != _numLines)
+            {
+                AddTabIndents();
+            }
+
+            _numLines = this.Lines.Count();
+
             int prevPos = this.SelectionStart;
 
             this.SelectAll();
@@ -82,6 +95,7 @@ namespace Edrych.Helpers
             this.Select(prevPos, 0);
 
             ParseSyntax(_keywordRegex, this.KeywordColor);
+            ParseSyntax(_stringRegex, this.StringColor);
             ParseSyntax(_commentRegex, this.CommentColor);
             ParseMultilineComments(_multilineCommentRegex, this.CommentColor);
 
@@ -91,7 +105,7 @@ namespace Edrych.Helpers
             this.Select(prevPos, 0);
             this.SelectionColor = this.NormalColor;
         }
-
+        
         #endregion
 
         #region Private Methods
@@ -174,6 +188,37 @@ namespace Edrych.Helpers
             if(this.MultilineComment.Length == 2)
                 pattern = "(" + this.MultilineComment[0] + @")|(" + this.MultilineComment[1] + ")";
             return pattern;
+        }
+
+        /// <summary>Adds corresponding tab indents to the current line</summary>
+        private void AddTabIndents()
+        {
+            int currLineChar = this.GetFirstCharIndexOfCurrentLine();
+            int currLine = this.GetLineFromCharIndex(currLineChar);
+            if (currLine > 0 && this.Lines.Count() > 0 && this.Lines[currLine].Length == 0)
+            {
+                string beforeLine = this.Lines[currLine - 1];
+                int counter = 0;
+                foreach (char nextChar in beforeLine.ToCharArray())
+                {
+                    if (nextChar == '\t')
+                    {
+                        counter++;
+                    }
+                    else
+                    {
+                        break;
+                    }
+                }
+
+                for (int i = 0; i < counter; i++)
+                {
+                    this.Select(currLineChar, 1);
+                    this.SelectedText = '\t' + this.SelectedText;
+                }
+
+                this.Select(currLineChar + counter, 0);
+            }
         }
 
         #endregion

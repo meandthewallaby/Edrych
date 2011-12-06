@@ -24,6 +24,8 @@ namespace Edrych.Views
 
         #endregion
 
+        private delegate void UpdatingTimer(object sender, ProgressChangedEventArgs e);
+
         #region Constructor(s)
 
         /// <summary>Initializes the tab</summary>
@@ -32,8 +34,8 @@ namespace Edrych.Views
         {
             InitializeComponent();
             _queryViewModel = new QueryViewModel(ref Browser);
-            this.dgResults.DataSource = _queryViewModel.DataBinding;
-            this.tbMessages.DataBindings.Add("Text", _queryViewModel, "Messages");
+            this.dgResults.DataBindings.Add("DataSource", _queryViewModel.Results, "Data");
+            this.tbMessages.DataBindings.Add("Text", _queryViewModel.Results, "Messages");
             this.Name = Guid.NewGuid().ToString();
             
             _queryViewModel.BeginQuery += this.BeginQuery;
@@ -42,7 +44,7 @@ namespace Edrych.Views
             _bgWorker.WorkerReportsProgress = true;
             _bgWorker.WorkerSupportsCancellation = true;
             _bgWorker.DoWork += this.TimeQuery;
-            _bgWorker.ProgressChanged += this.UpdateTimer;
+            _bgWorker.ProgressChanged += (s, e) => { this.BeginInvoke(new UpdatingTimer(this.UpdateTimer), new object[] { s, e }); };
 
             //Change status bar
             UpdateConnectionInfo();
@@ -256,7 +258,8 @@ namespace Edrych.Views
 
                 for (int i = 0; i < counter; i++)
                 {
-                    this.tbQuery.Text = this.tbQuery.Text.Insert(currLineChar, "\t");
+                    this.tbQuery.Select(currLineChar, 1);
+                    this.tbQuery.SelectedText = '\t' + this.tbQuery.SelectedText;
                 }
 
                 this.tbQuery.Select(currLineChar + counter, 0);
@@ -277,6 +280,7 @@ namespace Edrych.Views
 
                 //Auto-complete info
                 this.tbQuery.NormalColor = Color.Black;
+                this.tbQuery.StringColor = Color.Red;
                 this.tbQuery.CommentColor = Color.Green;
                 this.tbQuery.KeywordColor = Color.Blue;
 
@@ -306,7 +310,6 @@ namespace Edrych.Views
             if (_numLines != newLines)
             {
                 UpdateLineNumbers();
-                AddTabIndents();
             }
 
             _numLines = newLines;
@@ -333,7 +336,8 @@ namespace Edrych.Views
         {
             if (e.Modifiers == Keys.None && e.KeyCode == Keys.F5)
             {
-                this.RunQuery();
+                if(!_bgWorker.IsBusy)
+                    this.RunQuery();
             }
             else if ((e.Modifiers & ModifierKeys) == Keys.Control && e.KeyCode == Keys.R)
             {
@@ -615,6 +619,11 @@ namespace Edrych.Views
         private void UpdateTimer(object sender, ProgressChangedEventArgs e)
         {
             this.queryTimer.Text = e.UserState.ToString();
+        }
+
+        private void UpdateTimerInvoke(string Time)
+        {
+            this.queryTimer.Text = Time;
         }
 
         #endregion

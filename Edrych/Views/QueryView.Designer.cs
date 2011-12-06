@@ -39,7 +39,7 @@ namespace Edrych.Views
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(QueryView));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.tbQuery = new SyntaxRichTextBox();
+            this.tbQuery = new Edrych.Helpers.SyntaxRichTextBox();
             this.tbLines = new System.Windows.Forms.RichTextBox();
             this.tcResults = new System.Windows.Forms.TabControl();
             this.tpResults = new System.Windows.Forms.TabPage();
@@ -88,15 +88,21 @@ namespace Edrych.Views
             this.tbQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbQuery.Comment = null;
+            this.tbQuery.CommentColor = System.Drawing.Color.Empty;
             this.tbQuery.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.tbQuery.KeywordColor = System.Drawing.Color.Empty;
+            this.tbQuery.Keywords = null;
             this.tbQuery.Location = new System.Drawing.Point(31, 0);
+            this.tbQuery.MultilineComment = null;
             this.tbQuery.Name = "tbQuery";
+            this.tbQuery.NormalColor = System.Drawing.Color.Empty;
             this.tbQuery.ShortcutsEnabled = false;
             this.tbQuery.Size = new System.Drawing.Size(831, 267);
+            this.tbQuery.StringColor = System.Drawing.Color.Empty;
             this.tbQuery.TabIndex = 0;
             this.tbQuery.Text = "";
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
-            this.tbQuery.Invalidated += this.QueryView_QueryChanged;
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
             this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
             this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);

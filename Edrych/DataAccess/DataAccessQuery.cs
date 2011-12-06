@@ -58,7 +58,7 @@ namespace Edrych.DataAccess
             }
             else
             {
-                rs = ProcessInternalQuery(_dab, Query);
+                rs = ProcessInternalQuery(_dab, Query, true);
             }
             return rs;
         }
@@ -103,7 +103,7 @@ namespace Edrych.DataAccess
         /// <param name="Dab">DataAccessBase object to execute the query against</param>
         /// <param name="Query">Query to run</param>
         /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
-        private ResultSet ProcessInternalQuery(DataAccessBase Dab, string Query)
+        private ResultSet ProcessInternalQuery(DataAccessBase Dab, string Query, bool ReportProgress)
         {
             IDataReader reader = null;
 
@@ -117,7 +117,7 @@ namespace Edrych.DataAccess
                 ResultSet rs = new ResultSet();
 
                 rs.Messages = reader.RecordsAffected + " rows affected";
-                LoadResult(rs.Data, reader);
+                LoadResult((ReportProgress ? new DataTable() : rs.Data), reader, Dab, ReportProgress);
 
                 return rs;
             }
@@ -142,7 +142,7 @@ namespace Edrych.DataAccess
             }
         }
 
-        private void LoadResult(DataTable dt, IDataReader reader)
+        private void LoadResult(DataTable dt, IDataReader reader, DataAccessBase Dab, bool ReportProgress)
         {
             DataTable schema = reader.GetSchemaTable();
             foreach (DataRow row in schema.Rows)
@@ -156,7 +156,9 @@ namespace Edrych.DataAccess
                 dt.Columns.Add(col);
             }
 
-            dt.BeginLoadData();
+            if(ReportProgress)
+                Dab.OnRunQuerySchemaCreated(dt);
+
             while (reader.Read())
             {
                 object[] vals = new object[dt.Columns.Count];
@@ -167,9 +169,11 @@ namespace Edrych.DataAccess
                     else
                         vals[col.Ordinal] = reader[col.Ordinal];
                 }
-                dt.LoadDataRow(vals, false);
+                if (ReportProgress)
+                    Dab.OnRunQueryRowCreated(vals);
+                else
+                    dt.LoadDataRow(vals, false);
             }
-            dt.EndLoadData();
         }
 
         #endregion
@@ -237,7 +241,7 @@ namespace Edrych.DataAccess
                 }
 
                 //Grab the externalQuery from database on server
-                externalRs = ProcessInternalQuery(_externalDab, externalQuery);
+                externalRs = ProcessInternalQuery(_externalDab, externalQuery, false);
                 if (externalRs.Data.Rows.Count == 0)
                 {
                     throw new Exception("No external data to insert!");
@@ -297,7 +301,7 @@ namespace Edrych.DataAccess
                 }
                 selectQuery.Append("from ");
                 selectQuery.Append(insertTable);
-                ResultSet rs = ProcessInternalQuery(_dab, selectQuery.ToString());
+                ResultSet rs = ProcessInternalQuery(_dab, selectQuery.ToString(), true);
                 rs.Messages = rowsAffected.ToString() + " rows inserted\r\n\r\n" + rs.Messages;
                 return rs;
             }

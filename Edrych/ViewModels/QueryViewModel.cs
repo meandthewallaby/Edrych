@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
 using System.IO;
 using System.Windows.Forms;
 using Edrych.DataAccess;
@@ -21,6 +22,8 @@ namespace Edrych.ViewModels
         private string _messages = string.Empty;
         private List<Database> _databases;
         private string _oldDatabase;
+        AsyncOperation _async = AsyncOperationManager.CreateOperation(null);
+        private int _rowCount = 0;
 
         private string _fileName = string.Empty;
         private string _safeFileName = "New Query";
@@ -46,11 +49,12 @@ namespace Edrych.ViewModels
                 );
             _dab.BuildKeywords();
             _browser = Browser;
+            _dataBinding.DataSource = _results.Data;
         }
 
         #endregion
 
-        #region public Properties
+        #region Public Properties
         
         /// <summary>Returns the query's data access object</summary>
         public DataAccessBase Data
@@ -98,7 +102,7 @@ namespace Edrych.ViewModels
 
         #endregion
 
-        #region public Methods
+        #region Public Methods
 
         /// <summary>Initialize the query</summary>
         /// <param name="OpenQuery">Whether or not to open an existing query</param>
@@ -146,13 +150,18 @@ namespace Edrych.ViewModels
         public void RunQuery(string Query)
         {
             App.IsStopQueryEnabled = true;
+            _results.SetData(new DataTable());
+            _results.OnPropertyChanged("Data");
             this.RunQueryAsync(Query);
         }
 
         /// <summary>Cancels the running query</summary>
         public void CancelQuery()
         {
-            _dab.Cancel();
+            lock (_dab)
+            {
+                _dab.Cancel();
+            }
         }
 
         /// <summary>Save the query</summary>
@@ -204,10 +213,6 @@ namespace Edrych.ViewModels
         {
             this.Data.SetDatabase(DatabaseName);
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>Disposes of the query</summary>
         public void Dispose()
@@ -299,13 +304,16 @@ namespace Edrych.ViewModels
         /// <param name="Query">Query to execute</param>
         private void RunQueryAsync(string Query)
         {
+            _async = AsyncOperationManager.CreateOperation(null);
             RunQueryCompleted += this.RunQuery_Completed;
+            _dab.RunQuerySchemaCreated += this.RunQuery_SchemaCreatedAsync;
+            _dab.RunQueryRowCreated += this.RunQuery_RowCreatedAsync;
             RunQueryDelegate dl = new RunQueryDelegate(RunQueryWorker);
-            AsyncOperation async = AsyncOperationManager.CreateOperation(null);
+            
             _oldDatabase = this.Data.SelectedDatabase;
 
             OnBeginQuery();
-            IAsyncResult ar = dl.BeginInvoke(Query, new AsyncCallback(RunQueryCallback), async);
+            IAsyncResult ar = dl.BeginInvoke(Query, new AsyncCallback(RunQueryCallback), _async);
         }
 
         /// <summary>Worker function which actually runs the query</summary>
@@ -358,12 +366,10 @@ namespace Edrych.ViewModels
             bool isError = true;
             if (e.Error == null)
             {
-                _results = e.Results;
                 isError = false;
             }
             else
             {
-                _results = new ResultSet();
                 _results.Messages = e.Error.Message;
             }
 
@@ -372,12 +378,46 @@ namespace Edrych.ViewModels
                 App.OnDatabaseChanged(this, new ConnectionChangedEventArgs(null, this.Data.SelectedDatabase));
             }
 
-            _dataBinding.DataSource = _results.Data;
-            _messages = _results.Messages;
+            _results.OnPropertyChanged("Data");
             NotifyPropertyChanged("Messages");
+            _dab.RunQuerySchemaCreated -= this.RunQuery_SchemaCreatedAsync;
+            _dab.RunQueryRowCreated -= this.RunQuery_RowCreatedAsync;
             RunQueryCompleted -= this.RunQuery_Completed;
             App.IsStopQueryEnabled = false;
             OnEndQuery(isError);
+        }
+
+        #endregion
+
+        #region Private/Protected Background Worker
+
+        private void RunQuery_RowCreatedAsync(object sender, RunQueryRowCreatedEventArgs e)
+        {
+            _async.Post(new System.Threading.SendOrPostCallback(this.RunQuery_RowCreated), e.Row);
+        }
+
+        private void RunQuery_RowCreated(object row)
+        {
+            lock (_results)
+            {
+                _results.Data.LoadDataRow((object[])row, false);
+                if (++_rowCount % 1000 == 0)
+                    _results.OnPropertyChanged("Data");
+            }
+        }
+
+        private void RunQuery_SchemaCreatedAsync(object sender, RunQuerySchemaCreatedEventArgs e)
+        {
+            _async.Post(new System.Threading.SendOrPostCallback(this.RunQuery_SchemaCreated), e.Data);
+        }
+
+        private void RunQuery_SchemaCreated(object data)
+        {
+            lock (_results)
+            {
+                _results.SetData((DataTable)data);
+                _results.OnPropertyChanged("Data");
+            }
         }
 
         #endregion

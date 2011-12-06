@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using Edrych.Properties;
+using Edrych.Helpers;
 
 namespace Edrych.DataAccess
 {
@@ -51,7 +52,14 @@ namespace Edrych.DataAccess
 
         #endregion
 
-        #region public Methods
+        #region Public Events
+
+        public event RunQuerySchemaCreatedEventHandler RunQuerySchemaCreated;
+        public event RunQueryRowCreatedEventHandler RunQueryRowCreated;
+
+        #endregion
+
+        #region Public Methods
 
         /// <summary>Test whether the specified database type has the .NET libraries available.</summary>
         /// <returns>Boolean representing whether the connection type is viable.</returns>
@@ -102,7 +110,9 @@ namespace Edrych.DataAccess
             lock (_comm)
             {
                 if (_comm != null)
+                {
                     _comm.Cancel();
+                }
             }
             lock (_daq)
             {
@@ -197,16 +207,28 @@ namespace Edrych.DataAccess
         {
             return new string[] { @"\/\*", @"\*\/" };
         }
-    
-        #endregion
-
-        #region Public Methods
 
         /// <summary>Sets the active database</summary>
         /// <param name="DatabaseName">Name of the database to set the active connection to</param>
         public void SetDatabase(string DatabaseName)
         {
             this._conn.ChangeDatabase(DatabaseName);
+        }
+
+        /// <summary>Fires off the Row Created event</summary>
+        /// <param name="Row">Row that was created</param>
+        public void OnRunQueryRowCreated(object[] Row)
+        {
+            if (RunQueryRowCreated != null)
+                RunQueryRowCreated(this, new RunQueryRowCreatedEventArgs(Row));
+        }
+
+        /// <summary>Fires off the Schema Created event</summary>
+        /// <param name="SchemaTable">Schema Table that was created</param>
+        public void OnRunQuerySchemaCreated(DataTable SchemaTable)
+        {
+            if (RunQuerySchemaCreated != null)
+                RunQuerySchemaCreated(this, new RunQuerySchemaCreatedEventArgs(SchemaTable));
         }
 
         /// <summary>Closes and disposes of all connection objects</summary>
