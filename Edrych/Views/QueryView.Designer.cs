@@ -104,7 +104,7 @@ namespace Edrych.Views
             this.tbQuery.TabIndex = 0;
             this.tbQuery.Text = "";
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
-            this.tbQuery.Invalidated += new System.Windows.Forms.InvalidateEventHandler(this.QueryView_QueryChanged);
+            this.tbQuery.TextChanged += new System.EventHandler(this.QueryView_QueryChanged);
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
             this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
             this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);

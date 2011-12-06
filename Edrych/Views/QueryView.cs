@@ -275,7 +275,7 @@ namespace Edrych.Views
         #region Private Methods - Event Handlers
 
         /// <summary>Handles when the query text is changed</summary>
-        private void QueryView_QueryChanged(object sender, InvalidateEventArgs e)
+        private void QueryView_QueryChanged(object sender, EventArgs e)
         {
             int newLines = this.tbQuery.Lines.Count();
 

@@ -104,6 +104,7 @@ namespace Edrych.Helpers
 
             this.Select(prevPos, 0);
             this.SelectionColor = this.NormalColor;
+            base.OnTextChanged(e);
         }
         
         #endregion
