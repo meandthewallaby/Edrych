@@ -136,7 +136,7 @@
     </Compile>
     <Compile Include="ViewModels\ServerBrowserViewModel.cs" />
     <Compile Include="Views\QueryView.cs">
-      <SubType>Component</SubType>
+      <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Views\QueryView.Designer.cs">
       <DependentUpon>QueryView.cs</DependentUpon>

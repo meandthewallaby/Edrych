@@ -88,6 +88,7 @@ namespace Edrych.Views
             this.tbQuery.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbQuery.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.tbQuery.Comment = null;
             this.tbQuery.CommentColor = System.Drawing.Color.Empty;
             this.tbQuery.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -103,6 +104,7 @@ namespace Edrych.Views
             this.tbQuery.TabIndex = 0;
             this.tbQuery.Text = "";
             this.tbQuery.VScroll += new System.EventHandler(this.QueryView_Scrolling);
+            this.tbQuery.Invalidated += new System.Windows.Forms.InvalidateEventHandler(this.QueryView_QueryChanged);
             this.tbQuery.Enter += new System.EventHandler(this.Query_Focus);
             this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
             this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);
@@ -114,6 +116,7 @@ namespace Edrych.Views
             | System.Windows.Forms.AnchorStyles.Left)));
             this.tbLines.BackColor = System.Drawing.SystemColors.Control;
             this.tbLines.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.tbLines.Cursor = System.Windows.Forms.Cursors.Default;
             this.tbLines.Enabled = false;
             this.tbLines.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbLines.Location = new System.Drawing.Point(0, 0);

@@ -223,6 +223,9 @@ namespace Edrych.Views
                 lines.Add(i.ToString());
             }
             this.tbLines.Lines = lines.ToArray();
+            this.tbLines.SelectAll();
+            this.tbLines.SelectionAlignment = HorizontalAlignment.Right;
+            this.tbLines.Select(0, 0);
         }
 
         /// <summary>Updates the tab's name</summary>
@@ -232,37 +235,6 @@ namespace Edrych.Views
             if (_queryViewModel.IsSaved == false)
             {
                 this.Text = "*" + this.Text;
-            }
-        }
-
-        /// <summary>Adds corresponding tab indents to the current line</summary>
-        private void AddTabIndents()
-        {
-            int currLineChar = this.tbQuery.GetFirstCharIndexOfCurrentLine();
-            int currLine = this.tbQuery.GetLineFromCharIndex(currLineChar);
-            if (currLine > 0 && this.tbQuery.Lines.Count() > 0 && this.tbQuery.Lines[currLine].Length == 0)
-            {
-                string beforeLine = this.tbQuery.Lines[currLine-1];
-                int counter = 0;
-                foreach (char nextChar in beforeLine.ToCharArray())
-                {
-                    if (nextChar == '\t')
-                    {
-                        counter++;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-
-                for (int i = 0; i < counter; i++)
-                {
-                    this.tbQuery.Select(currLineChar, 1);
-                    this.tbQuery.SelectedText = '\t' + this.tbQuery.SelectedText;
-                }
-
-                this.tbQuery.Select(currLineChar + counter, 0);
             }
         }
 
