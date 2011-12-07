@@ -210,9 +210,9 @@ namespace Edrych.Views
         /// <summary>Redraws the line numbers on the query</summary>
         private void UpdateLineNumbers()
         {
-            int d = this.tbQuery.GetPositionFromCharIndex(0).Y %
-                              (this.tbQuery.Font.Height + 1);
+            int d = this.tbQuery.GetPositionFromCharIndex(0).Y % (this.tbQuery.Font.Height - 1);
             this.tbLines.Location = new Point(0, d);
+            this.tbLines.Height = this.tbQuery.Height - d;
 
             int firstCharIndex = this.tbQuery.GetCharIndexFromPosition(new Point(0, 0));
             int lineNumber = this.tbQuery.GetLineFromCharIndex(firstCharIndex);

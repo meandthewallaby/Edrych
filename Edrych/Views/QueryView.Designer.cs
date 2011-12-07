@@ -109,6 +109,7 @@ namespace Edrych.Views
             this.tbQuery.KeyDown += new System.Windows.Forms.KeyEventHandler(this.QueryView_KeyUp);
             this.tbQuery.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.QueryView_KeyPress);
             this.tbQuery.Leave += new System.EventHandler(this.QueryOrResults_Leave);
+            this.tbQuery.SizeChanged += new System.EventHandler(this.QueryView_Scrolling);
             // 
             // tbLines
             // 
