@@ -54,8 +54,7 @@ namespace Edrych.DataAccess
 
         #region Public Events
 
-        public event RunQuerySchemaCreatedEventHandler RunQuerySchemaCreated;
-        public event RunQueryRowCreatedEventHandler RunQueryRowCreated;
+        public event RunQueryInitialRowsCreatedEventHandler RunQueryRowCreated;
 
         #endregion
 
@@ -217,18 +216,10 @@ namespace Edrych.DataAccess
 
         /// <summary>Fires off the Row Created event</summary>
         /// <param name="Row">Row that was created</param>
-        public void OnRunQueryRowCreated(object[] Row)
+        public void OnRunQueryRowCreated(DataTable table)
         {
             if (RunQueryRowCreated != null)
-                RunQueryRowCreated(this, new RunQueryRowCreatedEventArgs(Row));
-        }
-
-        /// <summary>Fires off the Schema Created event</summary>
-        /// <param name="SchemaTable">Schema Table that was created</param>
-        public void OnRunQuerySchemaCreated(DataTable SchemaTable)
-        {
-            if (RunQuerySchemaCreated != null)
-                RunQuerySchemaCreated(this, new RunQuerySchemaCreatedEventArgs(SchemaTable));
+                RunQueryRowCreated(this, new RunQueryInitialRowsCreatedEventArgs(table));
         }
 
         /// <summary>Closes and disposes of all connection objects</summary>

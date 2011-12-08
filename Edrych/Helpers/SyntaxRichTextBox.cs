@@ -55,8 +55,8 @@ namespace Edrych.Helpers
             string keywordPattern = SetKeywords();
             string multilinePattern = GetMultilinePattern();
             _keywordRegex = new Regex(keywordPattern, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
-            _stringRegex = new Regex(@"'(\n|.)*?'|'(\n|.)*?$(?!')", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             _commentRegex = new Regex(this.Comment + @".*?(\n|$)", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
+            _stringRegex = new Regex(@"(?<!" + this.Comment + @".*?)('(\n|.)*?'|'(\n|.)*?$(?!'))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
             _multilineCommentRegex = new Regex(multilinePattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
         }
 
@@ -95,8 +95,8 @@ namespace Edrych.Helpers
             this.Select(prevPos, 0);
 
             ParseSyntax(_keywordRegex, this.KeywordColor);
-            ParseSyntax(_stringRegex, this.StringColor);
             ParseSyntax(_commentRegex, this.CommentColor);
+            ParseSyntax(_stringRegex, this.StringColor);
             ParseMultilineComments(_multilineCommentRegex, this.CommentColor);
 
             EndUpdate();

@@ -95,6 +95,7 @@ namespace Edrych.Views
         public void RunQuery()
         {
             string query = (string.IsNullOrEmpty(tbQuery.SelectedText.Trim()) ? tbQuery.Text : tbQuery.SelectedText).Trim();
+            this.dgResults.SelectionMode = DataGridViewSelectionMode.CellSelect;
             _queryViewModel.RunQuery(query);
         }
 
@@ -479,6 +480,12 @@ namespace Edrych.Views
             this.tbQuery.SelectAll();
         }
 
+        /// <summary>Prevents columns from being sortable</summary>
+        private void Results_ColumnAdded(object sender, DataGridViewColumnEventArgs e)
+        {
+            this.dgResults.Columns[e.Column.DisplayIndex].SortMode = DataGridViewColumnSortMode.NotSortable;
+        }
+
         /// <summary>Handles when the copy button is hit on the results</summary>
         private void Results_Copy(object sender, EventArgs e)
         {
@@ -549,6 +556,7 @@ namespace Edrych.Views
 
             this.rowsReturnedLabel.Text = this.dgResults.RowCount.ToString() + " rows returned";
 
+            this.dgResults.SelectionMode = DataGridViewSelectionMode.ColumnHeaderSelect | DataGridViewSelectionMode.CellSelect;
             this.tbQuery.Focus();
         }
 

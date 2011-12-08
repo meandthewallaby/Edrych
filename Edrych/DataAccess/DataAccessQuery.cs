@@ -117,7 +117,7 @@ namespace Edrych.DataAccess
                 ResultSet rs = new ResultSet();
 
                 rs.Messages = reader.RecordsAffected + " rows affected";
-                LoadResult((ReportProgress ? new DataTable() : rs.Data), reader, Dab, ReportProgress);
+                LoadResult(rs.Data, reader, Dab, ReportProgress);
 
                 return rs;
             }
@@ -156,8 +156,7 @@ namespace Edrych.DataAccess
                 dt.Columns.Add(col);
             }
 
-            if(ReportProgress)
-                Dab.OnRunQuerySchemaCreated(dt);
+            int rowCount = 0;
 
             while (reader.Read())
             {
@@ -169,10 +168,11 @@ namespace Edrych.DataAccess
                     else
                         vals[col.Ordinal] = reader[col.Ordinal];
                 }
-                if (ReportProgress)
-                    Dab.OnRunQueryRowCreated(vals);
-                else
-                    dt.LoadDataRow(vals, false);
+
+                dt.LoadDataRow(vals, false);
+
+                if (ReportProgress && ++rowCount == 1000)
+                    Dab.OnRunQueryRowCreated(dt.AsDataView().ToTable());
             }
         }
 

@@ -47,35 +47,22 @@
     /// <summary>All queries return a result set, consisting of data and messages about the query</summary>
     class ResultSet : INotifyPropertyChanged, IDisposable
     {
-        private DataSet _ds;
-        private DataTable _dt;
-
         /// <summary>Constructor</summary>
         public ResultSet()
         {
-            _ds = new DataSet();
-            _ds.EnforceConstraints = false;
-            _dt = new DataTable();
-            _ds.Tables.Add(_dt);
+            this.Data = new DataTable();
         }
 
         /// <summary>DataTable that houses all the data</summary>
-        public DataTable Data { get { return _ds.Tables[0]; } }
+        public DataTable Data { get; set; }
         /// <summary>String of messages from the query execution</summary>
         public string Messages { get; set; }
-
-        public void SetData(DataTable NewTable)
-        {
-            if (_ds.Tables.Count == 1)
-                _ds.Tables.RemoveAt(0);
-            _ds.Tables.Add(NewTable);
-        }
 
         /// <summary>Disposes the data</summary>
         public void Dispose()
         {
-            if (_dt != null)
-                _dt.Dispose();
+            if (this.Data != null)
+                this.Data.Dispose();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

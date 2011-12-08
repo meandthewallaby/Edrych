@@ -23,7 +23,6 @@ namespace Edrych.ViewModels
         private List<Database> _databases;
         private string _oldDatabase;
         AsyncOperation _async = AsyncOperationManager.CreateOperation(null);
-        private int _rowCount = 0;
 
         private string _fileName = string.Empty;
         private string _safeFileName = "New Query";
@@ -49,7 +48,6 @@ namespace Edrych.ViewModels
                 );
             _dab.BuildKeywords();
             _browser = Browser;
-            _dataBinding.DataSource = _results.Data;
         }
 
         #endregion
@@ -150,7 +148,9 @@ namespace Edrych.ViewModels
         public void RunQuery(string Query)
         {
             App.IsStopQueryEnabled = true;
-            _results.SetData(new DataTable());
+            DataTable oldTable = _results.Data;
+            _results.Data = new DataTable();
+            oldTable.Dispose();
             _results.OnPropertyChanged("Data");
             this.RunQueryAsync(Query);
         }
@@ -306,8 +306,7 @@ namespace Edrych.ViewModels
         {
             _async = AsyncOperationManager.CreateOperation(null);
             RunQueryCompleted += this.RunQuery_Completed;
-            _dab.RunQuerySchemaCreated += this.RunQuery_SchemaCreatedAsync;
-            _dab.RunQueryRowCreated += this.RunQuery_RowCreatedAsync;
+            _dab.RunQueryRowCreated += this.RunQuery_InitialRowsCreatedAsync;
             RunQueryDelegate dl = new RunQueryDelegate(RunQueryWorker);
             
             _oldDatabase = this.Data.SelectedDatabase;
@@ -366,6 +365,8 @@ namespace Edrych.ViewModels
             bool isError = true;
             if (e.Error == null)
             {
+                _results.Data = e.Results.Data;
+                _results.Messages = e.Results.Messages;
                 isError = false;
             }
             else
@@ -379,45 +380,34 @@ namespace Edrych.ViewModels
             }
 
             _results.OnPropertyChanged("Data");
-            NotifyPropertyChanged("Messages");
-            _dab.RunQuerySchemaCreated -= this.RunQuery_SchemaCreatedAsync;
-            _dab.RunQueryRowCreated -= this.RunQuery_RowCreatedAsync;
+            _results.OnPropertyChanged("Messages");
+            _dab.RunQueryRowCreated -= this.RunQuery_InitialRowsCreatedAsync;
             RunQueryCompleted -= this.RunQuery_Completed;
             App.IsStopQueryEnabled = false;
             OnEndQuery(isError);
+        }
+
+        private void LoadRemainingRows(DataTable table)
+        {
+            for (int i = _results.Data.Rows.Count; i < table.Rows.Count; i++)
+            {
+                _results.Data.ImportRow(table.Rows[i]);
+            }
         }
 
         #endregion
 
         #region Private/Protected Background Worker
 
-        private void RunQuery_RowCreatedAsync(object sender, RunQueryRowCreatedEventArgs e)
+        private void RunQuery_InitialRowsCreatedAsync(object sender, RunQueryInitialRowsCreatedEventArgs e)
         {
-            _async.Post(new System.Threading.SendOrPostCallback(this.RunQuery_RowCreated), e.Row);
+            _async.Post(new System.Threading.SendOrPostCallback(this.RunQuery_InitialRowsCreated), e.Table);
         }
 
-        private void RunQuery_RowCreated(object row)
+        private void RunQuery_InitialRowsCreated(object data)
         {
-            lock (_results)
-            {
-                _results.Data.LoadDataRow((object[])row, false);
-                if (++_rowCount % 1000 == 0)
-                    _results.OnPropertyChanged("Data");
-            }
-        }
-
-        private void RunQuery_SchemaCreatedAsync(object sender, RunQuerySchemaCreatedEventArgs e)
-        {
-            _async.Post(new System.Threading.SendOrPostCallback(this.RunQuery_SchemaCreated), e.Data);
-        }
-
-        private void RunQuery_SchemaCreated(object data)
-        {
-            lock (_results)
-            {
-                _results.SetData((DataTable)data);
-                _results.OnPropertyChanged("Data");
-            }
+            _results.Data = (DataTable)data;
+            _results.OnPropertyChanged("Data");
         }
 
         #endregion

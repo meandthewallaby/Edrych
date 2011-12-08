@@ -183,9 +183,13 @@ namespace Edrych.Views
             this.dgResults.ReadOnly = true;
             this.dgResults.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
             this.dgResults.RowTemplate.ReadOnly = true;
+            this.dgResults.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.ColumnHeaderSelect | System.Windows.Forms.DataGridViewSelectionMode.CellSelect;
+            this.dgResults.MultiSelect = true;
             this.dgResults.ShowEditingIcon = false;
             this.dgResults.Size = new System.Drawing.Size(848, 243);
             this.dgResults.TabIndex = 0;
+            this.dgResults.VirtualMode = true;
+            this.dgResults.ColumnAdded += new System.Windows.Forms.DataGridViewColumnEventHandler(this.Results_ColumnAdded);
             this.dgResults.Enter += new System.EventHandler(this.Query_Focus);
             this.dgResults.Leave += new System.EventHandler(this.QueryOrResults_Leave);
             // 
