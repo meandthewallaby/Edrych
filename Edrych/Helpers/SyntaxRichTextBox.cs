@@ -15,8 +15,12 @@ namespace Edrych.Helpers
     {
         #region Private/Global Variables
 
+        private List<string> _undoHistory = new List<string>();
+        private List<string> _redoHistory = new List<string>();
+        private string _priorText = string.Empty;
+        private bool _isRedoOrUndo = false;
+        private bool _justRedidOrUndid = false;
         private Regex _highlightRegex;
-
         private int _numLines = 0;
 
         [DllImport("user32.dll")]
@@ -25,7 +29,24 @@ namespace Edrych.Helpers
 
         #endregion
 
-        #region Public Properties
+        #region Constructor(s)
+
+        public SyntaxRichTextBox()
+            : base()
+        {
+        }
+
+        #endregion
+
+
+        #region Public Properties - Base
+
+        new public bool CanUndo { get { return _undoHistory.Count > 1; } }
+        new public bool CanRedo { get { return _redoHistory.Count > 0; } }
+
+        #endregion
+
+        #region Public Properties - Syntax Highlighting
 
         /// <summary>Color of normal text</summary>
         public Color NormalColor { get; set; }
@@ -66,6 +87,16 @@ namespace Edrych.Helpers
             SendMessage(this.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
         }
 
+        new public void Undo()
+        {
+            RedoUndo(ref _undoHistory, ref _redoHistory, this.CanUndo);
+        }
+
+        new public void Redo()
+        {
+            RedoUndo(ref _redoHistory, ref _undoHistory, this.CanRedo);
+        }
+
         #endregion
 
         #region Protected Methods
@@ -73,6 +104,16 @@ namespace Edrych.Helpers
         /// <summary>Overrides the TextChanged event</summary>
         protected override void OnTextChanged(EventArgs e)
         {
+            if (_isRedoOrUndo) return;
+            if (!_justRedidOrUndid)
+            {
+                if (_undoHistory.Count == 20)
+                    _undoHistory.RemoveAt(_undoHistory.Count - 1);
+                _undoHistory.Add(_priorText);
+                _priorText = this.Text;
+                this._redoHistory = new List<string>();
+            }
+
             BeginUpdate();
 
             if (this.Lines.Count() != _numLines)
@@ -95,12 +136,15 @@ namespace Edrych.Helpers
 
             this.Select(prevPos, 0);
             this.SelectionColor = this.NormalColor;
+
+            _justRedidOrUndid = false;
+
             base.OnTextChanged(e);
         }
         
         #endregion
 
-        #region Private Methods
+        #region Private Methods - Syntax Highlighting
 
         /// <summary>Parses keywords and comments</summary>
         /// <param name="regKeywords">Regular expression object to use</param>
@@ -222,6 +266,38 @@ namespace Edrych.Helpers
 
                 this.Select(currLineChar + counter, 0);
             }
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        /// <summary>Performs the undo/redo action</summary>
+        /// <param name="From">List to update from</param>
+        /// <param name="To">List to update</param>
+        /// <param name="Can">Boolean on whether the user can perform the action.</param>
+        private void RedoUndo(ref List<string> From, ref List<string> To, bool Can)
+        {
+            if (Can)
+            {
+                int cursorPos = this.SelectionStart;
+                int index = From.Count - 1;
+                UpdateList(ref To);
+                _isRedoOrUndo = true;
+                this.Text = From[index];
+                _isRedoOrUndo = false;
+                From.RemoveAt(index);
+                _justRedidOrUndid = true;
+                this.OnTextChanged(new EventArgs());
+                base.Select(Math.Min(cursorPos, this.Text.Length), 0);
+            }
+        }
+
+        private void UpdateList(ref List<string> History)
+        {
+            if (History.Count == 20)
+                History.RemoveAt(0);
+            History.Add(this.Text);
         }
 
         #endregion
