@@ -15,10 +15,7 @@ namespace Edrych.Helpers
     {
         #region Private/Global Variables
 
-        private Regex _keywordRegex;
-        private Regex _stringRegex;
-        private Regex _commentRegex;
-        private Regex _multilineCommentRegex;
+        private Regex _highlightRegex;
 
         private int _numLines = 0;
 
@@ -53,11 +50,8 @@ namespace Edrych.Helpers
         public void InitializeSyntax()
         {
             string keywordPattern = SetKeywords();
-            string multilinePattern = GetMultilinePattern();
-            _keywordRegex = new Regex(keywordPattern, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
-            _commentRegex = new Regex(this.Comment + @".*?(\n|$)", RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
-            _stringRegex = new Regex(@"(?<!" + this.Comment + @".*?)('(\n|.)*?'|'(\n|.)*?$(?!'))", RegexOptions.IgnoreCase | RegexOptions.Compiled);
-            _multilineCommentRegex = new Regex(multilinePattern, RegexOptions.IgnoreCase | RegexOptions.Compiled);
+            string pattern = @"(')|(" + this.Comment + ".*?$)|(" + this.MultilineComment[0] + @")|(" + this.MultilineComment[1] + @")|" + keywordPattern;
+            _highlightRegex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
         }
 
         /// <summary>Sends the interop message to hold painting</summary>
@@ -94,10 +88,7 @@ namespace Edrych.Helpers
             this.SelectionColor = this.NormalColor;
             this.Select(prevPos, 0);
 
-            ParseSyntax(_keywordRegex, this.KeywordColor);
-            ParseSyntax(_commentRegex, this.CommentColor);
-            ParseSyntax(_stringRegex, this.StringColor);
-            ParseMultilineComments(_multilineCommentRegex, this.CommentColor);
+            ParseSyntax(_highlightRegex);
 
             EndUpdate();
             this.Invalidate();
@@ -113,46 +104,67 @@ namespace Edrych.Helpers
 
         /// <summary>Parses keywords and comments</summary>
         /// <param name="regKeywords">Regular expression object to use</param>
-        /// <param name="HighlightColor">Color to highlight matched text</param>
-        private void ParseSyntax(Regex regKeywords, Color HighlightColor)
+        private void ParseSyntax(Regex r)
         {
-            for (Match regMatch = regKeywords.Match(this.Text); regMatch.Success; regMatch = regMatch.NextMatch())
+            bool inString = false;
+            bool inComment = false;
+            int commentsOpen = 0;
+            int openStringPosition = -1;
+            List<int> commentOpenPositions = new List<int>();
+            List<int> commentClosedPositions = new List<int>();
+
+            for (Match m = r.Match(this.Text); m.Success; m = m.NextMatch())
             {
-                HighlightText(regMatch.Index, regMatch.Value.Length, HighlightColor);
+                //Text delimeter
+                if (m.Groups[1].Success && !inComment)
+                {
+                    if (openStringPosition >= 0)
+                    {
+                        //Need to add to the Index to make sure to highlight the ending '
+                        HighlightText(openStringPosition, m.Index + 1 - openStringPosition, this.StringColor);
+                        openStringPosition = -1;
+                    }
+                    else
+                    {
+                        openStringPosition = m.Index;
+                    }
+                    inString = !inString;
+                }
+                //Line comment delimeter
+                else if (m.Groups[2].Success && !inString && (!inComment || m.Value.Contains("*/")))
+                {
+                    int start = !inComment ? m.Index : commentOpenPositions[commentOpenPositions.Count - 1];
+                    int end = m.Index + m.Length;
+                    HighlightText(start, end - start, this.CommentColor);
+                }
+                //Multiline comment open
+                else if (m.Groups[3].Success && !inString)
+                {
+                    commentOpenPositions.Add(m.Index);
+                    commentsOpen++;
+                    inComment = true;
+                }
+                //Multiline comment closed
+                else if (m.Groups[4].Success && !inString && commentsOpen > 0)
+                {
+                    int start = commentOpenPositions[commentOpenPositions.Count - 1];
+                    int end = m.Index + 2;
+                    HighlightText(start, end - start, this.CommentColor);
+                    commentOpenPositions.Remove(start);
+                    commentsOpen--;
+                    inComment = commentsOpen > 0;
+                }
+                //Keyword
+                else if (!inString && !inComment)
+                {
+                    HighlightText(m.Index, m.Length, this.KeywordColor);
+                }
             }
-        }
 
-        /// <summary>Parses out multiline comments</summary>
-        /// <param name="regComments">Regular expression object to use</param>
-        /// <param name="HighlightColor">Color to highlight matched text</param>
-        private void ParseMultilineComments(Regex regComments, Color HighlightColor)
-        {
-	        bool commentOpen = false;
-	        int commentBegin = -1;
-	        int commentsOpen = 0;
-		
-	        for(Match regMatch = regComments.Match(this.Text); regMatch.Success; regMatch = regMatch.NextMatch())
-	        {
-		        if(regMatch.Groups.Count == 3 && regMatch.Groups[1].Success)
-		        {
-			        commentOpen = true;			
-			        commentsOpen++;
-			        if(commentsOpen == 1)
-				        commentBegin = regMatch.Index;
-		        }
-		        else if(commentOpen && regMatch.Groups.Count == 3 && regMatch.Groups[2].Success)
-		        {
-			        commentsOpen--;
-			        if(commentsOpen == 0)
-			        {
-				        commentOpen = false;
-                        HighlightText(commentBegin, regMatch.Index+regMatch.Value.Length - commentBegin, HighlightColor);
-			        }
-		        }
-	        }
-
-            if(commentOpen)
-                HighlightText(commentBegin, -1, HighlightColor);
+            if (inString)
+                HighlightText(openStringPosition, this.Text.Length - openStringPosition, this.StringColor);
+            else if (inComment)
+                HighlightText(commentOpenPositions[0], this.Text.Length - commentOpenPositions[0], this.CommentColor);
         }
 
         /// <summary>Highlights given swatch of a text a given color</summary>
@@ -179,16 +191,6 @@ namespace Edrych.Helpers
                     pattern.Append("|");
             }
             return pattern.ToString();
-        }
-
-        /// <summary>Creates a regex pattern for multiline comments</summary>
-        /// <returns>String representing the regular expression to use</returns>
-        private string GetMultilinePattern()
-        {
-            string pattern = string.Empty;
-            if(this.MultilineComment.Length == 2)
-                pattern = "(" + this.MultilineComment[0] + @")|(" + this.MultilineComment[1] + ")";
-            return pattern;
         }
 
         /// <summary>Adds corresponding tab indents to the current line</summary>
