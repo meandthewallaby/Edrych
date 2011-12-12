@@ -20,6 +20,7 @@ namespace Edrych.Helpers
         private string _priorText = string.Empty;
         private bool _isRedoOrUndo = false;
         private bool _justRedidOrUndid = false;
+        private bool _emptyTextOkay = true;
         private Regex _highlightRegex;
         private int _numLines = 0;
 
@@ -87,14 +88,16 @@ namespace Edrych.Helpers
             SendMessage(this.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
         }
 
+        /// <summary>Hides the Textbox undo functionality and uses its own (necessitated by syntax highlighting)</summary>
         new public void Undo()
         {
-            RedoUndo(ref _undoHistory, ref _redoHistory, this.CanUndo);
+            RedoUndo(_undoHistory, _redoHistory, this.CanUndo);
         }
 
+        /// <summary>Hides the Textbox redo functionality and uses its own (necessitated by syntax highlighting)</summary>
         new public void Redo()
         {
-            RedoUndo(ref _redoHistory, ref _undoHistory, this.CanRedo);
+            RedoUndo(_redoHistory, _undoHistory, this.CanRedo);
         }
 
         #endregion
@@ -109,9 +112,17 @@ namespace Edrych.Helpers
             {
                 if (_undoHistory.Count == 20)
                     _undoHistory.RemoveAt(_undoHistory.Count - 1);
-                _undoHistory.Add(_priorText);
-                _priorText = this.Text;
-                this._redoHistory = new List<string>();
+                if (!string.IsNullOrEmpty(_priorText) || _emptyTextOkay)
+                {
+                    _undoHistory.Add(_priorText);
+                    _priorText = this.Text;
+                    _emptyTextOkay = string.IsNullOrEmpty(_priorText);
+                    this._redoHistory = new List<string>();
+                }
+            }
+            else
+            {
+                _priorText = string.Empty;
             }
 
             BeginUpdate();
@@ -129,15 +140,13 @@ namespace Edrych.Helpers
             this.SelectionColor = this.NormalColor;
             this.Select(prevPos, 0);
 
-            ParseSyntax(_highlightRegex);
+            ParseSyntax();
 
             EndUpdate();
             this.Invalidate();
 
             this.Select(prevPos, 0);
             this.SelectionColor = this.NormalColor;
-
-            _justRedidOrUndid = false;
 
             base.OnTextChanged(e);
         }
@@ -148,7 +157,7 @@ namespace Edrych.Helpers
 
         /// <summary>Parses keywords and comments</summary>
         /// <param name="regKeywords">Regular expression object to use</param>
-        private void ParseSyntax(Regex r)
+        private void ParseSyntax()
         {
             bool inString = false;
             bool inComment = false;
@@ -157,7 +166,7 @@ namespace Edrych.Helpers
             List<int> commentOpenPositions = new List<int>();
             List<int> commentClosedPositions = new List<int>();
 
-            for (Match m = r.Match(this.Text); m.Success; m = m.NextMatch())
+            for (Match m = _highlightRegex.Match(this.Text); m.Success; m = m.NextMatch())
             {
                 //Text delimeter
                 if (m.Groups[1].Success && !inComment)
@@ -276,13 +285,13 @@ namespace Edrych.Helpers
         /// <param name="From">List to update from</param>
         /// <param name="To">List to update</param>
         /// <param name="Can">Boolean on whether the user can perform the action.</param>
-        private void RedoUndo(ref List<string> From, ref List<string> To, bool Can)
+        private void RedoUndo(List<string> From, List<string> To, bool Can)
         {
             if (Can)
             {
                 int cursorPos = this.SelectionStart;
                 int index = From.Count - 1;
-                UpdateList(ref To);
+                UpdateList(To);
                 _isRedoOrUndo = true;
                 this.Text = From[index];
                 _isRedoOrUndo = false;
@@ -293,7 +302,9 @@ namespace Edrych.Helpers
             }
         }
 
-        private void UpdateList(ref List<string> History)
+        /// <summary>Keeps the undo/redo history short</summary>
+        /// <param name="History">List to update</param>
+        private void UpdateList(List<string> History)
         {
             if (History.Count == 20)
                 History.RemoveAt(0);

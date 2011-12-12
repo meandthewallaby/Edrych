@@ -45,9 +45,6 @@ namespace Edrych.Views
             _bgWorker.WorkerSupportsCancellation = true;
             _bgWorker.DoWork += this.TimeQuery;
             _bgWorker.ProgressChanged += (s, e) => { this.BeginInvoke(new UpdatingTimer(this.UpdateTimer), new object[] { s, e }); };
-
-            //Change status bar
-            UpdateConnectionInfo();
         }
 
         #endregion
@@ -80,6 +77,7 @@ namespace Edrych.Views
                 tc.Closing += this.TabClosing;
             }
             this.tbQuery.Text = _queryViewModel.InitQuery(OpenQuery);
+            UpdateConnectionInfo();
             this.ResetTabName();
             this.tbQuery.Focus();
         }
