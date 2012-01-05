@@ -63,6 +63,10 @@ namespace Edrych.Helpers
         public string[] MultilineComment { get; set; }
         /// <summary>List of keywords to highlight</summary>
         public List<string> Keywords { get; set; }
+        /// <summary>List of operators to highlight</summary>
+        public List<string> Operators { get; set; }
+        /// <summary>List of functions to highlight</summary>
+        public List<string> Functions { get; set; }
 
         #endregion
 

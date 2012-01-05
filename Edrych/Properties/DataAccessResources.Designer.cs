@@ -202,6 +202,24 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ALL
+        ///AND
+        ///ANY
+        ///BETWEEN
+        ///EXISTS
+        ///IN
+        ///LIKE
+        ///NOT
+        ///OR
+        ///SOME.
+        /// </summary>
+        internal static string ANSI_Operators {
+            get {
+                return ResourceManager.GetString("ANSI_Operators", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to select
         ///	LTRIM(RTRIM(c.COLNAME)) as COLNAME,
         ///	NULLS,
@@ -375,6 +393,59 @@ namespace Edrych.Properties {
         internal static string ODBC_SetDatabase {
             get {
                 return ResourceManager.GetString("ODBC_SetDatabase", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RANK
+        ///NTILE
+        ///DENSE_RANK
+        ///ROW_NUMBER
+        ///AVG
+        ///MIN
+        ///CHECKSUM_AGG
+        ///COUNT
+        ///COUNT_BIG
+        ///STDEV
+        ///GROUPING
+        ///STDEVP
+        ///GROUPING_ID
+        ///SUM
+        ///MAX
+        ///VAR
+        ///VARP
+        ///@@DATEFIRST
+        ///@@OPTIONS
+        ///@@DBTS
+        ///@@REMSERVER
+        ///@@LANGID
+        ///@@SERVERNAME
+        ///@@LANGUAGE
+        ///@@SERVICENAME
+        ///@@LOCK_TIMEOUT
+        ///@@SPID
+        ///@@MAX_CONNECTIONS
+        ///@@TEXTSIZE
+        ///@@MAX_PRECISION
+        ///@@VERSION
+        ///@@NESTLEVEL
+        ///EncryptByKey
+        ///DecryptByKey
+        ///EncryptByPassPhrase
+        ///DecryptByPassPhrase
+        ///Key_ID
+        ///EncryptByAsmKey
+        ///DecryptByAsmKey
+        ///EncryptByCert
+        ///DecryptByCert
+        ///Cert_ID
+        ///AsymKey_ID
+        ///CertProperty
+        ///SignB [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SQL_Functions {
+            get {
+                return ResourceManager.GetString("SQL_Functions", resourceCulture);
             }
         }
         
