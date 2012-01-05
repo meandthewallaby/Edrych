@@ -155,4 +155,29 @@
         Foreign,
         Primary
     }
+
+    class ExternalQueryInfo
+    {
+        public string Server { get; set; }
+        public string Database { get; set; }
+        public string ColumnList { get; set; }
+        public string InternalQuery { get; set; }
+        public string InternalAlias { get; set; }
+        public string ExternalQuery { get; set; }
+        public string ExternalAlias { get; set; }
+        public string JoinType { get; set; }
+        public string JoinClause { get; set; }
+    }
+
+    class JoinClause
+    {
+        public string InternalCol { get; set; }
+        public string ExternalCol { get; set; }
+    }
+
+    class QueryColumn
+    {
+        public string Name { get; set; }
+        public DataTable Table { get; set; }
+    }
 }
