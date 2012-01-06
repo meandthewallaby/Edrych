@@ -94,6 +94,8 @@ namespace Edrych.Views
             this.tbQuery.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbQuery.KeywordColor = System.Drawing.Color.Empty;
             this.tbQuery.Keywords = null;
+            this.tbQuery.Operators = null;
+            this.tbQuery.Functions = null;
             this.tbQuery.Location = new System.Drawing.Point(31, 0);
             this.tbQuery.MultilineComment = null;
             this.tbQuery.Name = "tbQuery";

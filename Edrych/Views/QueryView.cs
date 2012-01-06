@@ -254,10 +254,14 @@ namespace Edrych.Views
                 this.tbQuery.StringColor = Color.Red;
                 this.tbQuery.CommentColor = Color.Green;
                 this.tbQuery.KeywordColor = Color.Blue;
+                this.tbQuery.OperatorColor = Color.Gray;
+                this.tbQuery.FunctionColor = Color.DeepPink;
 
                 this.tbQuery.Comment = _queryViewModel.Data.GetComment();
                 this.tbQuery.MultilineComment = _queryViewModel.Data.GetMultilineComment();
                 this.tbQuery.Keywords = _queryViewModel.Data.Keywords;
+                this.tbQuery.Operators = _queryViewModel.Data.Operators;
+                this.tbQuery.Functions = _queryViewModel.Data.Functions;
                 this.tbQuery.InitializeSyntax();
             }
             else

@@ -15,9 +15,9 @@ namespace Edrych.DataAccess
         private IDbCommand _comm;
         private IDbTransaction _tran;
         private DataAccessQuery _daq = null;
-        private List<string> _keywords = new List<string>();
-        private List<string> _operators = new List<string>();
-        private List<string> _functions = new List<string>();
+        protected List<string> _keywords = new List<string>();
+        protected List<string> _operators = new List<string>();
+        protected List<string> _functions = new List<string>();
 
         #endregion
 
@@ -320,8 +320,8 @@ namespace Edrych.DataAccess
         public virtual void BuildKeywords()
         {
             //ANSI keywords loaded from http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.blocks/html/blocks/blocks295.htm
-            LoadKeywords(DataAccessResources.ANSI_Keywords);
-            LoadOperators(DataAccessResources.ANSI_Operators);
+            LoadKeywords(DataAccessResources.ANSI_Keywords, this._keywords);
+            LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
         }
                 
         #endregion
@@ -354,31 +354,11 @@ namespace Edrych.DataAccess
 
         /// <summary>Gets the list of ANSI SQL keywords</summary>
         /// <returns>List of keywords in ANSI SQL</returns>
-        protected void LoadKeywords(string WordList)
+        protected void LoadKeywords(string WordList, List<string> KeywordList)
         {
             foreach (string word in WordList.Split('\n'))
             {
-                _keywords.Add(word.Trim());
-            }
-        }
-
-        /// <summary>Gets the list of ANSI SQL operators</summary>
-        /// <returns>List of operators in ANSI SQL</returns>
-        protected void LoadOperators(string WordList)
-        {
-            foreach (string word in WordList.Split('\n'))
-            {
-                _operators.Add(word.Trim());
-            }
-        }
-
-        /// <summary>Gets the list of ANSI SQL functions</summary>
-        /// <returns>List of functions in ANSI SQL</returns>
-        protected void LoadFunctions(string WordList)
-        {
-            foreach (string word in WordList.Split('\n'))
-            {
-                _functions.Add(word.Trim());
+                KeywordList.Add(word.Trim().ToUpper());
             }
         }
 

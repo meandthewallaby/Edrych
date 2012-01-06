@@ -185,7 +185,8 @@ namespace Edrych.DataAccess
         public override void BuildKeywords()
         {
             //Keywords loaded from http://www.teradataforum.com/l030103a.htm
-            LoadKeywords(DataAccessResources.Teradata_Keywords);
+            LoadKeywords(DataAccessResources.Teradata_Keywords, this._keywords);
+            LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
         }
     }
 }

@@ -53,6 +53,10 @@ namespace Edrych.Helpers
         public Color NormalColor { get; set; }
         /// <summary>Color of a language keyword</summary>
         public Color KeywordColor { get; set; }
+        /// <summary>Color of an operator keyword</summary>
+        public Color OperatorColor { get; set; }
+        /// <summary>Color of an function keyword</summary>
+        public Color FunctionColor { get; set; }
         /// <summary>Color of string text</summary>
         public Color StringColor { get; set; }
         /// <summary>Color of a language comment</summary>
@@ -75,8 +79,10 @@ namespace Edrych.Helpers
         /// <summary>Creates the regex patterns and compiles the regular expressions</summary>
         public void InitializeSyntax()
         {
-            string keywordPattern = SetKeywords();
-            string pattern = @"(')|(" + this.Comment + ".*?$)|(" + this.MultilineComment[0] + @")|(" + this.MultilineComment[1] + @")|" + keywordPattern;
+            string keywordPattern = SetKeywords(this.Keywords);
+            string operatorPattern = SetKeywords(this.Operators);
+            string functionPattern = SetKeywords(this.Functions);
+            string pattern = @"(')|(" + this.Comment + ".*?$)|(" + this.MultilineComment[0] + @")|(" + this.MultilineComment[1] + @")|" + keywordPattern + @"|" + operatorPattern + @"|" + functionPattern;
             _highlightRegex = new Regex(pattern, RegexOptions.IgnoreCase | RegexOptions.Multiline | RegexOptions.Compiled);
         }
 
@@ -211,10 +217,15 @@ namespace Edrych.Helpers
                     commentsOpen--;
                     inComment = commentsOpen > 0;
                 }
-                //Keyword
+                //Keyword of some sort
                 else if (!inString && !inComment)
                 {
-                    HighlightText(m.Index, m.Length, this.KeywordColor);
+                    if (this.Operators.Contains(m.Value.ToUpper()))
+                        HighlightText(m.Index, m.Length, this.OperatorColor);
+                    else if (this.Functions.Contains(m.Value.ToUpper()))
+                        HighlightText(m.Index, m.Length, this.FunctionColor);
+                    else
+                        HighlightText(m.Index, m.Length, this.KeywordColor);
                 }
             }
 
@@ -238,13 +249,13 @@ namespace Edrych.Helpers
 
         /// <summary>Creates a regex pattern from a list of keywords</summary>
         /// <returns>String representing the regular expression to use</returns>
-        private string SetKeywords()
+        private string SetKeywords(List<string> WordList)
         {
             StringBuilder pattern = new StringBuilder();
-            for (int i = 0; i < Keywords.Count; i++)
+            for (int i = 0; i < WordList.Count; i++)
             {
-                pattern.Append("(^+|\\b+)" + Keywords[i] + "(\\b+|$)");
-                if (i < Keywords.Count - 1)
+                pattern.Append("(^+|\\b+)" + WordList[i] + "(\\b+|$)");
+                if (i < WordList.Count - 1)
                     pattern.Append("|");
             }
             return pattern.ToString();
