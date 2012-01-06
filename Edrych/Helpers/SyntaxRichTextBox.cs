@@ -220,12 +220,19 @@ namespace Edrych.Helpers
                 //Keyword of some sort
                 else if (!inString && !inComment)
                 {
-                    if (this.Operators.Contains(m.Value.ToUpper()))
-                        HighlightText(m.Index, m.Length, this.OperatorColor);
-                    else if (this.Functions.Contains(m.Value.ToUpper()))
-                        HighlightText(m.Index, m.Length, this.FunctionColor);
-                    else
-                        HighlightText(m.Index, m.Length, this.KeywordColor);
+                    if (!(m.Index > 0 && m.Index + m.Length < this.Text.Length && 
+                        ((this.Text[m.Index - 1] == '[' && this.Text[m.Index + m.Length] == ']')
+                        || (this.Text[m.Index - 1] == '"' && this.Text[m.Index + m.Length] == '"')
+                        )
+                        ))
+                    {
+                        if (this.Operators.Contains(m.Value.ToUpper()))
+                            HighlightText(m.Index, m.Length, this.OperatorColor);
+                        else if (this.Functions.Contains(m.Value.ToUpper()))
+                            HighlightText(m.Index, m.Length, this.FunctionColor);
+                        else
+                            HighlightText(m.Index, m.Length, this.KeywordColor);
+                    }
                 }
             }
 
