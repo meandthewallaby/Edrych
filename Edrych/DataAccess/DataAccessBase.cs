@@ -322,6 +322,7 @@ namespace Edrych.DataAccess
             //ANSI keywords loaded from http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.blocks/html/blocks/blocks295.htm
             LoadKeywords(DataAccessResources.ANSI_Keywords, this._keywords);
             LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
+            LoadKeywords(DataAccessResources.ANSI_Functions, this._functions);
         }
                 
         #endregion

@@ -130,6 +130,7 @@ namespace Edrych.DataAccess
             //Keywords loaded from http://www.sqlite.org/lang_keywords.html
             LoadKeywords(DataAccessResources.SQLite_Keywords, this._keywords);
             LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
+            LoadKeywords(DataAccessResources.SQLite_Functions, this._functions);
         }
     }
 }

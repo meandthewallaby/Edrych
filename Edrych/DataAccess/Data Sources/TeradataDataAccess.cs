@@ -187,6 +187,7 @@ namespace Edrych.DataAccess
             //Keywords loaded from http://www.teradataforum.com/l030103a.htm
             LoadKeywords(DataAccessResources.Teradata_Keywords, this._keywords);
             LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
+            LoadKeywords(DataAccessResources.ANSI_Functions, this._functions);
         }
     }
 }

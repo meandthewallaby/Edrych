@@ -157,6 +157,8 @@ namespace Edrych.Dialogs
         {
             try
             {
+                this.Enabled = false;
+
                 this._dataAccess =
                    DataAccessFactory.GetDataAccess(
                        this.SelectedConnectionType,
@@ -193,6 +195,10 @@ namespace Edrych.Dialogs
             catch (Exception ex)
             {
                 MessageBox.Show("Could not open the connection!\r\n" + ex.Message, "Invalid Connection", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            finally
+            {
+                this.Enabled = true;
             }
         }
 
