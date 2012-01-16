@@ -217,7 +217,13 @@ namespace Edrych.DataAccess
         /// <param name="DatabaseName">Name of the database to set the active connection to</param>
         public void SetDatabase(string DatabaseName)
         {
-            this._conn.ChangeDatabase(DatabaseName);
+            try
+            {
+                this._conn.ChangeDatabase(DatabaseName);
+            }
+            catch (NotImplementedException ex)
+            {
+            }
         }
 
         /// <summary>Fires off the Row Created event</summary>

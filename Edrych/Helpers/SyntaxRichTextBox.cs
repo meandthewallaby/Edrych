@@ -273,7 +273,7 @@ namespace Edrych.Helpers
         {
             int currLineChar = this.GetFirstCharIndexOfCurrentLine();
             int currLine = this.GetLineFromCharIndex(currLineChar);
-            if (currLine > 0 && this.Lines.Count() > 0 && this.Lines[currLine].Length == 0)
+            if (currLine > 0 && this.Lines.Count() > currLine && this.Lines[currLine].Length == 0)
             {
                 string beforeLine = this.Lines[currLine - 1];
                 int counter = 0;
