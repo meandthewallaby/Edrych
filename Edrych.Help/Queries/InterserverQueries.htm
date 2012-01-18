@@ -28,11 +28,20 @@ insert into BaseTable (cols)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;from<br> 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;table<br> 
 };
+</code><br><br>
+You can also join two datasets with an inner join or a left join, only. Note that you cannot use a <code>where</code> or an <code>order by</code> clause with the <code>select</code>. You can put them in your subqueries, though.
+<br><br>
+<code>
+select a.Col1, a.Col2, b.Col1, b.Col2
+from 
+(select * from BaseTable) a
+inner join ([servername].[databasename] { select * from RemoteTable }) b on
+	a.col = b.col
 </code>
 <h2>Notes</h2>
 Ensure that the base table you're inserting into is created!
 <br><br>
-Coming soon: Ability to join two tables without doing the insert.
+Note that the join condition is currently limited at 1 column equals another column. Also, the table aliases can be anything you'd like.
 <br><br>
 Beware doing this for large tables--all the processing is within Edrych, so network and your local
 machine constraints will apply.

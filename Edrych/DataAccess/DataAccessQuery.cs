@@ -345,8 +345,8 @@ namespace Edrych.DataAccess
                 {
                     var rows =
                         from a in externalRs.Data.AsEnumerable()
-                        from b in internalRs.Data.AsEnumerable()
-                        where a[jc.InternalCol].Equals(b[jc.ExternalCol])
+                        join b in internalRs.Data.AsEnumerable()
+                        on a[jc.ExternalCol].ToString().ToUpper() equals b[jc.InternalCol].ToString().ToUpper()
                         select new { a, b };
                     foreach (var row in rows)
                     {
@@ -357,6 +357,28 @@ namespace Edrych.DataAccess
                                 Data.Add(row.b[col.Name]);
                             else
                                 Data.Add(row.a[col.Name]);
+                        }
+
+                        rs.Data.LoadDataRow(Data.ToArray(), false);
+                    }
+                }
+                else if (Query.JoinType.ToLower() == "left" && jc != null)
+                {
+                    var rows =
+                        from b in internalRs.Data.AsEnumerable()
+                        join a in externalRs.Data.AsEnumerable()
+                            on b[jc.InternalCol].ToString().ToUpper() equals a[jc.ExternalCol].ToString().ToUpper() into abTemp
+                        from ab in abTemp.DefaultIfEmpty()
+                        select new { b, ab };
+                    foreach (var row in rows)
+                    {
+                        List<object> Data = new List<object>();
+                        foreach (QueryColumn col in cols)
+                        {
+                            if (col.Table.Equals(internalRs.Data))
+                                Data.Add(row.b[col.Name]);
+                            else
+                                Data.Add(row.ab != null ? row.ab[col.Name] : null);
                         }
 
                         rs.Data.LoadDataRow(Data.ToArray(), false);
