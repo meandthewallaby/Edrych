@@ -122,7 +122,9 @@ namespace Edrych.DataAccess
         public override void BuildKeywords()
         {
             //Keywords loaded from http://publib.boulder.ibm.com/infocenter/db2luw/v9/index.jsp?topic=%2Fcom.ibm.db2.udb.admin.doc%2Fdoc%2Fr0001095.htm
-            LoadKeywords(DataAccessResources.DB2_Keywords);
+            LoadKeywords(DataAccessResources.DB2_Keywords, this._keywords);
+            LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
+            LoadKeywords(DataAccessResources.DB2_Functions, this._functions);
         }
 
         private bool AddTableParameters(string TableName)

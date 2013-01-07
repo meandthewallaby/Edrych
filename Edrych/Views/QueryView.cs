@@ -45,9 +45,6 @@ namespace Edrych.Views
             _bgWorker.WorkerSupportsCancellation = true;
             _bgWorker.DoWork += this.TimeQuery;
             _bgWorker.ProgressChanged += (s, e) => { this.BeginInvoke(new UpdatingTimer(this.UpdateTimer), new object[] { s, e }); };
-
-            //Change status bar
-            UpdateConnectionInfo();
         }
 
         #endregion
@@ -80,6 +77,7 @@ namespace Edrych.Views
                 tc.Closing += this.TabClosing;
             }
             this.tbQuery.Text = _queryViewModel.InitQuery(OpenQuery);
+            UpdateConnectionInfo();
             this.ResetTabName();
             this.tbQuery.Focus();
         }
@@ -256,10 +254,14 @@ namespace Edrych.Views
                 this.tbQuery.StringColor = Color.Red;
                 this.tbQuery.CommentColor = Color.Green;
                 this.tbQuery.KeywordColor = Color.Blue;
+                this.tbQuery.OperatorColor = Color.Gray;
+                this.tbQuery.FunctionColor = Color.DeepPink;
 
                 this.tbQuery.Comment = _queryViewModel.Data.GetComment();
                 this.tbQuery.MultilineComment = _queryViewModel.Data.GetMultilineComment();
                 this.tbQuery.Keywords = _queryViewModel.Data.Keywords;
+                this.tbQuery.Operators = _queryViewModel.Data.Operators;
+                this.tbQuery.Functions = _queryViewModel.Data.Functions;
                 this.tbQuery.InitializeSyntax();
             }
             else

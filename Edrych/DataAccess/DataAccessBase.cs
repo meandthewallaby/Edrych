@@ -15,7 +15,9 @@ namespace Edrych.DataAccess
         private IDbCommand _comm;
         private IDbTransaction _tran;
         private DataAccessQuery _daq = null;
-        private List<string> _keywords = null;
+        protected List<string> _keywords = new List<string>();
+        protected List<string> _operators = new List<string>();
+        protected List<string> _functions = new List<string>();
 
         #endregion
 
@@ -27,7 +29,7 @@ namespace Edrych.DataAccess
 
         #endregion
 
-        #region public Properties
+        #region Public Properties
 
         /// <summary>The type of connection to create</summary>
         public ConnectionType ConnectionType { get; set; }
@@ -49,6 +51,10 @@ namespace Edrych.DataAccess
         public bool IsConnected { get { return _conn != null && _conn.State != ConnectionState.Closed && _conn.State != ConnectionState.Broken; } }
         /// <summary>Returns the list of keywords for this data access layer</summary>
         public List<string> Keywords { get { return _keywords; } }
+        /// <summary>Returns the list of operators for this data access layer</summary>
+        public List<string> Operators { get { return _operators; } }
+        /// <summary>Returns the list of functions for this data access layer</summary>
+        public List<string> Functions { get { return _functions; } }
 
         #endregion
 
@@ -211,7 +217,13 @@ namespace Edrych.DataAccess
         /// <param name="DatabaseName">Name of the database to set the active connection to</param>
         public void SetDatabase(string DatabaseName)
         {
-            this._conn.ChangeDatabase(DatabaseName);
+            try
+            {
+                this._conn.ChangeDatabase(DatabaseName);
+            }
+            catch (NotImplementedException ex)
+            {
+            }
         }
 
         /// <summary>Fires off the Row Created event</summary>
@@ -314,7 +326,9 @@ namespace Edrych.DataAccess
         public virtual void BuildKeywords()
         {
             //ANSI keywords loaded from http://infocenter.sybase.com/help/index.jsp?topic=/com.sybase.help.ase_15.0.blocks/html/blocks/blocks295.htm
-            LoadKeywords(DataAccessResources.ANSI_Keywords);
+            LoadKeywords(DataAccessResources.ANSI_Keywords, this._keywords);
+            LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
+            LoadKeywords(DataAccessResources.ANSI_Functions, this._functions);
         }
                 
         #endregion
@@ -347,12 +361,11 @@ namespace Edrych.DataAccess
 
         /// <summary>Gets the list of ANSI SQL keywords</summary>
         /// <returns>List of keywords in ANSI SQL</returns>
-        protected void LoadKeywords(string WordList)
+        protected void LoadKeywords(string WordList, List<string> KeywordList)
         {
-            _keywords = new List<string>();
             foreach (string word in WordList.Split('\n'))
             {
-                _keywords.Add(word.Trim());
+                KeywordList.Add(word.Trim().ToUpper());
             }
         }
 

@@ -84,7 +84,7 @@ namespace Edrych.DataAccess
         /// <returns>Match object with the RegEx results</returns>
         private Match RunRegEx(string pattern, string input)
         {
-            Regex reg = new Regex(pattern);
+            Regex reg = new Regex(pattern, RegexOptions.IgnoreCase);
             input = input.Replace("\r\n", " ");
             input = input.Replace("\n", " ");
             return reg.Match(input);
@@ -187,17 +187,43 @@ namespace Edrych.DataAccess
         {
             CheckCancel();
             ResultSet rs = new ResultSet();
-            string pattern = @"^insert\s+into\s+([a-zA-Z0-9\._\-#]+?)\s+(\(\s*([a-zA-Z0-9\,\s_\-]+?)\s*\)\s+)*?" + BASE_PATTERN + @"\s?;\s?$";
-            Match mt = RunRegEx(pattern, Query);
-            if (mt.Success)
+            ExternalQueryInfo myQuery = new ExternalQueryInfo();
+            string pattern = string.Empty;
+            if (Query.Trim().Substring(0, 6).ToLower() == "select")
             {
-                string insertTable = mt.Groups[1].Value;
-                string server = mt.Groups[4].Value;
-                string database = mt.Groups[5].Value;
-                string colList = mt.Groups[3].Value;
-                string externalQuery = mt.Groups[6].Value;
+                pattern =
+                    @"^\s*select(.*?)from\s*\(\s*(select.*?)\)\s*([a-z0-9]+)\s+(inner|outer|left|right|cross|full)\s+join\s+\(" +
+                    BASE_PATTERN + @"\)\s*([a-z0-9]+)\s+on(.*?)$";
+                Match mt = RunRegEx(pattern, Query);
+                if (mt.Success)
+                {
+                    myQuery.Server = mt.Groups[5].Value;
+                    myQuery.Database = mt.Groups[6].Value;
+                    myQuery.ColumnList = mt.Groups[1].Value;
+                    myQuery.InternalQuery = mt.Groups[2].Value;
+                    myQuery.InternalAlias = mt.Groups[3].Value;
+                    myQuery.JoinType = mt.Groups[4].Value;
+                    myQuery.ExternalQuery = mt.Groups[7].Value;
+                    myQuery.ExternalAlias = mt.Groups[8].Value;
+                    myQuery.JoinClause = mt.Groups[9].Value;
 
-                rs = InsertExternalData(server, database, externalQuery, insertTable, colList);
+                    rs = SelectExternalData(myQuery);
+                }
+            }
+            else if (Query.Trim().Substring(0, 6).ToLower() == "insert")
+            {
+                pattern = @"^\s*insert\s+into\s+([a-z0-9\._\-#]+?)\s+(\(\s*([a-z0-9\,\s_\-]+?)\s*\)\s+)*?" + BASE_PATTERN + @"\s?;\s?$";
+                Match mt = RunRegEx(pattern, Query);
+                if (mt.Success)
+                {
+                    myQuery.Server = mt.Groups[4].Value;
+                    myQuery.Database = mt.Groups[5].Value;
+                    myQuery.ColumnList = mt.Groups[3].Value;
+                    myQuery.InternalQuery = mt.Groups[1].Value;
+                    myQuery.ExternalQuery = mt.Groups[6].Value;
+
+                    rs = InsertExternalData(myQuery);
+                }
             }
             else
             {
@@ -208,13 +234,8 @@ namespace Edrych.DataAccess
         }
 
         /// <summary>Inserts data from an external source to a local source</summary>
-        /// <param name="server">External server to get data from</param>
-        /// <param name="database">Database to use on the external server</param>
-        /// <param name="externalQuery">Query to use to read the data from an external server</param>
-        /// <param name="insertTable">Local table to insert the data into</param>
-        /// <param name="colList">Column list from the local table to </param>
-        /// <returns>ResultSet object containing data and messages as a result of the given query</returns>
-        private ResultSet InsertExternalData(string server, string database, string externalQuery, string insertTable, string colList)
+        /// <param name="Query">ExternalQuery object which contains all the necessary variables</param>
+        private ResultSet InsertExternalData(ExternalQueryInfo Query)
         {
             ResultSet externalRs = null;
 
@@ -223,32 +244,17 @@ namespace Edrych.DataAccess
                 string oldDb = string.Empty;
 
                 //Get the server and database
-                if (_browser.Tree.Cache.ContainsKey("ROOT"))
-                {
-                    ServerItem si = _browser.Tree.Cache["ROOT"].FirstOrDefault(s => s.Name == server) as ServerItem;
-                    _externalDab = si.DataAccess;
-                    oldDb = _externalDab.SelectedDatabase;
-                    _externalDab.SetDatabase(database);
-                    if (_externalDab.SelectedDatabase.ToUpper() != database.ToUpper())
-                    {
-                        _externalDab.SetDatabase(oldDb);
-                        throw new Exception("Could not set the database context for the extraserver query.");
-                    }
-                }
-                else
-                {
-                    throw new Exception("I'm sorry, I don't know what server that is.");
-                }
+                SetExternalDatabase(Query);
 
                 //Grab the externalQuery from database on server
-                externalRs = ProcessInternalQuery(_externalDab, externalQuery, false);
+                externalRs = ProcessInternalQuery(_externalDab, Query.ExternalQuery, false);
                 if (externalRs.Data.Rows.Count == 0)
                 {
                     throw new Exception("No external data to insert!");
                 }
 
                 //Check for existence of table -- create if necessary
-                if (!InsertTableExists(insertTable))
+                if (!InsertTableExists(Query.InternalQuery))
                 {
                     //TODO: Universal create table
                     throw new NotImplementedException();
@@ -260,10 +266,10 @@ namespace Edrych.DataAccess
                 }
 
                 //Build the insert statement
-                StringBuilder insertQuery = new StringBuilder("insert into " + insertTable + " ");
-                if (!string.IsNullOrEmpty(colList))
+                StringBuilder insertQuery = new StringBuilder("insert into " + Query.InternalQuery + " ");
+                if (!string.IsNullOrEmpty(Query.ColumnList))
                 {
-                    insertQuery.Append("(" + colList + ") ");
+                    insertQuery.Append("(" + Query.ColumnList + ") ");
                 }
                 insertQuery.Append("values (");
 
@@ -291,16 +297,16 @@ namespace Edrych.DataAccess
                 }
 
                 StringBuilder selectQuery = new StringBuilder("select ");
-                if (string.IsNullOrEmpty(colList))
+                if (string.IsNullOrEmpty(Query.ColumnList))
                 {
                     selectQuery.Append("* ");
                 }
                 else
                 {
-                    selectQuery.Append(colList + " ");
+                    selectQuery.Append(Query.ColumnList + " ");
                 }
                 selectQuery.Append("from ");
-                selectQuery.Append(insertTable);
+                selectQuery.Append(Query.InternalQuery);
                 ResultSet rs = ProcessInternalQuery(_dab, selectQuery.ToString(), true);
                 rs.Messages = rowsAffected.ToString() + " rows inserted\r\n\r\n" + rs.Messages;
                 return rs;
@@ -311,6 +317,82 @@ namespace Edrych.DataAccess
                     externalRs.Dispose();
                 if (_externalDab != null)
                     _externalDab.Dispose();
+            }
+        }
+
+        private ResultSet SelectExternalData(ExternalQueryInfo Query)
+        {
+            ResultSet rs = null;
+
+            try
+            {
+                //Make the queries and then argh!
+                rs = new ResultSet();
+                ResultSet internalRs = ProcessInternalQuery(_dab, Query.InternalQuery, false);
+                SetExternalDatabase(Query);
+                ResultSet externalRs = ProcessInternalQuery(_externalDab, Query.ExternalQuery, false);
+                DataSet joinDs = new DataSet();
+                joinDs.Tables.Add(internalRs.Data);
+                joinDs.Tables.Add(externalRs.Data);
+                joinDs.Tables[0].TableName = Query.InternalAlias;
+                joinDs.Tables[1].TableName = Query.ExternalAlias;
+
+                List<QueryColumn> cols = BuildColumns(Query, rs.Data, internalRs.Data, externalRs.Data);
+
+                JoinClause jc = BuildJoinClause(Query, internalRs.Data, externalRs.Data);
+
+                if (Query.JoinType.ToLower() == "inner" && jc != null)
+                {
+                    var rows =
+                        from a in externalRs.Data.AsEnumerable()
+                        join b in internalRs.Data.AsEnumerable()
+                        on a[jc.ExternalCol].ToString().ToUpper() equals b[jc.InternalCol].ToString().ToUpper()
+                        select new { a, b };
+                    foreach (var row in rows)
+                    {
+                        List<object> Data = new List<object>();
+                        foreach (QueryColumn col in cols)
+                        {
+                            if (col.Table.Equals(internalRs.Data))
+                                Data.Add(row.b[col.Name]);
+                            else
+                                Data.Add(row.a[col.Name]);
+                        }
+
+                        rs.Data.LoadDataRow(Data.ToArray(), false);
+                    }
+                }
+                else if (Query.JoinType.ToLower() == "left" && jc != null)
+                {
+                    var rows =
+                        from b in internalRs.Data.AsEnumerable()
+                        join a in externalRs.Data.AsEnumerable()
+                            on b[jc.InternalCol].ToString().ToUpper() equals a[jc.ExternalCol].ToString().ToUpper() into abTemp
+                        from ab in abTemp.DefaultIfEmpty()
+                        select new { b, ab };
+                    foreach (var row in rows)
+                    {
+                        List<object> Data = new List<object>();
+                        foreach (QueryColumn col in cols)
+                        {
+                            if (col.Table.Equals(internalRs.Data))
+                                Data.Add(row.b[col.Name]);
+                            else
+                                Data.Add(row.ab != null ? row.ab[col.Name] : null);
+                        }
+
+                        rs.Data.LoadDataRow(Data.ToArray(), false);
+                    }
+                }
+                
+                return rs;
+            }
+            catch
+            {
+                throw;
+            }
+            finally
+            {
             }
         }
 
@@ -336,6 +418,87 @@ namespace Edrych.DataAccess
                 if (reader != null && !reader.IsClosed)
                     reader.Close();
             }
+        }
+
+        /// <summary>Sets the external data access object</summary>
+        /// <param name="Query">ExternalQuery object holding all parameters</param>
+        private void SetExternalDatabase(ExternalQueryInfo Query)
+        {
+            if (_browser.Tree.Cache.ContainsKey("ROOT"))
+            {
+                ServerItem si = _browser.Tree.Cache["ROOT"].FirstOrDefault(s => s.Name == Query.Server) as ServerItem;
+                _externalDab = 
+                    DataAccessFactory.GetDataAccess(si.DataAccess.ConnectionType, si.DataAccess.DataSource, si.DataAccess.SelectedDatabase, si.DataAccess.Authentication, si.DataAccess.Username, si.DataAccess.Password);
+                string oldDb = _externalDab.SelectedDatabase;
+                _externalDab.SetDatabase(Query.Database);
+                if (_externalDab.SelectedDatabase.ToUpper() != Query.Database.ToUpper())
+                {
+                    _externalDab.SetDatabase(oldDb);
+                    throw new Exception("Could not set the database context for the extraserver query.");
+                }
+            }
+            else
+            {
+                throw new Exception("I'm sorry, I don't know what server that is.");
+            }
+        }
+
+        private List<QueryColumn> BuildColumns(ExternalQueryInfo Query, DataTable dt, DataTable Internal, DataTable External)
+        {
+            List<QueryColumn> cols = new List<QueryColumn>();
+            foreach (string column in Query.ColumnList.Split(','))
+            {
+                QueryColumn qc = new QueryColumn();
+                string col = column.Trim();
+                int periodIndex = col.IndexOf('.');
+                if (periodIndex > 0 && periodIndex + 1 < col.Length)
+                {
+                    qc.Name = col.Substring(periodIndex + 1);
+                    qc.Table = col.Substring(0, periodIndex) == Query.InternalAlias ? Internal : col.Substring(0, periodIndex) == Query.ExternalAlias ? External : null;
+                }
+                else
+                {
+                    qc.Name = col;
+                    qc.Table = Internal.Columns.Contains(col) && !External.Columns.Contains(col) ? Internal : !Internal.Columns.Contains(col) && External.Columns.Contains(col) ? External : null;
+                }
+
+                if (qc.Table != null)
+                {
+                    cols.Add(qc);
+                    dt.Columns.Add(col);
+                }
+            }
+
+            return cols;
+        }
+
+        private JoinClause BuildJoinClause(ExternalQueryInfo Query, DataTable Internal, DataTable External)
+        {
+            JoinClause jc = new JoinClause();
+            foreach (string colDef in Query.JoinClause.Split('='))
+            {
+                string col = colDef.Trim();
+                int periodIndex = col.IndexOf('.');
+                if (periodIndex > 0 && periodIndex + 1 < col.Length)
+                {
+                    if (col.Substring(0, periodIndex) == Query.InternalAlias)
+                        jc.InternalCol = col.Substring(periodIndex + 1);
+                    else if (col.Substring(0, periodIndex) == Query.ExternalAlias)
+                        jc.ExternalCol = col.Substring(periodIndex + 1);
+                    else
+                        jc = null;
+                }
+                else
+                {
+                    if (Internal.Columns.Contains(col) && !External.Columns.Contains(col))
+                        jc.InternalCol = col;
+                    else if (!Internal.Columns.Contains(col) && External.Columns.Contains(col))
+                        jc.ExternalCol = col;
+                    else
+                        jc = null;
+                }
+            }
+            return jc;
         }
 
         #endregion

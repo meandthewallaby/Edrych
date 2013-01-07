@@ -140,6 +140,38 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to AVG
+        ///COUNT
+        ///MIN
+        ///MAX
+        ///SUM
+        ///CURRENT_DATE
+        ///CURRENT_TIME
+        ///CURRENT_TIMESTAMP
+        ///CURRENT_USER
+        ///SESSION_USER
+        ///SYSTEM_USER
+        ///BIT_LENGTH
+        ///CHAR_LENGTH
+        ///EXTRACT
+        ///OCTET_LENGTH
+        ///POSITION
+        ///IN
+        ///CONCATENATE
+        ///CONVERT
+        ///LOWER
+        ///SUBSTRING
+        ///TRANSLATE
+        ///TRIM
+        ///UPPER.
+        /// </summary>
+        internal static string ANSI_Functions {
+            get {
+                return ResourceManager.GetString("ANSI_Functions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to absolute
         ///action
         ///allocate
@@ -198,6 +230,24 @@ namespace Edrych.Properties {
         internal static string ANSI_Keywords {
             get {
                 return ResourceManager.GetString("ANSI_Keywords", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ALL
+        ///AND
+        ///ANY
+        ///BETWEEN
+        ///EXISTS
+        ///IN
+        ///LIKE
+        ///NOT
+        ///OR
+        ///SOME.
+        /// </summary>
+        internal static string ANSI_Operators {
+            get {
+                return ResourceManager.GetString("ANSI_Operators", resourceCulture);
             }
         }
         
@@ -281,6 +331,68 @@ namespace Edrych.Properties {
         internal static string DB2_FindViews {
             get {
                 return ResourceManager.GetString("DB2_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ABS
+        ///ACOS
+        ///ADD_MONTHS
+        ///ADMIN_TASK_LIST
+        ///ADMIN_TASK_STATUS
+        ///ASCII
+        ///ASIN
+        ///ATAN
+        ///ATANH
+        ///ATAN2
+        ///AVG
+        ///BLOB
+        ///CCSID_ENCODING
+        ///CEILING
+        ///CHAR
+        ///CHARACTER_LENGTH
+        ///CLOB
+        ///COALESCE
+        ///CONCAT
+        ///COS
+        ///COSH
+        ///COUNT
+        ///COUNT_BIG
+        ///DATE
+        ///DAY
+        ///DAYOFMONTH
+        ///DAYOFWEEK
+        ///DAYOFWEEK_ISO
+        ///DAYOFYEAR
+        ///DAYS
+        ///DBCLOB
+        ///DECIMAL or DEC
+        ///DECRYPT_BIT
+        ///DECRYPT_CHAR
+        ///DECRYPT_DB
+        ///DEGREES
+        ///DIGITS
+        ///DOUBLE
+        ///DOUBLE_PRECISION
+        ///ENCRYPT_TDES
+        ///EXP
+        ///FLOAT
+        ///FLOOR
+        ///GENERATE_UNIQUE
+        ///GETHINT
+        ///GETVARIABLE
+        ///GRAPHIC
+        ///HEX
+        ///HOUR
+        ///IDENTITY_VAL_LOCAL
+        ///IFNULL
+        ///INSERT
+        ///INT
+        ///IN [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string DB2_Functions {
+            get {
+                return ResourceManager.GetString("DB2_Functions", resourceCulture);
             }
         }
         
@@ -379,6 +491,59 @@ namespace Edrych.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to RANK
+        ///NTILE
+        ///DENSE_RANK
+        ///ROW_NUMBER
+        ///AVG
+        ///MIN
+        ///CHECKSUM_AGG
+        ///COUNT
+        ///COUNT_BIG
+        ///STDEV
+        ///GROUPING
+        ///STDEVP
+        ///GROUPING_ID
+        ///SUM
+        ///MAX
+        ///VAR
+        ///VARP
+        ///@@DATEFIRST
+        ///@@OPTIONS
+        ///@@DBTS
+        ///@@REMSERVER
+        ///@@LANGID
+        ///@@SERVERNAME
+        ///@@LANGUAGE
+        ///@@SERVICENAME
+        ///@@LOCK_TIMEOUT
+        ///@@SPID
+        ///@@MAX_CONNECTIONS
+        ///@@TEXTSIZE
+        ///@@MAX_PRECISION
+        ///@@VERSION
+        ///@@NESTLEVEL
+        ///EncryptByKey
+        ///DecryptByKey
+        ///EncryptByPassPhrase
+        ///DecryptByPassPhrase
+        ///Key_ID
+        ///EncryptByAsmKey
+        ///DecryptByAsmKey
+        ///EncryptByCert
+        ///DecryptByCert
+        ///Cert_ID
+        ///AsymKey_ID
+        ///CertProperty
+        ///SignB [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string SQL_Functions {
+            get {
+                return ResourceManager.GetString("SQL_Functions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to PRAGMA table_info(@TableName).
         /// </summary>
         internal static string SQLite_FindColumns {
@@ -415,6 +580,59 @@ namespace Edrych.Properties {
         internal static string SQLite_FindViews {
             get {
                 return ResourceManager.GetString("SQLite_FindViews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ABS
+        ///CHANGES
+        ///COALESCE
+        ///GLOB
+        ///IFNULL
+        ///HEX
+        ///LAST_INSERT_ROWID
+        ///LENGTH
+        ///LIKE
+        ///LOAD_EXTENSION
+        ///LOAD_EXTENSION
+        ///LOWER
+        ///LTRIM
+        ///MAX
+        ///MIN
+        ///NULLIF
+        ///QUOTE
+        ///RANDOM
+        ///RANDOMBLOB
+        ///REPLACE
+        ///ROUND
+        ///RTRIM
+        ///SOUNDEX
+        ///SQLITE_COMPILEOPTION_GET
+        ///SQLITE_COMPILEOPTION_USED
+        ///SQLITE_SOURCE_ID
+        ///SQLITE_VERSION
+        ///SUBSTR
+        ///TOTAL_CHANGES
+        ///TRIM
+        ///TYPEOF
+        ///UPPER
+        ///ZEROBLOB
+        ///DATE
+        ///TIME
+        ///DATETIME
+        ///JULIANDAY
+        ///STRFTIME
+        ///AVG
+        ///COUNT
+        ///GROUP_CONCAT
+        ///MAX
+        ///MIN
+        ///SUM
+        ///TOTAL.
+        /// </summary>
+        internal static string SQLite_Functions {
+            get {
+                return ResourceManager.GetString("SQLite_Functions", resourceCulture);
             }
         }
         

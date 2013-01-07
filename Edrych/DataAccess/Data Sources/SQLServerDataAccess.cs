@@ -136,7 +136,10 @@ namespace Edrych.DataAccess
         public override void BuildKeywords()
         {
             //SQL Server keywords loaded from http://msdn.microsoft.com/en-us/library/ms189822.aspx
-            LoadKeywords(DataAccessResources.SQLServer_Keywords);
+            LoadKeywords(DataAccessResources.SQLServer_Keywords, this._keywords);
+            LoadKeywords(DataAccessResources.ANSI_Keywords, this._keywords);
+            LoadKeywords(DataAccessResources.ANSI_Operators, this._operators);
+            LoadKeywords(DataAccessResources.SQL_Functions, this._functions);
         }
 
         /// <summary>Adds the schema and table name parameters to the command</summary>
